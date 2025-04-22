@@ -1,0 +1,68 @@
+_______________
+CONCLUSIONS :::
+===============
+
+
+
+
+Temperature Range Conclution ::
+======================================================================================
+There are two temperature ranges, HIGH and LOW. Set by Client;
+Temp range HIGH = Set temp ranges from 26.5 degree celcius to 40 degree celcius;
+Temp range LOW = Set temp ranges from 10 degree celcius to 37 degree celcius;
+
+When we change the Temp Range from the client(Display), it sends the following command:
+7e 07 10 bf 11 50 00 32 7e
+
+We can see the status change in the Status Update Frame's 
+15th Index byte and its bit # 2. (High = bit is 1. Low = bit is 0).
+
+
+
+Heating Mode ::
+===========================================================
+There are three heating modes; REST, READY & READY-IN-REST; Set by client;
+
+Command sent by the client(display) to change the Heating Mode ::
+7e 07 10 bf 11 51 00 27 7e
+
+We are getting change in the Status Update Frame's
+10th index Byte. (Byte = 0x00 = Heating mode Ready; 0x01 = Heating mode Rest; 0x02 = Read-in-Rest(Yet to understand how it get into this mode)).
+
+When we switch to Ready mode from Resting mode, Circulation also starts autometically.
+
+
+
+Circulation in normal mode ::
+===========================================================
+When Heating Mode is Ready, circulation starts autometically;
+
+If Jet1, Jet2 or Blower1 starts, circulation starts autometically even if the Heating Mode is Resting.
+
+
+
+Circulation in Priming mode conclution ::
+=========================================================
+In Priming mode, Circulation is not synced with Jet1 or Jet2. It is operated separately.
+Circulation On and Off command from the Client(Display)::
+7e 07 10 bf 11 3d 00 2e 7e
+
+We can see the status change in the Status Update Frame's 
+18th Index byte and its bit # 1. (Circulation pump on = bit is 1; Circulation pump off = bit is 0).
+Also 15th Index byte's(Related to heating) bit # 1 shows gets 1 for both the states of circulation pump(on or off), which does not happen in normal mode(it stays 00).
+It may be indicating that there is no heating status and we are in a priming mode.
+The details for these bits are not mantioned in the referance document as well. It may be indicating Priming mode operations.
+
+When we go out of the priming mode to the normal mode, circulation autometically starts;
+
+
+
+
+Normal operation ::
+=========================================================
+Ready Mode:
+If set and measured temperature are same, circulation & temp icon(red thermometer), which also coordinates with heater relay, will stay off.
+If set temp is higher than the measured temp, it will start circulation, after some time, for few seconds, will on heater relay and display "Heating" icon.
+Then will turn off the heater relay and the icon will change to "Heat Waiting" icon. If temperature still doesn't match, it will once again start the relay and 
+will change the icon to "Heating" icon once again. If temperature starts increasing and reaches to the set temp level, heater realy will turn off along with the "Heating" icon.
+After some time circulation icon will turn off along with its relay.

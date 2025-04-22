@@ -10,6 +10,10 @@
 #include "../../src/config.h"
 #include "../../src/main.h"
 
+
+//Test:::
+int lastCRC = 0;
+int last_lastCRC = 0;
 // QueueHandle_t rs485WriteQueue;
 
 // Local functions
@@ -108,7 +112,8 @@ void rs485Loop()
     if (spaMessage.size() > BALBOA_MESSAGE_SIZE - 1)
     {
       rs485Stats.badFormatToday++;
-      Log.warning(F("[rs485]: Invalid message, too long: %s" CR), msgToString(spaMessage).c_str());
+      //Test:::
+      // Log.warning(F("[rs485]: Invalid message, too long: %s" CR), msgToString(spaMessage).c_str());
       spaMessage.clear();
     }
   }
@@ -125,31 +130,52 @@ void rs485Loop()
   if (spaMessage.size() == 4 && (spaMessage[1] > BALBOA_MESSAGE_SIZE | !(spaMessage[3] == 0xBF || spaMessage[3] == 0xAF)))
   {
     rs485Stats.badFormatToday++;
-    Log.warning(F("[rs485]: Invalid message, corrupted length/broadcast flag: %s" CR), msgToString(spaMessage).c_str());
+    //Test:::
+    // Log.warning(F("[rs485]: Invalid message, corrupted length/broadcast flag: %s" CR), msgToString(spaMessage).c_str());
     spaMessage.clear();
   }
 
   if (spaMessage.size() - 2 > spaMessage[1])
   {
     rs485Stats.badFormatToday++;
-    Log.warning(F("[rs485]: Invalid message, corrupted length: %s" CR), msgToString(spaMessage).c_str());
+    //Test:::
+    // Log.warning(F("[rs485]: Invalid message, corrupted length: %s" CR), msgToString(spaMessage).c_str());
     spaMessage.clear();
   }
 
   if (x == 0x7E && spaMessage.size() > 4 && spaMessage.size() == spaMessage[1] + 2)
   {
-
     if (isMessageValid(spaMessage))
     {
-      Log.verbose(F("[rs485]: Received: %d - %s" CR), id, msgToString(spaMessage).c_str());
+      // Test:::
+      if(spaMessage[4] != 0x07 && spaMessage[4] != 0x06)
+      {
+        int receivedCRC = spaMessage[spaMessage.size() - 2];
+        last_lastCRC = receivedCRC;
+        Log.verbose("Received CRC : %d\n", receivedCRC);
+        Log.verbose("Last CRC : %d\n", lastCRC);
+        Log.verbose("Last_Last CRC : %d\n", last_lastCRC);
+        if(lastCRC != receivedCRC && last_lastCRC == receivedCRC)
+        {
+          lastCRC = receivedCRC;
+          if(last_lastCRC != receivedCRC)
+          {
+            last_lastCRC = receivedCRC;
+            Log.verbose(F("[rs485]: Received: %d - %s" CR), id, msgToString(spaMessage).c_str());
+          }
+        }
+      }
+      
+      
       rs485Stats.messagesToday++;
       if (id == 0)
       {
         if (Status_Update(spaMessage)) // This is hacky, but it appears to work
         {
           id = WIFI_MODULE_ID;
-          Log.verbose(F("[rs485]: Set SPA id 0x0A" CR));
-          sendExistingClientResponse(id);
+          //Test::: Commanted for test;
+          // Log.verbose(F("[rs485]: Set SPA id 0x0A" CR));
+          // sendExistingClientResponse(id); Commanted for Test;
           spaMessage.clear();
         }
 
@@ -189,7 +215,8 @@ void rs485Loop()
 
         if (xQueueSend(spaReadQueue, &messageToSend, 0) != pdTRUE)
         {
-          Log.error(F("[rs485]: SPA Read Queue full, dropped %s" CR), msgToString(messageToSend->message, messageToSend->length).c_str());
+          // Test::: Commanted for test;
+          // Log.error(F("[rs485]: SPA Read Queue full, dropped %s" CR), msgToString(messageToSend->message, messageToSend->length).c_str());
         }
         else
         {
@@ -203,7 +230,8 @@ void rs485Loop()
     }
     else
     {
-      Log.warning(F("[rs485]: Invalid message, crc failed: %s" CR), msgToString(spaMessage).c_str());
+      // Test::: Commnated for test;
+      // Log.warning(F("[rs485]: Invalid message, crc failed: %s" CR), msgToString(spaMessage).c_str());
     }
     spaMessage.clear();
   }
@@ -343,7 +371,7 @@ void rs485Write(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data)
 
   if (data[4] != Nothing_to_Send_Type)
   {
-    Log.verbose(F("[rs485]: Sent: %s" CR), msgToString(data).c_str());
+    // Log.verbose(F("[rs485]: Sent: %s" CR), msgToString(data).c_str()); Commented for Test;
   }
   data.clear();
 
@@ -398,7 +426,7 @@ void sendExistingClientResponse(uint8_t id)
 
   addCRC(dataBuffer);
   rs485Write(dataBuffer);
-  Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str());
+  // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
 }
 
 /*

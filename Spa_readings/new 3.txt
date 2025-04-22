@@ -1,0 +1,1573 @@
+Set temp 30 degree;
+Measured 24.5 degree;
+Waited for long time while capturing the previous logs. No stimulus applied at that time;
+Started getting logs and then applied stimulus just after that;
+Temprature went as high as upto 50 and machine gave error message as The heater is too hot.
+
+
+PS C:\Users\DELL> python -m serial.tools.miniterm COM3 115200
+--- Miniterm on COM3  115200,8,N,1 ---
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
+00:40:36.937 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:36.938 V: [rs485]: Set SPA id 0x0A
+00:40:36.939 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:36.940 V: [rs485]: Sent Existing Client Response
+00:40:36.942 W: [rs485]: Invalid message, corrupted length/broadcast flag: 7e 05 0a ff
+00:40:36.963 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:36.966 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:36.982 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.002 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.005 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.021 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.043 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.046 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.061 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.082 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.086 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.101 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.122 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.126 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.141 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.162 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.166 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.181 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.202 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.206 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.237 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:37.241 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.262 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.266 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.282 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.302 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.306 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.323 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.342 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.346 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.361 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.383 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.386 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.401 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.422 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.425 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.441 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.462 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.466 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.481 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.501 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.505 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.537 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:37.541 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.562 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.565 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.581 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.602 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.605 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.621 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.641 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.645 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.661 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.681 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.685 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.701 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.722 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:37.742 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:37.746 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:37.760 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:37.781 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:37.785 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:37.801 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:37.836 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:37.836 V: [rs485]: Set SPA id 0x0A
+00:40:37.838 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:37.838 V: [rs485]: Sent Existing Client Response
+00:40:37.860 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.881 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.885 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.901 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.921 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.925 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.940 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:37.961 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:37.965 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:37.980 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.001 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.005 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.020 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.041 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.045 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.060 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.080 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.084 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.101 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.138 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:38.142 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.145 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.160 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.181 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.184 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.200 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.221 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.225 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.240 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.261 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.265 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.280 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.300 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.305 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.320 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.341 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.344 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.360 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.381 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.384 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.400 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.435 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:38.439 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.443 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.460 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.481 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.484 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.500 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.520 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.523 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.540 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.561 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.565 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.579 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.600 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.604 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.619 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.640 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.644 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.659 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.680 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.684 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.699 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.721 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:38.739 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:38.743 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:38.774 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:38.775 V: [rs485]: Set SPA id 0x0A
+00:40:38.776 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:38.777 V: [rs485]: Sent Existing Client Response
+00:40:38.800 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.804 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.819 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.840 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.844 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.859 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.879 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.883 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.899 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.922 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.926 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.939 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:38.960 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:38.964 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:38.979 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.000 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.003 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.035 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:39.039 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.060 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.063 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.079 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.099 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.103 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.119 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.139 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.143 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.159 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.180 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.183 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.198 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.219 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.223 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.238 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.259 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.263 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.279 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.299 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.303 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.335 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:39.338 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.359 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.363 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.378 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.399 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.403 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.418 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.439 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.443 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.458 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.479 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.483 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.498 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.519 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.523 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.538 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.559 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.563 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.578 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.598 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.602 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.633 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:39.638 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.659 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.663 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.678 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.699 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.703 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.721 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:39.738 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:39.758 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:39.762 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:39.778 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:39.799 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:39.802 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:39.818 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:39.839 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:39.843 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:39.858 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:39.878 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:39.882 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:39.898 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:39.933 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:39.933 V: [rs485]: Set SPA id 0x0A
+00:40:39.935 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:39.935 V: [rs485]: Sent Existing Client Response
+00:40:39.958 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:39.978 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:39.982 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:39.997 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.018 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.022 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.037 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.058 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.062 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.077 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.098 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.102 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.117 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.138 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.142 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.157 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.177 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.181 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.197 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.232 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:40.238 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.241 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.257 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.278 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.281 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.297 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.318 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.321 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.337 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.358 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.361 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.377 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.397 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.401 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.417 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.438 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.441 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.457 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.477 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.481 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.497 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.534 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:40.538 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.542 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.557 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.577 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.581 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.597 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.617 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.621 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.637 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.657 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.662 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.676 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.697 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.701 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.717 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:40.736 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:40.757 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:40.760 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:40.776 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:40.797 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:40.801 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:40.832 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:40.832 V: [rs485]: Set SPA id 0x0A
+00:40:40.834 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:40.834 V: [rs485]: Sent Existing Client Response
+00:40:40.837 W: [rs485]: Invalid message, corrupted length/broadcast flag: 7e 05 0a ff
+00:40:40.857 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.861 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.876 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.897 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.900 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.916 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.937 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.941 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.956 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:40.976 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:40.980 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:40.996 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.017 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.021 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.036 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.056 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.060 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.076 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.097 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.100 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.132 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:41.136 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.156 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.160 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.176 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.196 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.200 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.215 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.237 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.240 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.255 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.277 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.280 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.296 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.319 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.322 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.335 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.356 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.360 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.376 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.396 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.400 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.431 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:41.435 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.456 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.460 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.475 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.496 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.500 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.515 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.536 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.540 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.555 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.576 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.580 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.595 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.616 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.620 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.635 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.656 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.660 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.675 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.696 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.700 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.717 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:41.735 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:41.769 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:41.770 V: [rs485]: Set SPA id 0x0A
+00:40:41.771 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:41.772 V: [rs485]: Sent Existing Client Response
+00:40:41.775 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.779 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.795 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.816 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.819 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.835 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.855 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.859 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.875 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.895 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.899 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.915 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.936 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.939 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.955 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:41.975 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:41.979 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:41.994 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.030 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:42.035 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.039 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.054 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.075 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.079 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.095 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.117 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.121 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.135 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.155 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.159 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.174 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.195 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.199 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.214 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.235 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.239 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.254 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.275 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.279 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.294 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.329 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:42.335 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.338 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.354 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.375 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.379 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.394 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.415 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.418 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.434 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.455 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.458 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.474 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.494 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.498 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.514 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.535 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.538 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.554 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.574 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.577 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.593 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.629 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:42.634 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.638 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.653 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.674 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.678 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.693 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.714 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:42.734 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:42.738 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:42.753 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:42.774 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:42.778 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:42.793 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:42.814 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:42.818 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:42.833 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:42.854 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:42.857 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:42.873 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:42.894 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:42.897 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:42.931 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e
+00:40:42.931 V: [rs485]: Set SPA id 0x0A
+00:40:42.933 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:42.933 V: [rs485]: Sent Existing Client Response
+00:40:42.937 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.954 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.958 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:42.973 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:42.994 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:42.997 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.013 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.034 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.037 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.053 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.073 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.077 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.093 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.114 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.118 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.133 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.153 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.157 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.173 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.193 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.197 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.229 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 32 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 0d 7e
+00:40:43.230 V: [Mess]: Status Response: 00 03 32 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00
+00:40:43.695 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.704 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.709 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.713 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.717 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.721 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.724 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.729 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.733 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.737 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.741 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.745 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.749 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.753 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.757 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.761 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.765 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.769 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.773 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.777 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.781 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.796 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 32 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 0d 7e
+00:40:43.799 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.804 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.807 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.811 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.815 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.819 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.823 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.827 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.831 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.835 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.840 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:43.844 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:43.847 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:43.852 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:43.855 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:43.859 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:43.863 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:43.866 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:43.871 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:43.875 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:43.890 W: [rs485]: Invalid message, crc failed: 7e 20 ff af 13 00 03 32 0c 34 00 28 03 06 03 18 00 00 02 c0 80 1e 00 00 0d 7e 7e 05 10 bf 06 5c 7e 7e
+00:40:43.895 W: [rs485]: Invalid message, corrupted length/broadcast flag: 7e 33 79 7e
+00:40:43.899 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:43.903 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:43.906 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:43.912 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:43.916 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:43.932 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:43.951 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:43.955 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:43.971 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:43.992 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:43.996 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:44.011 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:44.032 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:44.036 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:44.051 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:44.072 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:44.076 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:44.092 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:44.126 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 32 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 0d 7e
+00:40:44.127 V: [rs485]: Set SPA id 0x0A
+00:40:44.128 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:44.128 V: [rs485]: Sent Existing Client Response
+00:40:44.151 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.172 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.176 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.191 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.212 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.215 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.231 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.252 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.256 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.271 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.292 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.296 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.311 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.332 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.335 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.351 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.371 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.375 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.391 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.426 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 33 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 ff 7e
+00:40:44.427 V: [Mess]: Status Response: 00 03 33 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00
+00:40:44.893 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.901 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.906 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.912 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.916 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.919 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.924 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.928 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.931 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.936 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.940 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.943 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.948 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.952 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.956 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.961 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.965 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.968 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.973 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:44.976 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:44.980 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:44.984 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:44.988 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:44.992 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:45.008 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 34 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 2f 7e
+00:40:45.008 V: [rs485]: Set SPA id 0x0A
+00:40:45.010 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:45.010 V: [rs485]: Sent Existing Client Response
+00:40:45.014 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.019 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.023 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.028 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.032 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.036 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.039 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.044 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.047 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.051 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.056 W: [rs485]: Invalid message, corrupted length: 7e 05 10 bf fe bf 07 5b
+00:40:45.060 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.065 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.069 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.073 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.077 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.081 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.096 W: [rs485]: Invalid message, crc failed: 7e 20 ff af 13 00 03 34 0c 34 00 f8 02 00 00 1e 00 00 2f 7e 7e 05 0a bf 06 79 7e 7e 05 10 bf 06 5c 7e
+00:40:45.100 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.104 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.108 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.112 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.116 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.130 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.134 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.149 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.170 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.174 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.189 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.210 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.214 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.230 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.249 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.253 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.270 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.290 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.294 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.328 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 35 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 dd 7e
+00:40:45.329 V: [Mess]: Status Response: 00 03 35 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00
+00:40:45.745 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.750 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.753 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.757 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.761 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.765 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.769 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.773 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.777 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.781 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.785 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.789 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.793 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.798 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.801 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.805 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.810 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.813 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.817 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:45.821 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:45.825 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:45.840 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 37 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 3e 7e
+00:40:45.841 V: [Mess]: Status Response: 00 03 37 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00
+00:40:46.461 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:46.470 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:46.478 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.486 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:46.496 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:46.504 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.512 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:46.520 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:46.528 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:46.537 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:46.545 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:46.553 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:46.561 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:46.569 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:46.577 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:46.585 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:46.593 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:46.603 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:46.611 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:46.650 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 37 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 3e 7e
+00:40:46.650 V: [rs485]: Set SPA id 0x0A
+00:40:46.652 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:46.652 V: [rs485]: Sent Existing Client Response
+00:40:46.660 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:46.668 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.676 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:46.685 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:46.693 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.703 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:46.712 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:46.720 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.728 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:46.737 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:46.745 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.754 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:46.764 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:46.772 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.780 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.784 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:46.788 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:46.792 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.795 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:46.800 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:46.804 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.808 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:46.812 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:46.816 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.820 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:46.824 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:46.828 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:46.831 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:46.847 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 39 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 99 7e
+00:40:46.848 V: [Mess]: Status Response: 00 03 39 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00
+00:40:47.296 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.304 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.313 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.322 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.330 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.338 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.348 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.356 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.364 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.373 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.381 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.389 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.398 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.406 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.415 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.425 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.433 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.441 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.450 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.455 W: [rs485]: Invalid message, corrupted length/broadcast flag: 7e f5 7e 20
+00:40:47.498 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.507 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.514 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.518 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.523 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.527 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.531 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.535 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.539 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.543 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.547 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.551 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.554 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.560 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.564 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.568 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.572 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.576 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.580 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.583 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.588 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.591 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.595 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.599 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.603 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.607 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:47.611 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:47.615 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:47.631 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 40 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 2d 7e
+00:40:47.632 V: [Mess]: Status Response: 00 03 40 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00
+00:40:48.015 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.025 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.034 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.043 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.051 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.059 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.071 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.079 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.087 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.096 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.104 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.112 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.121 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.130 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.139 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.148 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.156 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.164 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.173 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.181 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.191 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:48.199 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:48.235 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 43 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 3c 7e
+00:40:48.235 V: [rs485]: Set SPA id 0x0A
+00:40:48.237 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:48.237 V: [rs485]: Sent Existing Client Response
+00:40:48.245 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.253 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.261 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.270 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.278 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.287 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.297 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.302 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.306 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.315 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.323 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.331 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.340 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.348 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.356 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.361 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.368 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.372 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.388 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 46 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 0f 7e
+00:40:48.389 V: [Mess]: Status Response: 00 03 46 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00
+00:40:48.820 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.828 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.836 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.845 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.855 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.863 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.873 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.881 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.889 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.898 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.906 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.914 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.923 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.931 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.939 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.949 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.958 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.966 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:48.975 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:48.983 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:48.991 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.029 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 46 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 0f 7e
+00:40:49.036 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.044 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.053 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.062 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.070 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.078 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.086 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.094 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.102 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.112 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.120 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.129 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.133 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.137 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:49.141 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:49.145 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:49.148 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:49.152 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:49.156 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:49.160 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:49.165 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:49.169 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:49.173 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:49.176 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:49.180 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:49.184 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:49.188 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:49.191 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:49.206 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 4a 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 4b 7e
+00:40:49.207 V: [rs485]: Set SPA id 0x0A
+00:40:49.208 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:49.208 V: [rs485]: Sent Existing Client Response
+00:40:49.212 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.217 W: [rs485]: Invalid message, corrupted length: 7e 05 10 bf 06 5c fe 5b
+00:40:49.222 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.226 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.230 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.234 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.238 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.242 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.245 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.250 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.253 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.257 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.263 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.266 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.270 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.274 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.278 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.282 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.286 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.290 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.305 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 4d 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 9b 7e
+00:40:49.306 V: [Mess]: Status Response: 00 03 4d 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00
+00:40:49.807 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.816 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.824 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.832 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.841 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.849 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.858 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.867 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.878 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.886 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.895 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.903 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.911 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.920 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.930 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.938 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.947 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.955 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:49.963 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:49.973 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:49.982 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:50.018 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 4f 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 78 7e
+00:40:50.019 V: [Mess]: Status Response: 00 03 4f 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00
+00:40:50.733 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:50.742 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:50.750 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:50.758 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:50.767 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:50.775 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:50.785 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:50.795 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:50.805 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:50.813 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:50.822 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:50.830 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:50.838 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:50.846 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:50.856 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:50.864 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:50.872 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:50.880 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:50.888 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:50.897 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:50.934 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 4f 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 78 7e
+00:40:50.934 V: [rs485]: Set SPA id 0x0A
+00:40:50.936 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:50.936 V: [rs485]: Sent Existing Client Response
+00:40:50.944 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:50.949 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:50.953 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:50.958 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:50.962 W: [rs485]: Invalid message, corrupted length: 7e 05 10 bf c7 7e 05 0a
+00:40:50.967 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:50.971 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:50.975 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:50.979 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:50.983 W: [rs485]: Invalid message, crc failed: 7e 05 10 bf 07 ff 7e
+00:40:50.989 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:50.993 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:50.998 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.002 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.007 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.012 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:51.016 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:51.019 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:51.034 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:51.035 V: [rs485]: Set SPA id 0x0A
+00:40:51.036 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:51.036 V: [rs485]: Sent Existing Client Response
+00:40:51.040 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.044 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.048 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.052 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.056 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.060 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.064 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.069 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.072 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.076 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.080 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.084 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.088 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.092 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.097 W: [rs485]: Invalid message, corrupted length: 7e 05 10 bf 06 5c fe 5b
+00:40:51.113 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:51.115 V: [Mess]: Status Response: 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00
+00:40:51.651 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.661 W: [rs485]: Invalid message, corrupted length: 7e 05 10 bf 06 5c fe 7e
+00:40:51.675 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.683 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.691 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.701 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.709 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.717 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.726 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.734 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.742 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.751 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.759 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.767 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.778 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.786 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.794 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.803 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.811 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.851 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:51.858 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.868 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.877 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.885 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.894 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.902 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.910 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.921 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.929 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.937 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.946 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.954 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.962 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.971 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:51.979 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:51.987 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:51.995 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.003 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.011 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.020 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.029 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.068 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:52.072 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.076 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.081 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.084 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.089 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.092 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.096 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:52.100 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:52.103 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:52.107 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:52.111 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:52.114 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:52.118 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:52.122 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:52.126 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:52.130 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:52.134 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:52.138 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:52.142 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:52.146 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:52.161 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:52.161 V: [rs485]: Set SPA id 0x0A
+00:40:52.162 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:52.163 V: [rs485]: Sent Existing Client Response
+00:40:52.166 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.170 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.174 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.178 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.182 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.186 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.190 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.194 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.198 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.202 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.206 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.209 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.216 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.220 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.224 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.228 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.233 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.237 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.241 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.256 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:52.260 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.264 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.267 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.272 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.275 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.279 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.297 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.301 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.316 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.337 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.340 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.356 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.377 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.380 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.396 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.417 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.420 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.437 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.457 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.460 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.476 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.514 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:52.517 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.521 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.536 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.556 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.560 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.576 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.597 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.600 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.616 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.637 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.641 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.655 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.676 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.680 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.696 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:52.715 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:52.736 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:52.740 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:52.755 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:52.776 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:52.780 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:52.811 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:52.811 V: [rs485]: Set SPA id 0x0A
+00:40:52.813 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:52.813 V: [rs485]: Sent Existing Client Response
+00:40:52.836 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.840 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.855 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.876 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.880 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.895 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.916 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.920 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.935 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.956 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:52.959 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:52.975 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:52.996 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.000 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.015 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.036 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.039 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.055 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.075 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.078 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.111 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:53.115 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.136 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.139 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.155 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.175 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.179 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.195 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.215 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.219 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.235 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.256 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.260 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.274 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.297 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.301 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.315 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.335 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.339 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.354 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.375 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.379 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.410 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:53.414 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.434 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.438 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.454 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.475 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.479 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.494 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.514 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.518 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.534 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.555 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.558 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.574 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.595 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.598 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.614 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.635 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.638 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.654 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.675 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.678 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.695 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:53.714 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:53.748 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:53.749 V: [rs485]: Set SPA id 0x0A
+00:40:53.750 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:53.750 V: [rs485]: Sent Existing Client Response
+00:40:53.755 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.758 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.773 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.794 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.798 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.814 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.834 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.838 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.853 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.873 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.877 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.893 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.914 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.918 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.933 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:53.954 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:53.958 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:53.974 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.009 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:54.013 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.017 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.033 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.054 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.058 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.073 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.096 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.100 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.113 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.134 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.138 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.153 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.174 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.178 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.193 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.213 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.217 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.233 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.254 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.257 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.273 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.308 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:54.313 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.316 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.333 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.353 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.357 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.373 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.393 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.397 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.413 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.434 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.437 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.452 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.473 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.477 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.492 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.513 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.517 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.532 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.553 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.557 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.572 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.608 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:54.613 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.617 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.632 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.653 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.657 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.672 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.693 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:54.712 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:54.716 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:54.732 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:54.753 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:54.757 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:54.772 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:54.793 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:54.797 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:54.812 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:54.832 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:54.836 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:54.852 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:54.872 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:54.876 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:54.910 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:54.910 V: [rs485]: Set SPA id 0x0A
+00:40:54.912 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:54.912 V: [rs485]: Sent Existing Client Response
+00:40:54.916 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.932 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.936 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.952 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:54.972 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:54.976 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:54.991 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.012 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.016 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.031 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.052 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.056 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.071 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.092 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.096 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.111 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.132 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.136 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.151 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.172 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.176 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.207 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:55.211 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.232 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.236 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.251 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.272 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.276 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.291 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.312 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.315 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.331 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.352 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.356 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.371 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.391 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.394 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.411 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.432 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.435 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.451 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.471 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.474 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.506 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:55.511 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.531 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.535 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.550 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.571 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.575 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.590 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.611 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.615 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.630 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.651 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.655 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.670 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.693 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:55.711 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:55.715 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:55.730 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:55.751 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:55.754 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:55.770 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:55.805 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:55.806 V: [rs485]: Set SPA id 0x0A
+00:40:55.807 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:55.807 V: [rs485]: Sent Existing Client Response
+00:40:55.830 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.851 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.854 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.870 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.891 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.895 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.910 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.931 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.934 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.950 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:55.970 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:55.974 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:55.990 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.011 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.014 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.030 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.050 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.053 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.069 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.105 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:56.110 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.114 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.129 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.150 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.154 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.169 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.189 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.193 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.209 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.230 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.234 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.249 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.269 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.273 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.289 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.310 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.314 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.330 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.350 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.354 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.369 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.404 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:56.409 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.413 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.429 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.450 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.453 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.469 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.492 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.496 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.509 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.530 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.534 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.549 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.569 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.573 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.589 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.609 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.613 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.629 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.649 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.653 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.669 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.690 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:56.709 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:56.713 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:56.744 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:56.745 V: [rs485]: Set SPA id 0x0A
+00:40:56.746 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:56.746 V: [rs485]: Sent Existing Client Response
+00:40:56.767 W: [rs485]: Invalid message, corrupted length: 7e 05 0a bf 06 7e 05 10
+00:40:56.772 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.789 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.809 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.813 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.828 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.848 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.852 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.868 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.889 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.893 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.908 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.929 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.932 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:56.948 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:56.969 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:56.972 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.004 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:57.008 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.029 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.032 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.048 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.068 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.071 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.088 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.108 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.112 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.128 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.149 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.153 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.168 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.188 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.192 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.208 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.228 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.232 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.248 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.268 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.272 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.306 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:57.309 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.328 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.332 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.347 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.368 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.372 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.387 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.408 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.412 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.427 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.448 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.452 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.467 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.488 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.491 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.507 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.528 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.531 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.547 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.567 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.571 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.602 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:57.607 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.627 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.631 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.647 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.667 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.671 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.687 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:57.706 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:57.727 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:57.731 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:57.746 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:57.767 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:57.771 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:57.786 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:57.807 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:57.811 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:57.826 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:57.847 V: [rs485]: Received: 0 - 7e 05 10 bf 06 5c 7e
+00:40:57.851 V: [rs485]: Received: 0 - 7e 05 10 bf 07 5b 7e
+00:40:57.866 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+00:40:57.902 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:57.902 V: [rs485]: Set SPA id 0x0A
+00:40:57.903 V: [rs485]: Sent: 7e 08 0a bf 05 04 37 00 ca 7e
+00:40:57.904 V: [rs485]: Sent Existing Client Response
+00:40:57.926 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.947 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.951 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:57.967 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:57.987 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:57.991 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.006 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.027 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.031 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.046 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.067 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.071 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.088 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.107 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.110 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.126 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.146 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.149 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.166 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.201 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:58.206 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.210 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.226 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.246 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.250 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.266 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.287 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.290 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.305 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.327 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.330 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.345 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.365 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.369 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.385 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.406 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.410 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.425 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.446 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.450 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.465 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.500 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e
+00:40:58.506 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.509 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.525 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.546 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.550 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.565 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.585 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.589 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.605 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.626 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.629 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.645 V: [rs485]: Received: 10 - 7e 05 0a bf 06 79 7e
+00:40:58.666 V: [rs485]: Received: 10 - 7e 05 10 bf 06 5c 7e
+00:40:58.669 V: [rs485]: Received: 10 - 7e 05 10 bf 07 5b 7e
+00:40:58.686 V: [rs485]: Received: 10 - 7e 05 fe bf 00 ac 7e
+00:40:58.705 V: [rs485]: Received: 0 - 7e 05 0a bf 06 79 7e
+
+--- exit ---
+PS C:\Users\DELL>
+
+=============================================================================================================
+Set temp 30 degree;
+Measured 24.5 degree;
+Waited for long time while capturing the previous logs. No stimulus applied at that time;
+Started getting logs and then applied stimulus just after that;
+Temprature went as high as upto 50 and machine gave error message as The heater is too hot.
+
+7e 20 ff af 13 00 03 31 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 1c 7e - 24.5
+7e 20 ff af 13 00 03 32 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 0d 7e - 25
+7e 20 ff af 13 00 03 33 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 ff 7e - 25.5
+7e 20 ff af 13 00 03 34 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 2f 7e - 26
+7e 20 ff af 13 00 03 35 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 dd 7e - 26.5
+7e 20 ff af 13 00 03 37 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 3e 7e - 27.5
+7e 20 ff af 13 00 03 39 0c 34 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 99 7e - 28.5
+7e 20 ff af 13 00 03 40 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 2d 7e - 29
+7e 20 ff af 13 00 03 43 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 3c 7e - 29.5
+7e 20 ff af 13 00 03 46 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 0f 7e - 31.5
+7e 20 ff af 13 00 03 4a 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 4b 7e - 38
+7e 20 ff af 13 00 03 4d 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 9b 7e - 38.5
+7e 20 ff af 13 00 03 4f 0c 34 00 28 03 06 03 08 00 00 02 00 00 00 00 02 02 3c 00 00 00 1e 00 00 78 7e - 39.5
+7e 20 ff af 13 00 02 ff 0c 35 00 1e 03 06 03 09 00 00 02 00 00 00 00 05 22 3c 00 00 00 1e 00 00 5c 7e - temp 10 degree above set temp. - FF should mean over limit.
