@@ -14,6 +14,8 @@
 //Test:::
 int lastCRC = 0;
 int last_lastCRC = 0;
+float measuredTemp = 0;
+float SetTemp = 0;
 // QueueHandle_t rs485WriteQueue;
 
 // Local functions
@@ -148,21 +150,29 @@ void rs485Loop()
     if (isMessageValid(spaMessage))
     {
       // Test:::
-      if(spaMessage[4] != 0x07 && spaMessage[4] != 0x06)
+      if(spaMessage.size() > 20)
+      {
+        getTemp();
+      }
+      // Test:::
+      if(spaMessage.size() >= 8)
       {
         int receivedCRC = spaMessage[spaMessage.size() - 2];
-        last_lastCRC = receivedCRC;
-        Log.verbose("Received CRC : %d\n", receivedCRC);
-        Log.verbose("Last CRC : %d\n", lastCRC);
-        Log.verbose("Last_Last CRC : %d\n", last_lastCRC);
-        if(lastCRC != receivedCRC && last_lastCRC == receivedCRC)
+        // last_lastCRC = receivedCRC;
+        // Log.verbose("Received CRC : %d\n", receivedCRC);
+        // Log.verbose("Last CRC : %d\n", lastCRC);
+        // Log.verbose("Last_Last CRC : %d\n", last_lastCRC);
+        if(lastCRC != receivedCRC)
         {
           lastCRC = receivedCRC;
-          if(last_lastCRC != receivedCRC)
-          {
-            last_lastCRC = receivedCRC;
-            Log.verbose(F("[rs485]: Received: %d - %s" CR), id, msgToString(spaMessage).c_str());
-          }
+          // last_lastCRC = receivedCRC;
+          Log.verbose(F("[rs485]: Received: %d - %s" CR), id, msgToString(spaMessage).c_str());
+          // Log.verbose("Measured Temp = %2.2f\n", measuredTemp, measuredTemp, measuredTemp);
+          // Log.verbose("Set Temp = %2.2f\n", SetTemp, SetTemp, SetTemp);
+          Serial.print("Measured Temp = ");
+          Serial.println(measuredTemp);
+          Serial.print("Set Temp = ");
+          Serial.println(SetTemp);
         }
       }
       
@@ -427,6 +437,64 @@ void sendExistingClientResponse(uint8_t id)
   addCRC(dataBuffer);
   rs485Write(dataBuffer);
   // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
+}
+
+// Test:::
+void switchTempRange(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x50);
+  dataBuffer.push(0x00);
+  // dataBuffer.push(0x32); // 08 10 BF 05 04 08 00 - Config request doesn't seem to work
+
+  addCRC(dataBuffer);
+  rs485Write(dataBuffer);
+  // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
+}
+
+// Test:::
+void switchHeatMode(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x51);
+  dataBuffer.push(0x00);
+  // dataBuffer.push(0x32); // 08 10 BF 05 04 08 00 - Config request doesn't seem to work
+
+  addCRC(dataBuffer);
+  rs485Write(dataBuffer);
+  // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
+}
+
+
+// Test:::
+void setTemp(int temp)
+{
+  temp = temp*2;
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x20);
+  dataBuffer.push(temp);
+  dataBuffer.push(0x00);
+  // dataBuffer.push(0x32); // 08 10 BF 05 04 08 00 - Config request doesn't seem to work
+
+  addCRC(dataBuffer);
+  rs485Write(dataBuffer);
+  // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
+}
+
+void getTemp(void)
+{
+  measuredTemp = spaMessage[7];
+  measuredTemp = measuredTemp /2;
+  SetTemp = spaMessage[25];
+  SetTemp = SetTemp / 2;
 }
 
 /*

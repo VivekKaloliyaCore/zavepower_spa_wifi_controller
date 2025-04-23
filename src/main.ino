@@ -64,6 +64,11 @@ void setup()
   esp_log_level_set("*", ESP_LOG_DEBUG);
 
   // logSection("This is UPDATED FIRMWARE....");
+
+// Test :::
+    switchTempRange();
+    switchHeatMode();
+    setTemp(0x1E);
 }
 
 void loop()

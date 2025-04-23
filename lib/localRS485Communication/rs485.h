@@ -11,6 +11,12 @@ void rs485Setup();
 void rs485Loop();
 void rs485ClearToSend();
 
+// Test:::
+void switchTempRange(void); // Tested and working; Switches temp range from low to high and high to low;
+void switchHeatMode(void); // Tesd and working; Switch heat mode from Ready to Rest and Rest to Ready;
+void setTemp(int temp); // Tested; Pass value of temperature needed to be set as an argument in Hex & according to current temperature range;
+void getTemp(void);
+
 // void rs485Send(uint8_t *data, int length, boolean addCrc, boolean force = false);
 // void rs485Send(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data, boolean addCrc, boolean force = false);
 void addCRC(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data);
