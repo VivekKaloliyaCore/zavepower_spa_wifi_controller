@@ -5,6 +5,12 @@
 #include <CircularBuffer.hpp>
 #include "../../src/main.h"
 
+typedef struct 
+{
+  float setTemp;
+  float measuredTemp;
+}spaTempData;
+
 typedef struct {
   bool  is_jet1_present;
   bool  jet1;
@@ -20,11 +26,14 @@ typedef struct {
 
   bool  is_reset_wifi_sta_present;
   bool  reset_wifi_sta;
+
+  bool setTempCommand;
 } spaControlParams_t;
 
 typedef struct {
   bool deviceStatus;
   bool bootupPacket;
+  bool tempStatus;
 } spaControlStatus_t;
 
 typedef struct {
@@ -42,6 +51,7 @@ void spaControl_action(void);
 void spaControl_mqtt_action(void);
 bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaControlParams, spaControlStatus_t *spaControlStatus, otaParams_t *otaParams);
 void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str);
+void spaControl_create_tempStatus(char *json_str);
 void spaControl_create_bootupPacket(char *json_str);
 
 #endif

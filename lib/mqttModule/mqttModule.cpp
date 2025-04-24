@@ -142,12 +142,13 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
   spaControlStatus_t spaControlStatus = {0};
   memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
 
+
   otaParams_t otaParams = {0};
   memset(&otaParams, 0, sizeof(otaParams_t));
 
   if(spaControl_parse_action_command((char *)payload, &spaControlParams, &spaControlStatus, &otaParams))
   {
-    if(spaControlStatus.deviceStatus)
+    if(spaControlStatus.deviceStatus || spaControlStatus.tempStatus)
     {
       Log.notice("Sending deviceStatus...\n");
       set_spaControlStatus(spaControlStatus);

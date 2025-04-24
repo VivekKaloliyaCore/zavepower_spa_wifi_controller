@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <CircularBuffer.hpp>
 #include "balboa.h"
+#include "spaControl.h"
 
 extern RTC_NOINIT_ATTR SpaStatusData spaStatusData;
 extern RTC_NOINIT_ATTR SpaConfigurationData spaConfigurationData;
@@ -22,5 +23,6 @@ void sendMessageToSpa(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data);
 String getMapDescription(uint8_t element, const std::map<uint8_t, const char*>& suppliedMap);
 
 SpaStatusData spaMessage_get_spaStatusData(void);
+SpaStatusData spa_get_tempStatusData(void);
 
 #endif

@@ -66,9 +66,9 @@ void setup()
   // logSection("This is UPDATED FIRMWARE....");
 
 // Test :::
-    switchTempRange();
-    switchHeatMode();
-    setTemp(0x1E);
+    // switchTempRange();
+    // switchHeatMode();
+    // setTemp(0x1E);
 }
 
 void loop()

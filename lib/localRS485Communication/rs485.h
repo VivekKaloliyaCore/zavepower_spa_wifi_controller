@@ -12,6 +12,8 @@ void rs485Loop();
 void rs485ClearToSend();
 
 // Test:::
+extern float measuredTemp;
+extern float SetTemp;
 void switchTempRange(void); // Tested and working; Switches temp range from low to high and high to low;
 void switchHeatMode(void); // Tesd and working; Switch heat mode from Ready to Rest and Rest to Ready;
 void setTemp(int temp); // Tested; Pass value of temperature needed to be set as an argument in Hex & according to current temperature range;

@@ -474,7 +474,6 @@ Byte	Name	Description/Values
 
 bool parseStatusMessage(u_int8_t *message, int length)
 {
-
   if (spaStatusData.crc != message[message[1]])
   {
     spaStatusData.rawData[0] = message[0];
@@ -714,3 +713,10 @@ SpaStatusData spaMessage_get_spaStatusData(void)
 {
   return spaStatusData;
 }
+
+// SpaStatusData spa_get_tempStatusData(void)
+// {
+//   spaTempData.setTemp = SetTemp;
+//   spaTempData.measuredTemp = measuredTemp;
+//   return spaTempData;
+// }

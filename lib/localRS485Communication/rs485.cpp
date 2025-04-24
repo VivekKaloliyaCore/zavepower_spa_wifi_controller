@@ -495,6 +495,7 @@ void getTemp(void)
   measuredTemp = measuredTemp /2;
   SetTemp = spaMessage[25];
   SetTemp = SetTemp / 2;
+  // spaControlStatus.deviceStatus = true;
 }
 
 /*

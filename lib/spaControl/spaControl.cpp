@@ -22,6 +22,8 @@ bool sendSpaCmdSend = false;
 static spaControlParams_t spaControlParams = {0};
 static spaControlStatus_t spaControlStatus = {0};
 
+
+
 void myFunction()
 {
   Log.notice("startSpaCmdSendTimer Triggered!\n");
@@ -82,10 +84,18 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
 {
   spaControlStatus.deviceStatus = _spaControlStatus.deviceStatus;
   spaControlStatus.bootupPacket = _spaControlStatus.bootupPacket;
+  spaControlStatus.tempStatus = _spaControlStatus.tempStatus;
 }
+
 
 void spaControl_action(void)
 {
+  if(spaControlParams.setTempCommand)
+  {
+    spaControlParams.setTempCommand = false;
+    setTemp(0x1E);
+  }
+
   if(spaControlParams.is_jet1_present)
   {
     if(spaControlParams.jet1)
@@ -214,6 +224,19 @@ void spaControl_mqtt_action(void)
 
     spaMqttMessage_publish_message("response", json_str, strlen(json_str));
   }
+
+  if(spaControlStatus.tempStatus)
+  {
+    spaControlStatus.tempStatus = false;
+
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    // SpaStatusData spa_status_data = spa_get_tempStatusData();
+    spaControl_create_tempStatus(json_str);
+
+    spaMqttMessage_publish_message("response", json_str, strlen(json_str));
+  }  
+
   if(spaControlStatus.bootupPacket)
   {
     spaControlStatus.bootupPacket = false;
@@ -289,6 +312,16 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlParams->is_reset_wifi_sta_present = true;
         spaControlParams->reset_wifi_sta = reset_wifi_sta;
       }
+
+      else if(doc["payload"].containsKey("setTemp"))
+      {
+        int setTemp = doc["payload"]["setTemp"];
+        Log.notice("Set Temprature : %d\n", setTemp);
+
+        spaControlParams->setTempCommand = true;
+        // spaControlParams->reset_wifi_sta = setTemp;
+      }
+
     }
     else
       return false;
@@ -304,6 +337,16 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         Log.notice("deviceStatus: %d\n", deviceStatus);
 
         spaControlStatus->deviceStatus = true;
+      }
+    }
+    if (doc.containsKey("payload"))
+    {
+      if(doc["payload"].containsKey("getTemp"))
+      {
+        int getTemp = doc["payload"]["getTemp"];
+        Log.notice("getTemp: %d\n", getTemp);
+
+        spaControlStatus->tempStatus = true;
       }
     }
     else
@@ -350,6 +393,28 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   payload["jet2"] = getMapDescription(_SpaStatusData.pump2, pumpMap);
   payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
   payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+}
+
+// Test:::
+void spaControl_create_tempStatus(char *json_str)
+{
+  // Create a JSON document
+  StaticJsonDocument<200> doc;
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "tempStatus";
+
+  // Create "payload" as a nested object
+  JsonObject payload = doc.createNestedObject("payload");
+  payload["setTemp"] = SetTemp;
+  payload["measuredTemp"] = measuredTemp;
 
   // Serialize JSON to a string
   String output;
