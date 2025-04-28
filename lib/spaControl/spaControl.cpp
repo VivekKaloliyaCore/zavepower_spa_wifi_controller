@@ -23,7 +23,6 @@ static spaControlParams_t spaControlParams = {0};
 static spaControlStatus_t spaControlStatus = {0};
 
 
-
 void myFunction()
 {
   Log.notice("startSpaCmdSendTimer Triggered!\n");
@@ -84,17 +83,18 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
 {
   spaControlStatus.deviceStatus = _spaControlStatus.deviceStatus;
   spaControlStatus.bootupPacket = _spaControlStatus.bootupPacket;
-  spaControlStatus.tempStatus = _spaControlStatus.tempStatus;
+  spaControlStatus.currentTemp = _spaControlStatus.currentTemp;
+  spaControlStatus.setTemp = _spaControlStatus.setTemp;
 }
 
 
 void spaControl_action(void)
 {
-  if(spaControlParams.setTempCommand)
-  {
-    spaControlParams.setTempCommand = false;
-    setTemp(0x1E);
-  }
+  // if(spaControlParams.setTempCommand)
+  // {
+  //   spaControlParams.setTempCommand = false;
+  //   // setTemp(0x1E);
+  // }
 
   if(spaControlParams.is_jet1_present)
   {
@@ -225,17 +225,29 @@ void spaControl_mqtt_action(void)
     spaMqttMessage_publish_message("response", json_str, strlen(json_str));
   }
 
-  if(spaControlStatus.tempStatus)
+  if(spaControlStatus.currentTemp)
   {
-    spaControlStatus.tempStatus = false;
+    spaControlStatus.currentTemp = false;
 
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
-    // SpaStatusData spa_status_data = spa_get_tempStatusData();
-    spaControl_create_tempStatus(json_str);
+    SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
+    spaControl_create_currentTemp(spa_status_data, json_str);
 
     spaMqttMessage_publish_message("response", json_str, strlen(json_str));
-  }  
+  }
+
+  if(spaControlStatus.setTemp)
+  {
+    spaControlStatus.setTemp = false;
+
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
+    spaControl_create_setTemp(spa_status_data, json_str);
+
+    spaMqttMessage_publish_message("response", json_str, strlen(json_str));
+  }
 
   if(spaControlStatus.bootupPacket)
   {
@@ -338,15 +350,19 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
 
         spaControlStatus->deviceStatus = true;
       }
-    }
-    if (doc.containsKey("payload"))
-    {
-      if(doc["payload"].containsKey("getTemp"))
+      else if(doc["payload"].containsKey("currentTemp"))
       {
-        int getTemp = doc["payload"]["getTemp"];
-        Log.notice("getTemp: %d\n", getTemp);
+        int currentTemp = doc["payload"]["currentTemp"];
+        Log.notice("currentTemp: %d\n", currentTemp);
 
-        spaControlStatus->tempStatus = true;
+        spaControlStatus->currentTemp = true;
+      }
+      else if(doc["payload"].containsKey("setTemp"))
+      {
+        int setTemp = doc["payload"]["setTemp"];
+        Log.notice("setTemp: %d\n", setTemp);
+
+        spaControlStatus->setTemp = true;
       }
     }
     else
@@ -401,20 +417,38 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   memcpy(json_str, output.c_str(), strlen(output.c_str()));
 }
 
-// Test:::
-void spaControl_create_tempStatus(char *json_str)
+void spaControl_create_currentTemp(SpaStatusData _SpaStatusData, char *json_str)
 {
   // Create a JSON document
   StaticJsonDocument<200> doc;
 
   // Add key-value pairs
   doc["action"] = "response";
-  doc["msgT"] = "tempStatus";
+  doc["msgT"] = "currentTemp";
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
-  payload["setTemp"] = SetTemp;
-  payload["measuredTemp"] = measuredTemp;
+  payload["currentTemp"] = _SpaStatusData.currentTemp;
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+}
+
+void spaControl_create_setTemp(SpaStatusData _SpaStatusData, char *json_str)
+{
+  // Create a JSON document
+  StaticJsonDocument<200> doc;
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "setTemp";
+
+  // Create "payload" as a nested object
+  JsonObject payload = doc.createNestedObject("payload");
+  payload["setTemp"] = _SpaStatusData.setTemp;
 
   // Serialize JSON to a string
   String output;

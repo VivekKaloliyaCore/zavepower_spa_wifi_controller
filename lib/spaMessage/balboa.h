@@ -80,6 +80,7 @@ Settings Code	Name	Subsequent Arguments	Response
 #define Channel_Assignment_Response(Q_in) (Q_in[2] == 0xFE && Q_in[4] == Channel_Assignment_Response_Type)
 #define Existing_WiFi_Client_Request(Q_in) (Q_in[2] == 0x0a && Q_in[4] == Existing_Client_Request_Type) // 7e 05 0a bf 04 77 7e
 #define Clear_to_Send(Q_in) (Q_in[2] == id && Q_in[4] == Clear_to_Send_Type)
+#define Nothing_to_Send(Q_in) (Q_in[2] == id && Q_in[4] == Nothing_to_Send_Type)
 
 #define For_Us_Message(Q_in) (Q_in[2] == id || Q_in[2] == 0xFF)
 

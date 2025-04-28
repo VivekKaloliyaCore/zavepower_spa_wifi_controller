@@ -10,12 +10,6 @@
 #include "../../src/config.h"
 #include "../../src/main.h"
 
-
-//Test:::
-int lastCRC = 0;
-int last_lastCRC = 0;
-float measuredTemp = 0;
-float SetTemp = 0;
 // QueueHandle_t rs485WriteQueue;
 
 // Local functions
@@ -114,8 +108,7 @@ void rs485Loop()
     if (spaMessage.size() > BALBOA_MESSAGE_SIZE - 1)
     {
       rs485Stats.badFormatToday++;
-      //Test:::
-      // Log.warning(F("[rs485]: Invalid message, too long: %s" CR), msgToString(spaMessage).c_str());
+      Log.warning(F("[rs485]: Invalid message, too long: %s" CR), msgToString(spaMessage).c_str());
       spaMessage.clear();
     }
   }
@@ -132,60 +125,31 @@ void rs485Loop()
   if (spaMessage.size() == 4 && (spaMessage[1] > BALBOA_MESSAGE_SIZE | !(spaMessage[3] == 0xBF || spaMessage[3] == 0xAF)))
   {
     rs485Stats.badFormatToday++;
-    //Test:::
-    // Log.warning(F("[rs485]: Invalid message, corrupted length/broadcast flag: %s" CR), msgToString(spaMessage).c_str());
+    Log.warning(F("[rs485]: Invalid message, corrupted length/broadcast flag: %s" CR), msgToString(spaMessage).c_str());
     spaMessage.clear();
   }
 
   if (spaMessage.size() - 2 > spaMessage[1])
   {
     rs485Stats.badFormatToday++;
-    //Test:::
-    // Log.warning(F("[rs485]: Invalid message, corrupted length: %s" CR), msgToString(spaMessage).c_str());
+    Log.warning(F("[rs485]: Invalid message, corrupted length: %s" CR), msgToString(spaMessage).c_str());
     spaMessage.clear();
   }
 
   if (x == 0x7E && spaMessage.size() > 4 && spaMessage.size() == spaMessage[1] + 2)
   {
+
     if (isMessageValid(spaMessage))
     {
-      // Test:::
-      if(spaMessage.size() > 20)
-      {
-        getTemp();
-      }
-      // Test:::
-      if(spaMessage.size() >= 8)
-      {
-        int receivedCRC = spaMessage[spaMessage.size() - 2];
-        // last_lastCRC = receivedCRC;
-        // Log.verbose("Received CRC : %d\n", receivedCRC);
-        // Log.verbose("Last CRC : %d\n", lastCRC);
-        // Log.verbose("Last_Last CRC : %d\n", last_lastCRC);
-        if(lastCRC != receivedCRC)
-        {
-          lastCRC = receivedCRC;
-          // last_lastCRC = receivedCRC;
-          Log.verbose(F("[rs485]: Received: %d - %s" CR), id, msgToString(spaMessage).c_str());
-          // Log.verbose("Measured Temp = %2.2f\n", measuredTemp, measuredTemp, measuredTemp);
-          // Log.verbose("Set Temp = %2.2f\n", SetTemp, SetTemp, SetTemp);
-          Serial.print("Measured Temp = ");
-          Serial.println(measuredTemp);
-          Serial.print("Set Temp = ");
-          Serial.println(SetTemp);
-        }
-      }
-      
-      
+      Log.verbose(F("[rs485]: Received: %d - %s" CR), id, msgToString(spaMessage).c_str());
       rs485Stats.messagesToday++;
       if (id == 0)
       {
         if (Status_Update(spaMessage)) // This is hacky, but it appears to work
         {
           id = WIFI_MODULE_ID;
-          //Test::: Commanted for test;
-          // Log.verbose(F("[rs485]: Set SPA id 0x0A" CR));
-          // sendExistingClientResponse(id); Commanted for Test;
+          Log.verbose(F("[rs485]: Set SPA id 0x0A" CR));
+          sendExistingClientResponse(id);
           spaMessage.clear();
         }
 
@@ -225,8 +189,7 @@ void rs485Loop()
 
         if (xQueueSend(spaReadQueue, &messageToSend, 0) != pdTRUE)
         {
-          // Test::: Commanted for test;
-          // Log.error(F("[rs485]: SPA Read Queue full, dropped %s" CR), msgToString(messageToSend->message, messageToSend->length).c_str());
+          Log.error(F("[rs485]: SPA Read Queue full, dropped %s" CR), msgToString(messageToSend->message, messageToSend->length).c_str());
         }
         else
         {
@@ -240,8 +203,7 @@ void rs485Loop()
     }
     else
     {
-      // Test::: Commnated for test;
-      // Log.warning(F("[rs485]: Invalid message, crc failed: %s" CR), msgToString(spaMessage).c_str());
+      Log.warning(F("[rs485]: Invalid message, crc failed: %s" CR), msgToString(spaMessage).c_str());
     }
     spaMessage.clear();
   }
@@ -381,7 +343,7 @@ void rs485Write(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data)
 
   if (data[4] != Nothing_to_Send_Type)
   {
-    // Log.verbose(F("[rs485]: Sent: %s" CR), msgToString(data).c_str()); Commented for Test;
+    Log.verbose(F("[rs485]: Sent: %s" CR), msgToString(data).c_str());
   }
   data.clear();
 
@@ -436,66 +398,7 @@ void sendExistingClientResponse(uint8_t id)
 
   addCRC(dataBuffer);
   rs485Write(dataBuffer);
-  // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
-}
-
-// Test:::
-void switchTempRange(void)
-{
-  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-  dataBuffer.push(id);
-  dataBuffer.push(0xBF);
-  dataBuffer.push(0x11);
-  dataBuffer.push(0x50);
-  dataBuffer.push(0x00);
-  // dataBuffer.push(0x32); // 08 10 BF 05 04 08 00 - Config request doesn't seem to work
-
-  addCRC(dataBuffer);
-  rs485Write(dataBuffer);
-  // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
-}
-
-// Test:::
-void switchHeatMode(void)
-{
-  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-  dataBuffer.push(id);
-  dataBuffer.push(0xBF);
-  dataBuffer.push(0x11);
-  dataBuffer.push(0x51);
-  dataBuffer.push(0x00);
-  // dataBuffer.push(0x32); // 08 10 BF 05 04 08 00 - Config request doesn't seem to work
-
-  addCRC(dataBuffer);
-  rs485Write(dataBuffer);
-  // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
-}
-
-
-// Test:::
-void setTemp(int temp)
-{
-  temp = temp*2;
-  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-  dataBuffer.push(id);
-  dataBuffer.push(0xBF);
-  dataBuffer.push(0x20);
-  dataBuffer.push(temp);
-  dataBuffer.push(0x00);
-  // dataBuffer.push(0x32); // 08 10 BF 05 04 08 00 - Config request doesn't seem to work
-
-  addCRC(dataBuffer);
-  rs485Write(dataBuffer);
-  // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
-}
-
-void getTemp(void)
-{
-  measuredTemp = spaMessage[7];
-  measuredTemp = measuredTemp /2;
-  SetTemp = spaMessage[25];
-  SetTemp = SetTemp / 2;
-  // spaControlStatus.deviceStatus = true;
+  Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str());
 }
 
 /*
