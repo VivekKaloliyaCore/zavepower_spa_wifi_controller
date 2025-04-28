@@ -20,6 +20,7 @@ void setup()
 {
   // Launch serial for debugging purposes
   Serial.begin(SERIAL_BAUD);
+  delay(5000);
   Log.setPrefix(logPrintPrefix);
   Log.begin(LOG_LEVEL, &Serial);
   logSection("WELCOME TO esp32_balboa_spa");
@@ -59,16 +60,19 @@ void setup()
   logSection("Spa Message Setup");
   spaMessageSetup();
 
+  
+
   logSection("Setup Complete");
 
   esp_log_level_set("*", ESP_LOG_DEBUG);
-
+  
   // logSection("This is UPDATED FIRMWARE....");
 
 // Test :::
     // switchTempRange();
     // switchHeatMode();
     // setTemp(0x1E);
+    // switchTempRange();
 }
 
 void loop()

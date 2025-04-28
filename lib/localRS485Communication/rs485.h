@@ -15,6 +15,10 @@ void rs485ClearToSend();
 // void rs485Send(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data, boolean addCrc, boolean force = false);
 void addCRC(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data);
 
+
+void switchTempRange(void);
+void switchHeatMode(void);
+
 extern uint8_t id; // spa id
 
 struct Rs485Stats

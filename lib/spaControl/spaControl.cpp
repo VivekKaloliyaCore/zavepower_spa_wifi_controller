@@ -23,6 +23,14 @@ static spaControlParams_t spaControlParams = {0};
 static spaControlStatus_t spaControlStatus = {0};
 
 
+// Local Function
+void switchTempRange(void);
+void switchHeatMode(void);
+void toggleJet1(void);
+void toggleJet2(void);
+void toggleLight1(void);
+void toggleBlower1(void);
+
 void myFunction()
 {
   Log.notice("startSpaCmdSendTimer Triggered!\n");
@@ -70,6 +78,7 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   spaControlParams.is_light1_present = _spaControlParams.is_light1_present;
   spaControlParams.light1 = _spaControlParams.light1;
 
+  spaControlParams.setTempRangeHigh = _spaControlParams.setTempRangeHigh;
   // spaControlParams.is_reset_wifi_sta_present = _spaControlParams.is_reset_wifi_sta_present;
   // spaControlParams.reset_wifi_sta = _spaControlParams.reset_wifi_sta;
 }
@@ -93,8 +102,9 @@ void spaControl_action(void)
   // if(spaControlParams.setTempCommand)
   // {
   //   spaControlParams.setTempCommand = false;
-  //   // setTemp(0x1E);
+  //   setTemp(0x1E);
   // }
+
 
   if(spaControlParams.is_jet1_present)
   {
@@ -102,14 +112,7 @@ void spaControl_action(void)
     {
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
-        CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-        dataBuffer.push(WIFI_MODULE_ID);
-        dataBuffer.push(0xBF);
-        dataBuffer.push(0x11);
-        dataBuffer.push(0x04);
-        dataBuffer.push(0x00);
-        addCRC(dataBuffer);
-        sendMessageToSpa(dataBuffer);
+        toggleJet1();
 
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
@@ -127,14 +130,7 @@ void spaControl_action(void)
     {
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
-        CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-        dataBuffer.push(WIFI_MODULE_ID);
-        dataBuffer.push(0xBF);
-        dataBuffer.push(0x11);
-        dataBuffer.push(0x05);
-        dataBuffer.push(0x00);
-        addCRC(dataBuffer);
-        sendMessageToSpa(dataBuffer);
+        toggleJet2();
 
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
@@ -152,14 +148,7 @@ void spaControl_action(void)
     {
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
-        CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-        dataBuffer.push(WIFI_MODULE_ID);
-        dataBuffer.push(0xBF);
-        dataBuffer.push(0x11);
-        dataBuffer.push(0x0C);
-        dataBuffer.push(0x00);
-        addCRC(dataBuffer);
-        sendMessageToSpa(dataBuffer);
+        toggleBlower1();
 
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
@@ -177,14 +166,7 @@ void spaControl_action(void)
     {
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
-        CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-        dataBuffer.push(WIFI_MODULE_ID);
-        dataBuffer.push(0xBF);
-        dataBuffer.push(0x11);
-        dataBuffer.push(0x11);
-        dataBuffer.push(0x00);
-        addCRC(dataBuffer);
-        sendMessageToSpa(dataBuffer);
+        toggleLight1();
 
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
@@ -195,6 +177,15 @@ void spaControl_action(void)
       sendSpaCmdSend = false;
       stopSpaCmdSendTimer();
     }
+  }
+  else if(spaControlParams.setTempRangeHigh)
+  {
+    // if(!(spaStatusData.tempRange))
+    // {
+      Log.notice("XYZ::::::::::\n");
+      spaControlParams.setTempRangeHigh = false;
+      switchTempRange();
+    // }
   }
   // else if(spaControlParams.is_reset_wifi_sta_present)
   // {
@@ -284,7 +275,17 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
   {
     if (doc.containsKey("payload"))
     {
-      if(doc["payload"].containsKey("jet1"))
+      if(doc["payload"].containsKey("tempRange"))
+      {
+        String tempRange = doc["payload"]["tempRange"];
+        Log.notice("Temperature Range: %s\n", tempRange);
+
+        spaControlParams->setTempRangeHigh = true;
+        // spaControlParams->setTempRangeLow = 0;
+        // spaControlParams->jet1 = jet1;
+      }
+
+     else if(doc["payload"].containsKey("jet1"))
       {
         int jet1 = doc["payload"]["jet1"];
         Log.notice("Jet1: %d\n", jet1);
@@ -481,4 +482,85 @@ void spaControl_create_bootupPacket(char *json_str)
   serializeJson(doc, output);
 
   memcpy(json_str, output.c_str(), strlen(output.c_str()));
+}
+
+
+// Test:::
+void switchTempRange(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x50);
+  dataBuffer.push(0x00);
+  // dataBuffer.push(0x32); // 08 10 BF 05 04 08 00 - Config request doesn't seem to work
+
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+  // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
+}
+
+// Test:::
+void switchHeatMode(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x51);
+  dataBuffer.push(0x00);
+  // dataBuffer.push(0x32); // 08 10 BF 05 04 08 00 - Config request doesn't seem to work
+
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+  // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
+}
+
+void toggleJet1(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(WIFI_MODULE_ID);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x04);
+  dataBuffer.push(0x00);
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+}
+
+void toggleJet2(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(WIFI_MODULE_ID);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x05);
+  dataBuffer.push(0x00);
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+}
+
+void toggleBlower1(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(WIFI_MODULE_ID);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x0C);
+  dataBuffer.push(0x00);
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+}
+
+void toggleLight1(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(WIFI_MODULE_ID);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x00);
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
 }

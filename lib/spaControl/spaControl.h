@@ -28,6 +28,13 @@ typedef struct {
   bool  reset_wifi_sta;
 
   bool setTempCommand;
+
+  bool setTempRangeHigh;
+  bool setTempRangeLow;
+
+  bool setWorkingModeRest;
+  bool setWorkingModeReady;
+  
 } spaControlParams_t;
 
 typedef struct {

@@ -20,6 +20,9 @@ bool isMessageValid(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data);
 void sendExistingClientResponse(uint8_t id);
 // bool hasDayChanged();
 
+void switchTempRange(void);
+void switchHeatMode(void);
+
 RTC_NOINIT_ATTR Rs485Stats rs485Stats;
 
 CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> spaMessage;
@@ -143,6 +146,7 @@ void rs485Loop()
     {
       Log.verbose(F("[rs485]: Received: %d - %s" CR), id, msgToString(spaMessage).c_str());
       rs485Stats.messagesToday++;
+
       if (id == 0)
       {
         if (Status_Update(spaMessage)) // This is hacky, but it appears to work
@@ -400,6 +404,9 @@ void sendExistingClientResponse(uint8_t id)
   rs485Write(dataBuffer);
   Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str());
 }
+
+
+
 
 /*
 bool hasDayChanged() {
