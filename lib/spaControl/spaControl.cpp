@@ -113,6 +113,8 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.bootupPacket = _spaControlStatus.bootupPacket;
   spaControlStatus.currentTemp = _spaControlStatus.currentTemp;
   spaControlStatus.setTemp = _spaControlStatus.setTemp;
+  spaControlStatus.tempRange = _spaControlStatus.tempRange;
+  spaControlStatus.heatMode = _spaControlStatus.heatMode;
 }
 
 
@@ -305,6 +307,30 @@ void spaControl_mqtt_action(void)
     spaMqttMessage_publish_message("response", json_str, strlen(json_str));
   }
 
+  if(spaControlStatus.heatMode)
+  {
+    spaControlStatus.heatMode = false;
+
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
+    spaControl_create_heatMode(spa_status_data, json_str);
+
+    spaMqttMessage_publish_message("response", json_str, strlen(json_str));
+  }
+
+  if(spaControlStatus.tempRange)
+  {
+    spaControlStatus.tempRange = false;
+
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
+    spaControl_create_tempRange(spa_status_data, json_str);
+
+    spaMqttMessage_publish_message("response", json_str, strlen(json_str));
+  }
+
   if(spaControlStatus.bootupPacket)
   {
     spaControlStatus.bootupPacket = false;
@@ -486,6 +512,20 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
 
         spaControlStatus->setTemp = true;
       }
+      else if(doc["payload"].containsKey("heatMode"))
+      {
+        int heatMode = doc["payload"]["heatMode"];
+        Log.notice("Heat Mode : %d\n", heatMode);
+
+        spaControlStatus->heatMode = true;
+      }
+      else if(doc["payload"].containsKey("tempRange"))
+      {
+        int tempRange = doc["payload"]["tempRange"];
+        Log.notice("Temp range : %d\n", tempRange);
+
+        spaControlStatus->tempRange = true;
+      }
     }
     else
       return false;
@@ -571,6 +611,66 @@ void spaControl_create_setTemp(SpaStatusData _SpaStatusData, char *json_str)
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
   payload["setTemp"] = _SpaStatusData.setTemp;
+  
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+}
+
+void spaControl_create_heatMode(SpaStatusData _SpaStatusData, char *json_str)
+{
+  // Create a JSON document
+  StaticJsonDocument<200> doc;
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "setTemp";
+
+  // Create "payload" as a nested object
+  JsonObject payload = doc.createNestedObject("payload");
+  if(_SpaStatusData.heatingMode == 0x00)
+  {
+    payload["heatMode"] = "ready";
+  }
+  else if(_SpaStatusData.heatingMode == 0x01)
+  {
+    payload["heatMode"] = "rest";
+  }
+  else if(_SpaStatusData.heatingMode == 0x02)
+  {
+    payload["heatMode"] = "ready in rest";
+  }
+
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+}
+
+void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str)
+{
+  // Create a JSON document
+  StaticJsonDocument<200> doc;
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "setTemp";
+
+  // Create "payload" as a nested object
+  JsonObject payload = doc.createNestedObject("payload");
+  if(_SpaStatusData.tempRange == 1)
+  {
+    payload["tempRange"] = "High";
+  }
+  else if(_SpaStatusData.tempRange == 0)
+  {
+    payload["tempRange"] = "Low";
+  } 
+  
 
   // Serialize JSON to a string
   String output;

@@ -162,6 +162,16 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
       Log.notice("Sending setTemp...\n");
       set_spaControlStatus(spaControlStatus);
     }
+    else if(spaControlStatus.heatMode)
+    {
+      Log.notice("Sending heatMode...\n");
+      set_spaControlStatus(spaControlStatus);
+    }
+    else if(spaControlStatus.tempRange)
+    {
+      Log.notice("Sending tempRange...\n");
+      set_spaControlStatus(spaControlStatus);
+    }
 
     if(spaControlParams.is_jet1_present)
     {

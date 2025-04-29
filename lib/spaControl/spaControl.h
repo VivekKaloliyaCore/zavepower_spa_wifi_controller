@@ -47,6 +47,8 @@ typedef struct {
   bool bootupPacket;
   bool currentTemp;
   bool setTemp;
+  bool heatMode;
+  bool tempRange;
 } spaControlStatus_t;
 
 typedef struct {
@@ -67,6 +69,8 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
 void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_currentTemp(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_setTemp(SpaStatusData _SpaStatusData, char *json_str);
+void spaControl_create_heatMode(SpaStatusData _SpaStatusData, char *json_str);
+void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_bootupPacket(char *json_str);
 
 #endif
