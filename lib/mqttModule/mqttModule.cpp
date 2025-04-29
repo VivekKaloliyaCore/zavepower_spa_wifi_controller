@@ -198,9 +198,29 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
 
       // set_spaControlParams(spaControlParams);
     }
-    else if(spaControlParams.setTempRangeHigh)
+    else if(spaControlParams.is_temp_range_high_present)
     {
-      Log.notice("Sending currentTemp...\n");
+      // Log.notice("Sending currentTemp...\n");
+      set_spaControlParams(spaControlParams);
+    }
+    else if(spaControlParams.is_temp_range_low_present)
+    {
+      // Log.notice("Sending currentTemp...\n");
+      set_spaControlParams(spaControlParams);
+    }
+    else if(spaControlParams.is_ready_mode_present)
+    {
+      // Log.notice("Sending currentTemp...\n");
+      set_spaControlParams(spaControlParams);
+    }
+    else if(spaControlParams.is_resting_mode_present)
+    {
+      // Log.notice("Sending currentTemp...\n");
+      set_spaControlParams(spaControlParams);
+    }
+    else if(spaControlParams.is_set_temp_present)
+    {
+      // Log.notice("Sending currentTemp...\n");
       set_spaControlParams(spaControlParams);
     }
 

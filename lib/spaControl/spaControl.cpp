@@ -15,6 +15,10 @@
 #include "../../src/config.h"
 #include "../../src/main.h"
 
+// Global variable to send temp to set.
+float sendSetTemp = 0;
+
+
 Ticker spaCmdSendTimer;
 bool spaCmdSendTimerRunning = false;
 bool sendSpaCmdSend = false;
@@ -30,6 +34,7 @@ void toggleJet1(void);
 void toggleJet2(void);
 void toggleLight1(void);
 void toggleBlower1(void);
+void setTemp(float temp);
 
 void myFunction()
 {
@@ -78,7 +83,21 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   spaControlParams.is_light1_present = _spaControlParams.is_light1_present;
   spaControlParams.light1 = _spaControlParams.light1;
 
+  spaControlParams.is_temp_range_high_present = _spaControlParams.is_temp_range_high_present;
   spaControlParams.setTempRangeHigh = _spaControlParams.setTempRangeHigh;
+
+  spaControlParams.is_temp_range_low_present = _spaControlParams.is_temp_range_low_present;
+  spaControlParams.setTempRangeLow = _spaControlParams.setTempRangeLow;
+
+  spaControlParams.is_ready_mode_present = _spaControlParams.is_ready_mode_present;
+  spaControlParams.setModeReady = _spaControlParams.setModeReady;
+
+  spaControlParams.is_resting_mode_present = _spaControlParams.is_resting_mode_present;
+  spaControlParams.setModeRest = _spaControlParams.setModeRest;
+
+  spaControlParams.is_set_temp_present = _spaControlParams.is_set_temp_present;
+  spaControlParams.setTempCommand = _spaControlParams.setTempCommand;
+
   // spaControlParams.is_reset_wifi_sta_present = _spaControlParams.is_reset_wifi_sta_present;
   // spaControlParams.reset_wifi_sta = _spaControlParams.reset_wifi_sta;
 }
@@ -178,14 +197,60 @@ void spaControl_action(void)
       stopSpaCmdSendTimer();
     }
   }
-  else if(spaControlParams.setTempRangeHigh)
+  else if(spaControlParams.is_temp_range_high_present)
   {
-    // if(!(spaStatusData.tempRange))
-    // {
-      Log.notice("XYZ::::::::::\n");
-      spaControlParams.setTempRangeHigh = false;
-      switchTempRange();
-    // }
+    if(spaControlParams.setTempRangeHigh)
+    {
+      // Log.notice("ABAB::::::::::\n");
+      if(spaStatusData.tempRange == 0) // If Temp range is already Low
+      {
+        // Log.notice("XYZ::::::::::\n");
+        spaControlParams.setTempRangeHigh = false;
+        switchTempRange();
+      }
+    }
+  }
+  else if(spaControlParams.is_temp_range_low_present)
+  {
+    // Log.notice("HEHE::::::::::\n");
+    if(spaControlParams.setTempRangeLow)
+    {
+      if(spaStatusData.tempRange == 1) // If Temp range is already High
+      {
+        spaControlParams.setTempRangeLow = false;
+        switchTempRange();
+      }
+    }
+  }
+  else if(spaControlParams.is_resting_mode_present)
+  {
+    if(spaControlParams.setModeRest)
+    {
+      if(spaStatusData.heatingMode != 0x01)
+      {
+        spaControlParams.setModeRest = false;
+        switchHeatMode();
+      }
+    }
+  }
+  else if(spaControlParams.is_ready_mode_present)
+  {
+    if(spaControlParams.setModeReady)
+    {
+      if(spaStatusData.heatingMode != 0x00)
+      {
+        spaControlParams.setModeReady = false;
+        switchHeatMode();
+      }
+    }
+  }
+  else if(spaControlParams.is_set_temp_present)
+  {
+    if(spaControlParams.setTempCommand)
+    {
+      spaControlParams.setTempCommand = false;
+      setTemp(sendSetTemp);
+    }
   }
   // else if(spaControlParams.is_reset_wifi_sta_present)
   // {
@@ -280,9 +345,65 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         String tempRange = doc["payload"]["tempRange"];
         Log.notice("Temperature Range: %s\n", tempRange);
 
-        spaControlParams->setTempRangeHigh = true;
-        // spaControlParams->setTempRangeLow = 0;
-        // spaControlParams->jet1 = jet1;
+        if(tempRange == "high")
+        {
+          spaControlParams->is_temp_range_high_present = true;
+          spaControlParams->setTempRangeHigh = true;
+          spaControlParams->setTempRangeLow = false;
+        }
+        else if(tempRange == "low")
+        {
+          spaControlParams->is_temp_range_low_present = true;
+          spaControlParams->setTempRangeHigh = false;
+          spaControlParams->setTempRangeLow = true;
+        }
+      }
+
+      else if(doc["payload"].containsKey("heatMode"))
+      {
+        String heatMode = doc["payload"]["heatMode"];
+        Log.notice("Heat Mode: %s\n", heatMode);
+
+        if(heatMode == "rest")
+        {
+          spaControlParams->is_resting_mode_present = true;
+          spaControlParams->setModeRest = true;
+          spaControlParams->setModeReady = false;
+        }
+        else if(heatMode == "ready")
+        {
+          spaControlParams->is_ready_mode_present = true;
+          spaControlParams->setModeRest = false;
+          spaControlParams->setModeReady = true;
+        }
+      }
+
+      else if(doc["payload"].containsKey("setTemp"))
+      {
+        sendSetTemp = doc["payload"]["setTemp"];
+        Log.notice("Temperature Range: %s\n", sendSetTemp);
+
+        if(spaStatusData.tempRange == 1) // Set temp range is HIGH. i.e. : 26.5 degree celcius to 40 degree celcius
+        {
+          if(sendSetTemp >= 26.5 && sendSetTemp <= 40)
+          {
+            spaControlParams->is_set_temp_present = true;
+            spaControlParams->setTempCommand = true;
+          }
+        }
+        else if(spaStatusData.tempRange == 0) // Set temp range is LOW. i.e. : 10 degree celcius to 37 degree celcius
+        {
+          if(sendSetTemp >= 10 && sendSetTemp <= 37)
+          {
+            spaControlParams->is_set_temp_present = true;
+            spaControlParams->setTempCommand = true;
+          }
+        }
+        else
+        {
+          spaControlParams->is_set_temp_present = false;
+          spaControlParams->setTempCommand = false;
+        }
       }
 
      else if(doc["payload"].containsKey("jet1"))
@@ -326,14 +447,14 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlParams->reset_wifi_sta = reset_wifi_sta;
       }
 
-      else if(doc["payload"].containsKey("setTemp"))
-      {
-        int setTemp = doc["payload"]["setTemp"];
-        Log.notice("Set Temprature : %d\n", setTemp);
+      // else if(doc["payload"].containsKey("setTemp"))
+      // {
+      //   int setTemp = doc["payload"]["setTemp"];
+      //   Log.notice("Set Temprature : %d\n", setTemp);
 
-        spaControlParams->setTempCommand = true;
-        // spaControlParams->reset_wifi_sta = setTemp;
-      }
+      //   spaControlParams->setTempCommand = true;
+      //   // spaControlParams->reset_wifi_sta = setTemp;
+      // }
 
     }
     else
@@ -563,4 +684,20 @@ void toggleLight1(void)
   dataBuffer.push(0x00);
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);
+}
+
+void setTemp(float temp)
+{
+  temp = temp*2;
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x20);
+  dataBuffer.push(temp);
+  dataBuffer.push(0x00);
+  // dataBuffer.push(0x32); // 08 10 BF 05 04 08 00 - Config request doesn't seem to work
+
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+  // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
 }
