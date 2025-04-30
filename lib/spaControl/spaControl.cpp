@@ -571,6 +571,10 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   payload["jet2"] = getMapDescription(_SpaStatusData.pump2, pumpMap);
   payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
   payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
+  payload["heatingMode"] = getMapDescription(_SpaStatusData.heatingMode, heatingModeMap);
+  payload["tempRange"] = getMapDescription(_SpaStatusData.tempRange, tempRangeMap);
+  payload["currentTemp"] = _SpaStatusData.currentTemp;
+  payload["setTemp"] = _SpaStatusData.setTemp;
 
   // Serialize JSON to a string
   String output;
@@ -669,7 +673,7 @@ void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str)
   else if(_SpaStatusData.tempRange == 0)
   {
     payload["tempRange"] = "Low";
-  } 
+  }
   
 
   // Serialize JSON to a string
