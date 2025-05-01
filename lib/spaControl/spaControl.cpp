@@ -35,6 +35,7 @@ void toggleJet2(void);
 void toggleLight1(void);
 void toggleBlower1(void);
 void setTemp(float temp);
+void spaControl_appand_device_info(StaticJsonDocument<200> *doc);
 
 void myFunction()
 {
@@ -115,6 +116,11 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.setTemp = _spaControlStatus.setTemp;
   spaControlStatus.tempRange = _spaControlStatus.tempRange;
   spaControlStatus.heatMode = _spaControlStatus.heatMode;
+  spaControlStatus.device_info = _spaControlStatus.device_info;
+  spaControlStatus.device_id = _spaControlStatus.device_id;
+  spaControlStatus.user_id = _spaControlStatus.user_id;
+
+  Log.notice("spa_contol_status;:;:;:\n");
 }
 
 
@@ -271,9 +277,14 @@ void spaControl_action(void)
 
 void spaControl_mqtt_action(void)
 {
+
+  // Log.notice("SpaControl_mqtt_action!!!");
+
   if(spaControlStatus.deviceStatus)
   {
     spaControlStatus.deviceStatus = false;
+
+    Log.notice("Device status transmit area!!\n");
 
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
@@ -286,7 +297,7 @@ void spaControl_mqtt_action(void)
   if(spaControlStatus.currentTemp)
   {
     spaControlStatus.currentTemp = false;
-
+    Log.notice("Current temp transmit area!!\n");
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
@@ -298,6 +309,7 @@ void spaControl_mqtt_action(void)
   if(spaControlStatus.setTemp)
   {
     spaControlStatus.setTemp = false;
+    Log.notice("Set temp transmit area!!\n");
 
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
@@ -310,7 +322,7 @@ void spaControl_mqtt_action(void)
   if(spaControlStatus.heatMode)
   {
     spaControlStatus.heatMode = false;
-
+    Log.notice("Heat mode transmit area!!\n");
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
@@ -322,6 +334,7 @@ void spaControl_mqtt_action(void)
   if(spaControlStatus.tempRange)
   {
     spaControlStatus.tempRange = false;
+    Log.notice("Temp range transmit area!!\n");
 
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
@@ -489,10 +502,12 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
   /* action 'get' */
   else if(strstr(action, "get"))
   {
+    Log.notice("inside get request!\n");
     if (doc.containsKey("payload"))
     {
       if(doc["payload"].containsKey("deviceStatus"))
       {
+        Log.notice("inside device status request!\n");
         int deviceStatus = doc["payload"]["deviceStatus"];
         Log.notice("deviceStatus: %d\n", deviceStatus);
 
@@ -500,6 +515,7 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("currentTemp"))
       {
+        Log.notice("inside current temp request!\n");
         int currentTemp = doc["payload"]["currentTemp"];
         Log.notice("currentTemp: %d\n", currentTemp);
 
@@ -507,6 +523,7 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("setTemp"))
       {
+        Log.notice("inside set temp request!\n");
         int setTemp = doc["payload"]["setTemp"];
         Log.notice("setTemp: %d\n", setTemp);
 
@@ -514,6 +531,7 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("heatMode"))
       {
+        Log.notice("inside heat mode request!\n");
         int heatMode = doc["payload"]["heatMode"];
         Log.notice("Heat Mode : %d\n", heatMode);
 
@@ -521,14 +539,27 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("tempRange"))
       {
+        Log.notice("inside temp range request!\n");
         int tempRange = doc["payload"]["tempRange"];
         Log.notice("Temp range : %d\n", tempRange);
 
         spaControlStatus->tempRange = true;
       }
     }
-    else
-      return false;
+    if(doc.containsKey("device_info"))
+    {
+      // Log.notice("hello\n");
+      if(doc["device_info"].containsKey("user_id"))
+      {
+        // Log.notice("hehe\n");
+        spaControlStatus->device_info = true;
+        spaControlStatus->device_id = doc["device_info"]["device_id"];
+        spaControlStatus->user_id = doc["device_info"]["user_id"];
+      }
+    }
+
+    // else
+    //   return false; // Commented for testing;
   }
   /* action 'ota' */
   else if(strstr(action, "ota"))
@@ -556,10 +587,20 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
   return true;
 }
 
+void spaControl_appand_device_info(DynamicJsonDocument *doc)
+{
+  spaControlStatus.device_info = false;
+
+  
+  JsonObject device_info = doc->createNestedObject("device_info");
+  device_info["device_id"] = spaControlStatus.device_id;
+  device_info["user_id"] = spaControlStatus.user_id;
+}
+
 void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str)
 {
   // Create a JSON document
-  StaticJsonDocument<200> doc;
+  DynamicJsonDocument doc(300);
 
   // Add key-value pairs
   doc["action"] = "response";
@@ -576,6 +617,13 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   payload["currentTemp"] = _SpaStatusData.currentTemp;
   payload["setTemp"] = _SpaStatusData.setTemp;
 
+  Log.notice("inside create device status\n");
+
+  if(spaControlStatus.device_info)
+  {
+    spaControl_appand_device_info(&doc);
+  }
+
   // Serialize JSON to a string
   String output;
   serializeJson(doc, output);
@@ -586,7 +634,7 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
 void spaControl_create_currentTemp(SpaStatusData _SpaStatusData, char *json_str)
 {
   // Create a JSON document
-  StaticJsonDocument<200> doc;
+  DynamicJsonDocument doc(200);
 
   // Add key-value pairs
   doc["action"] = "response";
@@ -595,6 +643,11 @@ void spaControl_create_currentTemp(SpaStatusData _SpaStatusData, char *json_str)
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
   payload["currentTemp"] = _SpaStatusData.currentTemp;
+
+  if(spaControlStatus.device_info)
+  {
+    spaControl_appand_device_info(&doc);
+  }
 
   // Serialize JSON to a string
   String output;
@@ -606,7 +659,7 @@ void spaControl_create_currentTemp(SpaStatusData _SpaStatusData, char *json_str)
 void spaControl_create_setTemp(SpaStatusData _SpaStatusData, char *json_str)
 {
   // Create a JSON document
-  StaticJsonDocument<200> doc;
+  DynamicJsonDocument doc(200);
 
   // Add key-value pairs
   doc["action"] = "response";
@@ -615,7 +668,12 @@ void spaControl_create_setTemp(SpaStatusData _SpaStatusData, char *json_str)
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
   payload["setTemp"] = _SpaStatusData.setTemp;
-  
+
+  if(spaControlStatus.device_info)
+  {
+    spaControl_appand_device_info(&doc);
+  }
+
   // Serialize JSON to a string
   String output;
   serializeJson(doc, output);
@@ -626,7 +684,7 @@ void spaControl_create_setTemp(SpaStatusData _SpaStatusData, char *json_str)
 void spaControl_create_heatMode(SpaStatusData _SpaStatusData, char *json_str)
 {
   // Create a JSON document
-  StaticJsonDocument<200> doc;
+  DynamicJsonDocument doc(200);
 
   // Add key-value pairs
   doc["action"] = "response";
@@ -647,6 +705,10 @@ void spaControl_create_heatMode(SpaStatusData _SpaStatusData, char *json_str)
     payload["heatMode"] = "ready in rest";
   }
 
+  if(spaControlStatus.device_info)
+  {
+    spaControl_appand_device_info(&doc);
+  }
 
   // Serialize JSON to a string
   String output;
@@ -658,7 +720,7 @@ void spaControl_create_heatMode(SpaStatusData _SpaStatusData, char *json_str)
 void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str)
 {
   // Create a JSON document
-  StaticJsonDocument<200> doc;
+  DynamicJsonDocument doc(200);
 
   // Add key-value pairs
   doc["action"] = "response";
@@ -675,6 +737,10 @@ void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str)
     payload["tempRange"] = "Low";
   }
   
+  if(spaControlStatus.device_info)
+  {
+    spaControl_appand_device_info(&doc);
+  }
 
   // Serialize JSON to a string
   String output;
@@ -686,7 +752,7 @@ void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str)
 void spaControl_create_bootupPacket(char *json_str)
 {
   // Create a JSON document
-  StaticJsonDocument<200> doc;
+  DynamicJsonDocument doc(200);
 
   // Add key-value pairs
   doc["action"] = "response";
@@ -701,6 +767,11 @@ void spaControl_create_bootupPacket(char *json_str)
   WiFi.macAddress(mac);
   sprintf(macAddr, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
   payload["mac"] = macAddr;
+
+  if(spaControlStatus.device_info)
+  {
+    spaControl_appand_device_info(&doc);
+  }
 
   // Serialize JSON to a string
   String output;

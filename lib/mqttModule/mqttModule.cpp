@@ -147,6 +147,7 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
 
   if(spaControl_parse_action_command((char *)payload, &spaControlParams, &spaControlStatus, &otaParams))
   {
+    Log.notice("parse_action_command\n");
     if(spaControlStatus.deviceStatus)
     {
       Log.notice("Sending deviceStatus...\n");
@@ -170,6 +171,10 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
     else if(spaControlStatus.tempRange)
     {
       Log.notice("Sending tempRange...\n");
+      set_spaControlStatus(spaControlStatus);
+    }
+    else if(spaControlStatus.device_info)
+    {
       set_spaControlStatus(spaControlStatus);
     }
 

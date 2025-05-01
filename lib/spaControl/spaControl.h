@@ -39,16 +39,21 @@ typedef struct {
   bool setModeReady;
   bool is_resting_mode_present;
   bool setModeRest;
-  
 } spaControlParams_t;
 
 typedef struct {
   bool deviceStatus;
+  
   bool bootupPacket;
   bool currentTemp;
   bool setTemp;
   bool heatMode;
   bool tempRange;
+
+  bool device_info;
+  int device_id;
+  int user_id;
+
 } spaControlStatus_t;
 
 typedef struct {
