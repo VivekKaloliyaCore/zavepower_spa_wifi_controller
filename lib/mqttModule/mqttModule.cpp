@@ -116,6 +116,7 @@ void reconnect()
     {
       publishError("MQTT Timeout - Reconnect Successfully Run");
       mqtt.subscribe((mqttTopic + "command").c_str());
+      mqtt.subscribe((mqttTopic + "command/server").c_str());
       
       spaControlStatus_t spaControlStatus = {0};
       memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
@@ -131,6 +132,20 @@ void reconnect()
 void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
 {
   // Log.notice(">>>> %s | %d | %s\n", p_topic, p_length, p_payload);
+
+  mqtt_params_t mqtt_params = {0};
+  if(strstr(p_topic, "/server"))
+  {
+    mqtt_params.is_mqtt_topic_postfix_present = true;
+    sprintf(&mqtt_params.mqtt_topic_postfix[0], "response/server");
+    set_mqtt_params(mqtt_params);
+  }
+  else
+  {
+    mqtt_params.is_mqtt_topic_postfix_present = true;
+    sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
+    set_mqtt_params(mqtt_params);
+  }
 
   char payload[1024] = {0};
   memset(payload, 0, sizeof(payload));

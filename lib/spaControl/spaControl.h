@@ -5,6 +5,11 @@
 #include <CircularBuffer.hpp>
 #include "../../src/main.h"
 
+typedef struct {
+  bool is_mqtt_topic_postfix_present;
+  char mqtt_topic_postfix[128];
+} mqtt_params_t;
+
 typedef struct 
 {
   float setTemp;
@@ -63,6 +68,8 @@ typedef struct {
 
 void startSpaCmdSendTimer();
 void stopSpaCmdSendTimer();
+
+void set_mqtt_params(mqtt_params_t _mqtt_params);
 spaControlParams_t get_spaControlParams(void);
 void set_spaControlParams(spaControlParams_t _spaControlParams);
 spaControlStatus_t get_spaControlStatus(void);

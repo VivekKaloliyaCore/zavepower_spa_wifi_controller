@@ -20,7 +20,7 @@ void setup()
 {
   // Launch serial for debugging purposes
   Serial.begin(SERIAL_BAUD);
-  delay(5000);
+  // delay(5000);
   Log.setPrefix(logPrintPrefix);
   Log.begin(LOG_LEVEL, &Serial);
   logSection("WELCOME TO esp32_balboa_spa");
