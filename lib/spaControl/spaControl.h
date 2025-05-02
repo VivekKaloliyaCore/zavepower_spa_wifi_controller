@@ -4,6 +4,19 @@
 #include <Arduino.h>
 #include <CircularBuffer.hpp>
 #include "../../src/main.h"
+#include <balboa.h>
+
+typedef struct{
+  int filter1StartHour;
+  int filter1StartMinute;
+  int filter1DurationHour;
+  int filter1DurationMinute;
+  int filter2StartHour;
+  int filter2StartMinute;
+  int filter2DurationHour;
+  int filter2DurationMinute;
+}filterCycleData_t;
+
 
 typedef struct {
   bool is_mqtt_topic_postfix_present;
@@ -44,6 +57,8 @@ typedef struct {
   bool setModeReady;
   bool is_resting_mode_present;
   bool setModeRest;
+
+  bool is_filterCycle_present;
 } spaControlParams_t;
 
 typedef struct {

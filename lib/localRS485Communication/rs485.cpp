@@ -430,25 +430,3 @@ bool hasDayChanged() {
 }
 */
 
-
-
-void filterCycleTrial()
-{
-  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-  dataBuffer.push(id);
-  dataBuffer.push(0xBF);
-  dataBuffer.push(0x23);
-
-  dataBuffer.push(0x14); // Filter 1 starting hours 23
-  dataBuffer.push(0x14); // Filter 1 starting minutes 23
-  dataBuffer.push(0x14); // Filter 1 Duration hours 23
-  dataBuffer.push(0x14); // Filter 1 Duration hours 23
-
-  dataBuffer.push(0x94); // Filter 2 enable(bit 7) & stating hours 23
-  dataBuffer.push(0x14); // Filter 2 minutes 23
-  dataBuffer.push(0x14); // Filter 2 Duration hours 23
-  dataBuffer.push(0x14); // Filter 2 Duration hours 23
-
-  addCRC(dataBuffer);
-  rs485Write(dataBuffer);
-}

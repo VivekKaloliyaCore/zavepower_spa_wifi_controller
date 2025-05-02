@@ -5,6 +5,8 @@
 #include <CircularBuffer.hpp>
 #include "../../src/main.h"
 
+#include "spaControl.h"
+
 #define RS485_WRITE_QUEUE 10
 
 void rs485Setup();
@@ -19,7 +21,8 @@ void addCRC(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data);
 void switchTempRange(void);
 void switchHeatMode(void);
 
-void filterCycleTrial();
+// void filterCycleTrial();
+void filterCycleTrial(filterCycleData_t *filterCycleData);
 
 extern uint8_t id; // spa id
 

@@ -253,6 +253,11 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
       // Log.notice("Sending currentTemp...\n");
       set_spaControlParams(spaControlParams);
     }
+    else if(spaControlParams.is_filterCycle_present)
+    {
+      // Log.notice("Sending currentTemp...\n");
+      set_spaControlParams(spaControlParams);
+    }
 
     if(otaParams.is_url_present)
     {
