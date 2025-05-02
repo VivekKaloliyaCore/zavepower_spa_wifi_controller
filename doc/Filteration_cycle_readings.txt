@@ -1,0 +1,108 @@
+Filteration Mode :::::
+
+As soon as you enter into the filteration manue, client sends a "Settings Request", having size of 10 bytes and 5th byte having 0x22 indicating it
+is a settings request and 6th byte having 0x01 indicating that it is a request for filter cycles.
+
+Once you click the Correct button after making the changes, the client sends another frame having size of 15 bytes. Of which 5th byte is 0x23 indicating it
+is a "Filter Cycles Message" 
+
+
+
+As soon as you ener inside filteration manue ::
+===============================================
+1st iteration
+7e 08 10 bf 22 01 00 00 b7 7e
+00:00:12.612 V: [rs485]: Received: 0 - 7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+00:00:12.781 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 34 0e 00 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 58 7e
+
+[
+
+7e 08 10 bf 22 01 00 00 b7 7e
+7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+7e 20 ff af 13 00 03 34 0e 00 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 58 7e
+
+]
+
+
+2nd
+ 7e 08 10 bf 22 01 00 00 b7 7e
+00:04:56.182 V: [rs485]: Received: 10 - 7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+00:04:56.471 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 34 0e 05 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 0b 7e
+
+[
+
+7e 08 10 bf 22 01 00 00 b7 7e
+7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+7e 20 ff af 13 00 03 34 0e 05 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 0b 7e
+
+]
+
+
+
+3rd(Changed the values before clicking correct icon)
+7e 08 10 bf 22 01 00 00 b7 7e
+00:15:41.669 V: [rs485]: Received: 10 - 7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+00:15:41.859 V: [rs485]: Received: 0 - 7e 20 ff af 13 00 03 34 0e 0f 00 28 03 06 0b 18 01 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 f8 7e
+
+[
+
+7e 08 10 bf 22 01 00 00 b7 7e
+7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+7e 20 ff af 13 00 03 34 0e 0f 00 28 03 06 0b 18 01 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 f8 7e
+
+]
+
+
+
+
+
+
+When you click correct symbole ::
+================================
+
+1st iteration
+7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+00:01:42.870 V: [rs485]: Received: 10 - 7e 08 10 bf 22 01 00 00 b7 7e
+00:01:42.904 V: [rs485]: Received: 10 - 7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+00:01:43.014 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 34 0e 01 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 e1 7e
+[
+
+7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+7e 08 10 bf 22 01 00 00 b7 7e
+7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+7e 20 ff af 13 00 03 34 0e 01 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 e1 7e
+
+]
+
+
+2nd 
+ 7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+00:05:26.849 V: [rs485]: Received: 10 - 7e 08 10 bf 22 01 00 00 b7 7e
+00:05:26.868 V: [rs485]: Received: 10 - 7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+00:05:27.038 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 34 0e 05 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 0b 7e
+
+[
+
+7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+7e 08 10 bf 22 01 00 00 b7 7e
+7e 0d 10 bf 23 0c 00 00 0f 8e 0f 16 0f 38 7e
+7e 20 ff af 13 00 03 34 0e 05 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 0b 7e
+
+]
+
+
+3rd(Changed the values before clicking correct icon)
+7e 0d 10 bf 23 0d 00 00 0f 8f 0f 00 0f 14 7e
+00:16:07.107 V: [rs485]: Received: 10 - 7e 08 10 bf 22 01 00 00 b7 7e
+00:16:07.127 V: [rs485]: Received: 10 - 7e 0d 10 bf 23 0d 00 00 0f 8f 0f 00 0f 14 7e
+00:16:07.337 V: [rs485]: Received: 10 - 7e 20 ff af 13 00 03 34 0e 10 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 f9 7e
+
+
+[
+
+7e 0d 10 bf 23 0d 00 00 0f 8f 0f 00 0f 14 7e
+7e 08 10 bf 22 01 00 00 b7 7e
+7e 0d 10 bf 23 0d 00 00 0f 8f 0f 00 0f 14 7e
+7e 20 ff af 13 00 03 34 0e 10 00 28 03 06 03 18 00 00 02 00 00 00 00 02 02 35 00 00 00 1e 00 00 f9 7e
+
+]

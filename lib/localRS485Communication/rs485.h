@@ -19,6 +19,8 @@ void addCRC(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data);
 void switchTempRange(void);
 void switchHeatMode(void);
 
+void filterCycleTrial();
+
 extern uint8_t id; // spa id
 
 struct Rs485Stats

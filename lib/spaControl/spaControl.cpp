@@ -131,7 +131,6 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.device_id = _spaControlStatus.device_id;
   spaControlStatus.user_id = _spaControlStatus.user_id;
 
-  Log.notice("spa_contol_status;:;:;:\n");
 }
 
 
@@ -295,8 +294,6 @@ void spaControl_mqtt_action(void)
   {
     spaControlStatus.deviceStatus = false;
 
-    Log.notice("Device status transmit area!!\n");
-
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
@@ -308,7 +305,6 @@ void spaControl_mqtt_action(void)
   if(spaControlStatus.currentTemp)
   {
     spaControlStatus.currentTemp = false;
-    Log.notice("Current temp transmit area!!\n");
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
@@ -320,7 +316,6 @@ void spaControl_mqtt_action(void)
   if(spaControlStatus.setTemp)
   {
     spaControlStatus.setTemp = false;
-    Log.notice("Set temp transmit area!!\n");
 
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
@@ -333,7 +328,6 @@ void spaControl_mqtt_action(void)
   if(spaControlStatus.heatMode)
   {
     spaControlStatus.heatMode = false;
-    Log.notice("Heat mode transmit area!!\n");
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
@@ -345,7 +339,6 @@ void spaControl_mqtt_action(void)
   if(spaControlStatus.tempRange)
   {
     spaControlStatus.tempRange = false;
-    Log.notice("Temp range transmit area!!\n");
 
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
@@ -518,7 +511,6 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
     {
       if(doc["payload"].containsKey("deviceStatus"))
       {
-        Log.notice("inside device status request!\n");
         int deviceStatus = doc["payload"]["deviceStatus"];
         Log.notice("deviceStatus: %d\n", deviceStatus);
 
@@ -526,7 +518,6 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("currentTemp"))
       {
-        Log.notice("inside current temp request!\n");
         int currentTemp = doc["payload"]["currentTemp"];
         Log.notice("currentTemp: %d\n", currentTemp);
 
@@ -534,7 +525,6 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("setTemp"))
       {
-        Log.notice("inside set temp request!\n");
         int setTemp = doc["payload"]["setTemp"];
         Log.notice("setTemp: %d\n", setTemp);
 
@@ -542,7 +532,6 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("heatMode"))
       {
-        Log.notice("inside heat mode request!\n");
         int heatMode = doc["payload"]["heatMode"];
         Log.notice("Heat Mode : %d\n", heatMode);
 
@@ -550,7 +539,6 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("tempRange"))
       {
-        Log.notice("inside temp range request!\n");
         int tempRange = doc["payload"]["tempRange"];
         Log.notice("Temp range : %d\n", tempRange);
 
@@ -628,7 +616,6 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   payload["currentTemp"] = _SpaStatusData.currentTemp;
   payload["setTemp"] = _SpaStatusData.setTemp;
 
-  Log.notice("inside create device status\n");
 
   if(spaControlStatus.device_info)
   {

@@ -73,6 +73,7 @@ void setup()
     // switchHeatMode();
     // setTemp(0x1E);
     // switchTempRange();
+    filterCycleTrial();
 }
 
 void loop()

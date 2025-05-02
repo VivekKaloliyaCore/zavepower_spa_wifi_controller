@@ -66,3 +66,29 @@ If set temp is higher than the measured temp, it will start circulation, after s
 Then will turn off the heater relay and the icon will change to "Heat Waiting" icon. If temperature still doesn't match, it will once again start the relay and 
 will change the icon to "Heating" icon once again. If temperature starts increasing and reaches to the set temp level, heater realy will turn off along with the "Heating" icon.
 After some time circulation icon will turn off along with its relay.
+
+
+
+Filtration Cycle ::
+=========================================================
+
+As soon as you enter into the filtration menu, client sends a "Settings Request", having size of 10 bytes and 5th byte having 0x22 indicating it
+is a settings request and 6th byte having 0x01 indicating that it is a request for filter cycles.
+
+Once you click the "Correct" button after making the changes, the client sends another frame having size of 15 bytes. Of which 5th byte is 0x23 indicating it
+is a "Filter Cycles Message" 
+
+
+In order to Setup the "Filtration Cycle" Settings, client need to send only the following command of 15 bytes :
+7e 0d 10 bf 23 0d 00 00 0f 8f 0f 00 0f 14 7e
+
+Where the 5th byte having 0x23 indicaes that it is a "Filter Cycles Message".
+6th byte indicates Cycle 1's Start time Hour
+7th byte indicates Cycle 1's Start time Minute
+8th byte indicates Cycle 1's Duration Hours
+9th byte indicates Cycle 1's Duration Minutes
+10th byte's 0-6 bits indicates Cycle 2's Start time Hour
+10th byte's 7th bit indicates Cycle 2 is enable or disable(0/1)
+11th byte indicates Cycle 2's Start time Minute
+12th byte indicates Cycle 2's Duration Hours
+13th byte indicates Cycle 2's Duration Minutes

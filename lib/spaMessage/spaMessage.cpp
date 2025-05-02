@@ -541,7 +541,7 @@ bool parseStatusMessage(u_int8_t *message, int length)
     
     spaStatusData.m8CycleTime = hexArray[24];
 
-    Log.verbose(F("[Mess]: Status Response: %s" CR), msgToString(hexArray, length - 7).c_str());
+    // Log.verbose(F("[Mess]: Status Response: %s" CR), msgToString(hexArray, length - 7).c_str()); // Commented for Test
 
     /* send status over MQTT */
     spaControlParams_t spaControlParams = get_spaControlParams();
