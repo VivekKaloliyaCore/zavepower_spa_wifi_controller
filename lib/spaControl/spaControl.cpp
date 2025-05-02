@@ -39,6 +39,7 @@ void toggleLight1(void);
 void toggleBlower1(void);
 void setTemp(float temp);
 void spaControl_appand_device_info(StaticJsonDocument<200> *doc);
+void spaControl_create_filter_cycle(char *json_str);
 
 void myFunction()
 {
@@ -133,7 +134,9 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.device_info = _spaControlStatus.device_info;
   spaControlStatus.device_id = _spaControlStatus.device_id;
   spaControlStatus.user_id = _spaControlStatus.user_id;
-
+  spaControlStatus.filterCycle = _spaControlStatus.filterCycle;
+  spaControlStatus.filter1 = _spaControlStatus.filter1;
+  spaControlStatus.filter2 = _spaControlStatus.filter2;
 }
 
 
@@ -356,6 +359,16 @@ void spaControl_mqtt_action(void)
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
+  if(spaControlStatus.filterCycle)
+  {
+    spaControlStatus.filterCycle = false;
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    spaControl_create_filter_cycle(json_str);
+
+    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+  }
+
   if(spaControlStatus.bootupPacket)
   {
     spaControlStatus.bootupPacket = false;
@@ -570,6 +583,18 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
 
         spaControlStatus->tempRange = true;
       }
+      else if(doc["payload"].containsKey("filterCycle"))
+      {
+        spaControlStatus->filterCycle = true;
+        if(doc["payload"]["filterCycle"].containsKey("cycle1"))
+        {
+          spaControlStatus->filter1 = true;
+        }
+        if(doc["payload"]["filterCycle"].containsKey("cycle1"))
+        {
+          spaControlStatus->filter2 = true;
+        }
+      }
     }
     if(doc.containsKey("device_info"))
     {
@@ -622,6 +647,44 @@ void spaControl_appand_device_info(DynamicJsonDocument *doc)
   device_info["user_id"] = spaControlStatus.user_id;
 }
 
+void spaControl_create_filter_cycle(char *json_str)
+{
+  // Create a JSON document
+  DynamicJsonDocument doc(200);
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "filterCycle";
+
+  JsonObject payload = doc.createNestedObject("payload");
+  if(spaControlStatus.filter1)
+  {
+    spaControlStatus.filter1 = false;
+    payload["filter1StartHour"] = filterCycleData.filter1StartHour;
+    payload["filter1StartMin"] = filterCycleData.filter1StartMinute;
+    payload["filter1DurationHour"] = filterCycleData.filter1DurationHour;
+    payload["filter1DurationHour"] = filterCycleData.filter1DurationMinute;
+  }
+  if(spaControlStatus.filter2)
+  {
+    spaControlStatus.filter2 = false;
+    payload["filter2StartHour"] = filterCycleData.filter2StartHour;
+    payload["filter2StartMin"] = filterCycleData.filter2StartMinute;
+    payload["filter2DurationHour"] = filterCycleData.filter2DurationHour;
+    payload["filter2DurationHour"] = filterCycleData.filter2DurationMinute;
+  }
+  if(spaControlStatus.device_info)
+  {
+    spaControl_appand_device_info(&doc);
+  }
+
+    // Serialize JSON to a string
+    String output;
+    serializeJson(doc, output);
+  
+    memcpy(json_str, output.c_str(), strlen(output.c_str()));
+}
+
 void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str)
 {
   // Create a JSON document
@@ -637,8 +700,8 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   payload["jet2"] = getMapDescription(_SpaStatusData.pump2, pumpMap);
   payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
   payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
-  // payload["heatingMode"] = getMapDescription(_SpaStatusData.heatingMode, heatingModeMap);
-  // payload["tempRange"] = getMapDescription(_SpaStatusData.tempRange, tempRangeMap);
+  payload["heatingMode"] = getMapDescription(_SpaStatusData.heatingMode, heatingModeMap);
+  payload["tempRange"] = getMapDescription(_SpaStatusData.tempRange, tempRangeMap);
   payload["currentTemp"] = _SpaStatusData.currentTemp;
   payload["setTemp"] = _SpaStatusData.setTemp;
 
@@ -938,7 +1001,6 @@ void filterCycleTrial(filterCycleData_t *filterCycleData)
     dataBuffer.push(filterCycleData->filter2DurationHour); // Filter 2 Duration hours 23
     dataBuffer.push(filterCycleData->filter2DurationMinute); // Filter 2 Duration hours 23
   }
-
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);
 }

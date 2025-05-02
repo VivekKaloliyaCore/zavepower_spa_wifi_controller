@@ -192,6 +192,10 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
     {
       set_spaControlStatus(spaControlStatus);
     }
+    else if(spaControlStatus.filterCycle)
+    {
+      set_spaControlStatus(spaControlStatus);
+    }
 
     if(spaControlParams.is_jet1_present)
     {

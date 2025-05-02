@@ -74,6 +74,9 @@ typedef struct {
   int device_id;
   int user_id;
 
+  bool filterCycle;
+  bool filter1;
+  bool filter2;
 } spaControlStatus_t;
 
 typedef struct {
