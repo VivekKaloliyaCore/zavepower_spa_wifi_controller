@@ -22,7 +22,7 @@ void switchTempRange(void);
 void switchHeatMode(void);
 
 // void filterCycleTrial();
-void filterCycleTrial(filterCycleData_t *filterCycleData);
+void filterCycleTrial(void);
 
 extern uint8_t id; // spa id
 

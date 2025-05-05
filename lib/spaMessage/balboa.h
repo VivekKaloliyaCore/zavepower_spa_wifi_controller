@@ -205,7 +205,7 @@ struct SpaConfigurationData
   bool temp_scale;
 };
 
-struct SpaFilterSettingsData
+typedef struct
 {
   uint8_t crc;
   unsigned long lastUpdate;
@@ -223,7 +223,7 @@ struct SpaFilterSettingsData
   uint8_t filt2Minute;
   uint8_t filt2DurationHour;
   uint8_t filt2DurationMinute;
-};
+}SpaFilterSettingsData;
 
 struct SpaFaultLogData
 {

@@ -145,6 +145,7 @@ void spaMessageLoop()
     SpaReadQueueMessage *message;
     if (xQueueReceive(spaReadQueue, &message, 0) == pdTRUE)
     {
+      // Log.notice("Filter Cycle::::::::;;;;;;::::\n");
       // Log.verbose(F("[Mess]: Queue Message Received: [%d]%s" CR), message->length, msgToString(message->message, message->length).c_str());
       switch (message->message[4])
       {
@@ -152,6 +153,7 @@ void spaMessageLoop()
         parseStatusMessage(message->message, message->length);
         break;
       case Filter_Cycles_Type:
+        Log.notice("Filter Cycle::::::::;;;;;;::::\n");
         Log.verbose(F("[Mess]: Filter Cycles Response: %s" CR), msgToString(message->message, message->length).c_str());
         parseFilterResponse(message->message, message->length);
         break;
@@ -721,6 +723,11 @@ void updateTemperatureHistory()
 SpaStatusData spaMessage_get_spaStatusData(void)
 {
   return spaStatusData;
+}
+
+SpaFilterSettingsData spaMessage_get_spaFilterData(void)
+{
+  return spaFilterSettingsData;
 }
 
 // SpaStatusData spa_get_tempStatusData(void)

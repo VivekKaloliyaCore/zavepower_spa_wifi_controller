@@ -14,6 +14,7 @@
 #include <wifiModule.h>
 #include "../../src/config.h"
 #include "../../src/main.h"
+#include <balboa.h>
 
 static mqtt_params_t mqtt_params = {0};
 
@@ -28,7 +29,7 @@ static spaControlParams_t spaControlParams = {0};
 static spaControlStatus_t spaControlStatus = {0};
 
 filterCycleData_t filterCycleData = {0};
-
+// SpaFilterSettingsData spaFilterSettingsData = {0};
 
 // Local Function
 void switchTempRange(void);
@@ -279,7 +280,7 @@ void spaControl_action(void)
   else if(spaControlParams.is_filterCycle_present)
   {
       spaControlParams.is_filterCycle_present = false;
-      filterCycleTrial(&filterCycleData);
+      filterCycleTrial();
   }
   // else if(spaControlParams.is_reset_wifi_sta_present)
   // {
@@ -364,6 +365,7 @@ void spaControl_mqtt_action(void)
     spaControlStatus.filterCycle = false;
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
+    // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
     spaControl_create_filter_cycle(json_str);
 
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
@@ -372,7 +374,6 @@ void spaControl_mqtt_action(void)
   if(spaControlStatus.bootupPacket)
   {
     spaControlStatus.bootupPacket = false;
-
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
@@ -516,26 +517,38 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlParams->is_filterCycle_present = true;
         if(doc["payload"]["filterCycle"].containsKey("1"))
         {
-          filterCycleData.filter1StartHour = doc["payload"]["filterCycle"]["1"]["startTimeHr"];
-          filterCycleData.filter1StartMinute = doc["payload"]["filterCycle"]["1"]["startTimeMin"];
-          filterCycleData.filter1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
-          filterCycleData.filter1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
+          spaFilterSettingsData.filt1Hour = doc["payload"]["filterCycle"]["1"]["startTimeHr"];
+          spaFilterSettingsData.filt1Minute = doc["payload"]["filterCycle"]["1"]["startTimeMin"];
+          spaFilterSettingsData.filt1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
+          spaFilterSettingsData.filt1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
+
+          // filterCycleData.filter1StartHour = doc["payload"]["filterCycle"]["1"]["startTimeHr"];
+          // filterCycleData.filter1StartMinute = doc["payload"]["filterCycle"]["1"]["startTimeMin"];
+          // filterCycleData.filter1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
+          // filterCycleData.filter1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
         }
         if(doc["payload"]["filterCycle"].containsKey("2"))
         {
+
           Log.notice("Payload 2 Received\n");
-          filterCycleData.filter2StartHour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
-          filterCycleData.filter2StartMinute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
-          filterCycleData.filter2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
-          filterCycleData.filter2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
+          spaFilterSettingsData.filt2Enable = 1;
+          spaFilterSettingsData.filt2Hour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
+          spaFilterSettingsData.filt2Minute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
+          spaFilterSettingsData.filt2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
+          spaFilterSettingsData.filt2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
+          // filterCycleData.filter2StartHour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
+          // filterCycleData.filter2StartMinute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
+          // filterCycleData.filter2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
+          // filterCycleData.filter2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
         }
         else
         {
           Log.notice("Payload 2 Not Received\n");
-          filterCycleData.filter2StartHour = 0;
-          filterCycleData.filter2StartMinute = 0;
-          filterCycleData.filter2DurationHour = 0;
-          filterCycleData.filter2DurationMinute = 0;
+          spaFilterSettingsData.filt2Enable = 0;
+          spaFilterSettingsData.filt2Hour = 0;
+          spaFilterSettingsData.filt2Minute = 0;
+          spaFilterSettingsData.filt2DurationHour = 0;
+          spaFilterSettingsData.filt2DurationMinute = 0;
         }
       }
     }
@@ -590,7 +603,7 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         {
           spaControlStatus->filter1 = true;
         }
-        if(doc["payload"]["filterCycle"].containsKey("cycle1"))
+        if(doc["payload"]["filterCycle"].containsKey("cycle2"))
         {
           spaControlStatus->filter2 = true;
         }
@@ -657,22 +670,26 @@ void spaControl_create_filter_cycle(char *json_str)
   doc["msgT"] = "filterCycle";
 
   JsonObject payload = doc.createNestedObject("payload");
-  if(spaControlStatus.filter1)
+    // spaControlStatus.filter1 = false;
+    payload["filter1StartHour"] = spaFilterSettingsData.filt1Hour;
+    payload["filter1StartMin"] = spaFilterSettingsData.filt1Minute;
+    payload["filter1DurationHour"] = spaFilterSettingsData.filt1DurationHour;
+    payload["filter1DurationHour"] = spaFilterSettingsData.filt1DurationMinute;
+
+  if(spaFilterSettingsData.filt2Enable)
   {
-    spaControlStatus.filter1 = false;
-    payload["filter1StartHour"] = filterCycleData.filter1StartHour;
-    payload["filter1StartMin"] = filterCycleData.filter1StartMinute;
-    payload["filter1DurationHour"] = filterCycleData.filter1DurationHour;
-    payload["filter1DurationHour"] = filterCycleData.filter1DurationMinute;
+    // spaControlStatus.filter2 = false;
+    // spaFilterSettingsData.filt2Hour = spaFilterSettingsData.filt2Hour & ~(1 << 7);
+    payload["filter2StartHour"] = spaFilterSettingsData.filt2Hour;
+    payload["filter2StartMin"] = spaFilterSettingsData.filt2Minute;
+    payload["filter2DurationHour"] = spaFilterSettingsData.filt2DurationHour;
+    payload["filter2DurationMin"] = spaFilterSettingsData.filt2DurationMinute;
   }
-  if(spaControlStatus.filter2)
+  else
   {
-    spaControlStatus.filter2 = false;
-    payload["filter2StartHour"] = filterCycleData.filter2StartHour;
-    payload["filter2StartMin"] = filterCycleData.filter2StartMinute;
-    payload["filter2DurationHour"] = filterCycleData.filter2DurationHour;
-    payload["filter2DurationHour"] = filterCycleData.filter2DurationMinute;
+    payload["filter2"] = "Disabled";
   }
+
   if(spaControlStatus.device_info)
   {
     spaControl_appand_device_info(&doc);
@@ -854,11 +871,11 @@ void spaControl_create_bootupPacket(char *json_str)
   WiFi.macAddress(mac);
   sprintf(macAddr, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
   payload["mac"] = macAddr;
-
-  if(spaControlStatus.device_info)
-  {
-    spaControl_appand_device_info(&doc);
-  }
+  payload["fw_rev"] = FW_REV_STR;
+  // if(spaControlStatus.device_info)
+  // {
+  //   spaControl_appand_device_info(&doc);
+  // }
 
   // Serialize JSON to a string
   String output;
@@ -964,17 +981,17 @@ void setTemp(float temp)
   // Log.verbose(F("[rs485]: Sent Existing Client Response" CR), msgToString(dataBuffer).c_str()); // Commented for Test;
 }
 
-void filterCycleTrial(filterCycleData_t *filterCycleData)
+void filterCycleTrial(void)
 {
   CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
   dataBuffer.push(id);
   dataBuffer.push(0xBF);
   dataBuffer.push(0x23);
 
-  dataBuffer.push(filterCycleData->filter1StartHour); // Filter 1 starting hours 23
-  dataBuffer.push(filterCycleData->filter1StartMinute); // Filter 1 starting minutes 23
-  dataBuffer.push(filterCycleData->filter1DurationHour); // Filter 1 Duration hours 23
-  dataBuffer.push(filterCycleData->filter1DurationMinute); // Filter 1 Duration hours 23
+  dataBuffer.push(spaFilterSettingsData.filt1Hour); // Filter 1 starting hours 23
+  dataBuffer.push(spaFilterSettingsData.filt1Minute); // Filter 1 starting minutes 23
+  dataBuffer.push(spaFilterSettingsData.filt2DurationHour); // Filter 1 Duration hours 23
+  dataBuffer.push(spaFilterSettingsData.filt1DurationMinute); // Filter 1 Duration hours 23
 
   // if(filterCycleData->filter2StartHour != 0)
   // {
@@ -986,20 +1003,21 @@ void filterCycleTrial(filterCycleData_t *filterCycleData)
   //   Log.notice("filter 2 nana\n");
   //   filterCycleData->filter2StartHour = 0;
   // }
-  if(filterCycleData->filter2DurationHour == 0 && filterCycleData->filter2StartMinute == 0 && filterCycleData->filter2DurationHour == 0 && filterCycleData->filter2DurationMinute ==0)
+  if(spaFilterSettingsData.filt2Enable)
+  {
+    spaFilterSettingsData.filt2Hour =spaFilterSettingsData.filt2Hour | (1 << 7);
+    dataBuffer.push(spaFilterSettingsData.filt2Hour); // Filter 2 enable(bit 7) & stating hours 23
+    dataBuffer.push(spaFilterSettingsData.filt2Minute); // Filter 2 minutes 23
+    dataBuffer.push(spaFilterSettingsData.filt2DurationHour); // Filter 2 Duration hours 23
+    dataBuffer.push(spaFilterSettingsData.filt2DurationMinute); // Filter 2 Duration hours 23
+
+  }
+  else
   {
     dataBuffer.push(0); // Filter 2 enable(bit 7) & stating hours 23
     dataBuffer.push(0); // Filter 2 minutes 23
     dataBuffer.push(0); // Filter 2 Duration hours 23
     dataBuffer.push(0); // Filter 2 Duration hours 23
-  }
-  else
-  {
-    filterCycleData->filter2StartHour = filterCycleData->filter2StartHour | (1 << 7);
-    dataBuffer.push(filterCycleData->filter2StartHour); // Filter 2 enable(bit 7) & stating hours 23
-    dataBuffer.push(filterCycleData->filter2StartMinute); // Filter 2 minutes 23
-    dataBuffer.push(filterCycleData->filter2DurationHour); // Filter 2 Duration hours 23
-    dataBuffer.push(filterCycleData->filter2DurationMinute); // Filter 2 Duration hours 23
   }
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);
