@@ -6,6 +6,8 @@
 #include "../../src/main.h"
 #include <balboa.h>
 
+
+
 typedef struct{
   int filter1StartHour;
   int filter1StartMinute;
@@ -102,5 +104,7 @@ void spaControl_create_setTemp(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_heatMode(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_bootupPacket(char *json_str);
+
+extern mqtt_params_t mqtt_params;
 
 #endif

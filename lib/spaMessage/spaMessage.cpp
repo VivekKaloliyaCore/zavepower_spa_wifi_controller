@@ -153,7 +153,7 @@ void spaMessageLoop()
         parseStatusMessage(message->message, message->length);
         break;
       case Filter_Cycles_Type:
-        Log.notice("Filter Cycle::::::::;;;;;;::::\n");
+      // Log.notice("Filter Cycle::::::::;;;;;;::::\n");
         Log.verbose(F("[Mess]: Filter Cycles Response: %s" CR), msgToString(message->message, message->length).c_str());
         parseFilterResponse(message->message, message->length);
         break;

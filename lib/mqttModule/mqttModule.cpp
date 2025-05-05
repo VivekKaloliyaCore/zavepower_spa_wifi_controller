@@ -64,6 +64,7 @@ void mqttModuleSetup()
   Log.notice("MQTT Server: %s:%d\n", MQTTS_SERVER, MQTTS_PORT);
   Log.notice("MQTT Topic: %s\n", mqttTopic.c_str());
   sendStatus.start();
+  sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
 }
 
 void mqttModuleLoop()
@@ -122,7 +123,7 @@ void reconnect()
       memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
       spaControlStatus.bootupPacket = true;
       set_spaControlStatus(spaControlStatus);
-      
+
       nodeStateReport();
     }
   }

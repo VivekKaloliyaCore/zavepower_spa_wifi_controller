@@ -16,7 +16,10 @@
 #include "../../src/main.h"
 #include <balboa.h>
 
-static mqtt_params_t mqtt_params = {0};
+//Create the second JSON document
+DynamicJsonDocument deviceInfoCopy(512);
+
+mqtt_params_t mqtt_params = {0};
 
 // Global variable to send temp to set.
 float sendSetTemp = 0;
@@ -376,10 +379,11 @@ void spaControl_mqtt_action(void)
     spaControlStatus.bootupPacket = false;
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
-    SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
+    // SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_bootupPacket(json_str);
 
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    Log.notice("Boot Up pacage Published\n");
   }
 }
 
@@ -612,13 +616,17 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
     if(doc.containsKey("device_info"))
     {
       // Log.notice("hello\n");
-      if(doc["device_info"].containsKey("user_id"))
-      {
-        // Log.notice("hehe\n");
-        spaControlStatus->device_info = true;
-        spaControlStatus->device_id = doc["device_info"]["device_id"];
-        spaControlStatus->user_id = doc["device_info"]["user_id"];
-      }
+      spaControlStatus->device_info = true;
+      deviceInfoCopy.set(doc["device_info"]);  // Deep copy
+
+
+      // if(doc["device_info"].containsKey("user_id"))
+      // {
+      //   // Log.notice("hehe\n");
+      //   spaControlStatus->device_info = true;
+      //   spaControlStatus->device_id = doc["device_info"]["device_id"];
+      //   spaControlStatus->user_id = doc["device_info"]["user_id"];
+      // }
     }
 
     // else
@@ -654,10 +662,14 @@ void spaControl_appand_device_info(DynamicJsonDocument *doc)
 {
   spaControlStatus.device_info = false;
 
+  // JsonArray device_info = *doc->[device_info];
+  // device_info.add(deviceInfoCopy);
   
-  JsonObject device_info = doc->createNestedObject("device_info");
-  device_info["device_id"] = spaControlStatus.device_id;
-  device_info["user_id"] = spaControlStatus.user_id;
+  // JsonObject device_info = &doc->set(deviceInfoCopy);
+  
+  // JsonObject device_info = doc->createNestedObject("device_info");
+  // device_info["device_id"] = spaControlStatus.device_id;
+  // device_info["user_id"] = spaControlStatus.user_id;
 }
 
 void spaControl_create_filter_cycle(char *json_str)
@@ -872,16 +884,14 @@ void spaControl_create_bootupPacket(char *json_str)
   sprintf(macAddr, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
   payload["mac"] = macAddr;
   payload["fw_rev"] = FW_REV_STR;
-  // if(spaControlStatus.device_info)
-  // {
-  //   spaControl_appand_device_info(&doc);
-  // }
 
   // Serialize JSON to a string
   String output;
   serializeJson(doc, output);
 
   memcpy(json_str, output.c_str(), strlen(output.c_str()));
+
+  Log.notice("Bootup Package created\n");
 }
 
 
