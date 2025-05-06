@@ -138,6 +138,7 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.device_info = _spaControlStatus.device_info;
   spaControlStatus.device_id = _spaControlStatus.device_id;
   spaControlStatus.user_id = _spaControlStatus.user_id;
+  spaControlStatus.heatingState = _spaControlStatus.heatingState;
   spaControlStatus.filterCycle = _spaControlStatus.filterCycle;
   spaControlStatus.filter1 = _spaControlStatus.filter1;
   spaControlStatus.filter2 = _spaControlStatus.filter2;
@@ -733,7 +734,7 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   payload["tempRange"] = getMapDescription(_SpaStatusData.tempRange, tempRangeMap);
   payload["currentTemp"] = _SpaStatusData.currentTemp;
   payload["setTemp"] = _SpaStatusData.setTemp;
-
+  payload["heatingStatus"] = getMapDescription(_SpaStatusData.heatingState, heatingStateMap);
 
   if(spaControlStatus.device_info)
   {

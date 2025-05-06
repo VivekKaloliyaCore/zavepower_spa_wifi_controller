@@ -341,6 +341,10 @@ const std::map<uint8_t, const char *> onOffMap = {
     {0, "Off"},
     {1, "On"}};
 
+const std::map<uint8_t, const char *> heatingStateMap = {
+  {0, "Off"},
+  {1, "Heating"},
+  {2, "Heat Waiting"}};
 
 
 #endif

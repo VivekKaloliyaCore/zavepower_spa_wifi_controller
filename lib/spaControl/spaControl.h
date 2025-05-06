@@ -71,7 +71,7 @@ typedef struct {
   bool setTemp;
   bool heatMode;
   bool tempRange;
-
+  bool heatingState;
   bool device_info;
   int device_id;
   int user_id;
