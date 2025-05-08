@@ -74,7 +74,7 @@ void mqttModuleLoop()
   {
     reconnect();
   }
-  sendStatus.update();
+  sendStatus.update(); // Commented for Test
   mqtt.loop();
   spaControl_mqtt_action();
 
@@ -206,6 +206,16 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
     else if(spaControlParams.is_jet2_present)
     {
       Log.notice("Sending jet 2 command...\n");
+      set_spaControlParams(spaControlParams);
+    }
+    else if(spaControlParams.is_jet3_present)
+    {
+      Log.notice("Sending jet 3 command...\n");
+      set_spaControlParams(spaControlParams);
+    }
+    else if(spaControlParams.is_jet4_present)
+    {
+      Log.notice("Sending jet 4 command...\n");
       set_spaControlParams(spaControlParams);
     }
     else if(spaControlParams.is_blower1_present)

@@ -9,6 +9,7 @@
 #include "spaControl.h"
 #include "../../src/config.h"
 #include "../../src/main.h"
+#include "spaMqttMessage.h"
 
 // QueueHandle_t rs485WriteQueue;
 int last_crc = 0;
@@ -141,7 +142,6 @@ void rs485Loop()
 
   if (x == 0x7E && spaMessage.size() > 4 && spaMessage.size() == spaMessage[1] + 2)
   {
-
     if (isMessageValid(spaMessage))
     {
       if(spaMessage.size() >= 8)
@@ -152,6 +152,7 @@ void rs485Loop()
         {
           last_crc = received_crc;
           Log.verbose(F("[rs485]: Received: %d - %s" CR), id, msgToString(spaMessage).c_str());
+          spaMqttMessage_publish_message("debug", (char *)msgToString(spaMessage).c_str(), spaMessage.size());
         }
       }
 

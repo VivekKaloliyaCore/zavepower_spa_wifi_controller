@@ -17,7 +17,7 @@
 #include <balboa.h>
 
 //Create the second JSON document
-DynamicJsonDocument deviceInfoCopy(512);
+JsonObject deviceInfoCopy;
 
 mqtt_params_t mqtt_params = {0};
 
@@ -39,10 +39,12 @@ void switchTempRange(void);
 void switchHeatMode(void);
 void toggleJet1(void);
 void toggleJet2(void);
+void toggleJet3(void);
+void toggleJet4(void);
 void toggleLight1(void);
 void toggleBlower1(void);
 void setTemp(float temp);
-void spaControl_appand_device_info(StaticJsonDocument<200> *doc);
+void spaControl_appand_device_info(DynamicJsonDocument* doc);
 void spaControl_create_filter_cycle(char *json_str);
 
 void myFunction()
@@ -90,11 +92,18 @@ spaControlParams_t get_spaControlParams(void)
 
 void set_spaControlParams(spaControlParams_t _spaControlParams)
 {
+  stopSpaCmdSendTimer();
   spaControlParams.is_jet1_present = _spaControlParams.is_jet1_present;
   spaControlParams.jet1 = _spaControlParams.jet1;
 
   spaControlParams.is_jet2_present = _spaControlParams.is_jet2_present;
   spaControlParams.jet2 = _spaControlParams.jet2;
+
+  spaControlParams.is_jet3_present = _spaControlParams.is_jet3_present;
+  spaControlParams.jet3 = _spaControlParams.jet3;
+
+  spaControlParams.is_jet4_present = _spaControlParams.is_jet4_present;
+  spaControlParams.jet4 = _spaControlParams.jet4;
 
   spaControlParams.is_blower1_present = _spaControlParams.is_blower1_present;
   spaControlParams.blower1 = _spaControlParams.blower1;
@@ -179,6 +188,42 @@ void spaControl_action(void)
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
         toggleJet2();
+
+        sendSpaCmdSend = false;
+        startSpaCmdSendTimer();
+      }
+    }
+    else
+    {
+      sendSpaCmdSend = false;
+      stopSpaCmdSendTimer();
+    }
+  }
+  else if(spaControlParams.is_jet3_present)
+  {
+    if(spaControlParams.jet3)
+    {
+      if(sendSpaCmdSend || !spaCmdSendTimerRunning)
+      {
+        toggleJet3();
+
+        sendSpaCmdSend = false;
+        startSpaCmdSendTimer();
+      }
+    }
+    else
+    {
+      sendSpaCmdSend = false;
+      stopSpaCmdSendTimer();
+    }
+  }
+  else if(spaControlParams.is_jet4_present)
+  {
+    if(spaControlParams.jet4)
+    {
+      if(sendSpaCmdSend || !spaCmdSendTimerRunning)
+      {
+        toggleJet4();
 
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
@@ -492,6 +537,22 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlParams->is_jet2_present = true;
         spaControlParams->jet2 = jet2;
       }
+      else if(doc["payload"].containsKey("jet3"))
+      {
+        int jet3 = doc["payload"]["jet3"];
+        Log.notice("Jet3: %d\n", jet3);
+
+        spaControlParams->is_jet3_present = true;
+        spaControlParams->jet3 = jet3;
+      }
+      else if(doc["payload"].containsKey("jet4"))
+      {
+        int jet4 = doc["payload"]["jet4"];
+        Log.notice("Jet2: %d\n", jet4);
+
+        spaControlParams->is_jet4_present = true;
+        spaControlParams->jet4 = jet4;
+      }
       else if(doc["payload"].containsKey("blower1"))
       {
         int blower1 = doc["payload"]["blower1"];
@@ -616,10 +677,13 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
     }
     if(doc.containsKey("device_info"))
     {
-      // Log.notice("hello\n");
       spaControlStatus->device_info = true;
-      deviceInfoCopy.set(doc["device_info"]);  // Deep copy
-
+      JsonObject objj = doc["device_info"];
+      deviceInfoCopy = deviceInfoCopy.createNestedObject("device_info");
+      for(JsonPair kv : objj)
+      {
+        deviceInfoCopy[kv.key()] = kv.value();
+      }
 
       // if(doc["device_info"].containsKey("user_id"))
       // {
@@ -659,14 +723,11 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
   return true;
 }
 
-void spaControl_appand_device_info(DynamicJsonDocument *doc)
+void spaControl_appand_device_info(DynamicJsonDocument* doc)
 {
   spaControlStatus.device_info = false;
 
-  // JsonArray device_info = *doc->[device_info];
-  // device_info.add(deviceInfoCopy);
-  
-  // JsonObject device_info = &doc->set(deviceInfoCopy);
+  (*doc)["device_info"].addElement();
   
   // JsonObject device_info = doc->createNestedObject("device_info");
   // device_info["device_id"] = spaControlStatus.device_id;
@@ -728,6 +789,8 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   JsonObject payload = doc.createNestedObject("payload");
   payload["jet1"] = getMapDescription(_SpaStatusData.pump1, pumpMap);
   payload["jet2"] = getMapDescription(_SpaStatusData.pump2, pumpMap);
+  payload["jet3"] = getMapDescription(_SpaStatusData.pump3, pumpMap);
+  payload["jet4"] = getMapDescription(_SpaStatusData.pump4, pumpMap);
   payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
   payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
   payload["heatingMode"] = getMapDescription(_SpaStatusData.heatingMode, heatingModeMap);
@@ -947,6 +1010,30 @@ void toggleJet2(void)
   dataBuffer.push(0xBF);
   dataBuffer.push(0x11);
   dataBuffer.push(0x05);
+  dataBuffer.push(0x00);
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+}
+
+void toggleJet3(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(WIFI_MODULE_ID);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x06);
+  dataBuffer.push(0x00);
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+}
+
+void toggleJet4(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(WIFI_MODULE_ID);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x07);
   dataBuffer.push(0x00);
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);

@@ -38,6 +38,12 @@ typedef struct {
   bool  is_jet2_present;
   bool  jet2;
 
+  bool  is_jet3_present;
+  bool  jet3;
+
+  bool  is_jet4_present;
+  bool  jet4;
+
   bool  is_blower1_present;
   bool  blower1;
   
