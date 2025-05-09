@@ -111,6 +111,8 @@ void spaControl_create_heatMode(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_bootupPacket(char *json_str);
 
+void printdeviceInfoCopy(void);
+
 extern mqtt_params_t mqtt_params;
 
 #endif

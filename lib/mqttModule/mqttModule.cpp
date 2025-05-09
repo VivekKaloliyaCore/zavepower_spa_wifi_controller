@@ -163,6 +163,8 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
 
   if(spaControl_parse_action_command((char *)payload, &spaControlParams, &spaControlStatus, &otaParams))
   {
+    printdeviceInfoCopy();
+
     Log.notice("parse_action_command\n");
     if(spaControlStatus.deviceStatus)
     {

@@ -18,6 +18,7 @@
 
 //Create the second JSON document
 JsonObject deviceInfoCopy;
+DynamicJsonDocument deviceInfoDoc(256);
 
 mqtt_params_t mqtt_params = {0};
 
@@ -678,12 +679,24 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
     if(doc.containsKey("device_info"))
     {
       spaControlStatus->device_info = true;
-      JsonObject objj = doc["device_info"];
-      deviceInfoCopy = deviceInfoCopy.createNestedObject("device_info");
-      for(JsonPair kv : objj)
+      
+      deviceInfoCopy = doc["device_info"];
+
+      // Create a new object and copy the data
+      JsonObject copiedDeviceInfo = deviceInfoDoc.to<JsonObject>();
+      copiedDeviceInfo.set(deviceInfoCopy);  // Deep copy
+
+      for(JsonPair kv : deviceInfoCopy)
       {
-        deviceInfoCopy[kv.key()] = kv.value();
+        char *key = (char *)(kv.key().c_str());
+        Log.notice(">>>> key: %s | %s | %s\n", key, kv.key().c_str(), kv.key());
       }
+
+      // deviceInfoCopy = deviceInfoCopy.createNestedObject("device_info");
+      // for(JsonPair kv : objj)
+      // {
+      //   deviceInfoCopy[kv.key()] = kv.value();
+      // }
 
       // if(doc["device_info"].containsKey("user_id"))
       // {
@@ -727,7 +740,19 @@ void spaControl_appand_device_info(DynamicJsonDocument* doc)
 {
   spaControlStatus.device_info = false;
 
-  (*doc)["device_info"].addElement();
+  // (*doc)["device_info"].addElement();
+
+  JsonObject device_info = doc->createNestedObject("device_info");
+  device_info.set(deviceInfoCopy);  // Deep copy
+
+  // JsonObject device_info = doc->createNestedObject("device_info");
+  // for(JsonPair kv : deviceInfoCopy)
+  // {
+  //   char *key = (char *)(kv.key().c_str());
+  //   Log.notice(">>>> key: %s | %s | %s\n", key, kv.key().c_str(), kv.key());
+
+  //   device_info[kv.key().c_str()] = kv.value();
+  // }
   
   // JsonObject device_info = doc->createNestedObject("device_info");
   // device_info["device_id"] = spaControlStatus.device_id;
@@ -1119,4 +1144,13 @@ void filterCycleTrial(void)
   }
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);
+}
+
+void printdeviceInfoCopy(void)
+{
+  for(JsonPair kv : deviceInfoCopy)
+  {
+    char *key = (char *)(kv.key().c_str());
+    Log.notice(">>>> key: %s | %s | %s\n", key, kv.key().c_str(), kv.key());
+  }
 }
