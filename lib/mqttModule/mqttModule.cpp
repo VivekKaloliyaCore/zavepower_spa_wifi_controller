@@ -78,6 +78,7 @@ void mqttModuleLoop()
   mqtt.loop();
   spaControl_mqtt_action();
 
+
   if(otaUpdateRunning)
   {
     otastatus = HttpsOTA.status();
@@ -307,6 +308,7 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
   // }
 
   // mqtt.publish(p_topic, p_payload, p_length);
+  printdeviceInfoCopy();
 }
 
 void nodeStateReport()

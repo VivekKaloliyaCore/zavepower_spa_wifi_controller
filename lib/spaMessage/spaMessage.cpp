@@ -145,7 +145,6 @@ void spaMessageLoop()
     SpaReadQueueMessage *message;
     if (xQueueReceive(spaReadQueue, &message, 0) == pdTRUE)
     {
-      // Log.notice("Filter Cycle::::::::;;;;;;::::\n");
       // Log.verbose(F("[Mess]: Queue Message Received: [%d]%s" CR), message->length, msgToString(message->message, message->length).c_str());
       switch (message->message[4])
       {
@@ -153,7 +152,6 @@ void spaMessageLoop()
         parseStatusMessage(message->message, message->length);
         break;
       case Filter_Cycles_Type:
-      // Log.notice("Filter Cycle::::::::;;;;;;::::\n");
         Log.verbose(F("[Mess]: Filter Cycles Response: %s" CR), msgToString(message->message, message->length).c_str());
         parseFilterResponse(message->message, message->length);
         break;
@@ -636,7 +634,8 @@ void parseFilterResponse(u_int8_t *message, int length)
   }
   spaFilterSettingsData.rawDataLength = length;
 
-  u_int8_t *hexArray = message + 5;
+  u_int8_t *hexArray = message + 5;\
+
   spaFilterSettingsData.filt1Hour = hexArray[0];
   spaFilterSettingsData.filt1Minute = hexArray[1];
   spaFilterSettingsData.filt1DurationHour = hexArray[2];
@@ -647,6 +646,10 @@ void parseFilterResponse(u_int8_t *message, int length)
   spaFilterSettingsData.filt2DurationHour = hexArray[6];
   spaFilterSettingsData.filt2DurationMinute = hexArray[7];
 
+  Log.notice("Filter Cycle command parsed!!\n");
+  Log.notice("F1Hour : %d, F1Min : %d, F1DHour : %d, F1DMin : %d, F2En : %d, F2H : %d, F2M : %d, F2DH : %d & F2DM : %d !!\n", spaFilterSettingsData.filt1Hour, \
+    spaFilterSettingsData.filt1Minute, spaFilterSettingsData.filt1DurationHour, spaFilterSettingsData.filt1DurationMinute, spaFilterSettingsData.filt2Enable, \
+    spaFilterSettingsData.filt2Hour, spaFilterSettingsData.filt2Minute, spaFilterSettingsData.filt2DurationHour, spaFilterSettingsData.filt2DurationMinute);
   // Log.verbose(F("[Mess]: Filter Response: %s" CR), msgToString(hexArray, length - 7).c_str());
   publishSpaFilterSettingsData();
 }

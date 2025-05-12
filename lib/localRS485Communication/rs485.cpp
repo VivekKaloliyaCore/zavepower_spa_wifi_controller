@@ -144,6 +144,17 @@ void rs485Loop()
   {
     if (isMessageValid(spaMessage))
     {
+      if(spaMessage[4] == 0x23)
+      {
+        SpaReadQueueMessage *messageToSend = new SpaReadQueueMessage;
+        messageToSend->length = (spaMessage.size() < BALBOA_MESSAGE_SIZE ? spaMessage.size() : BALBOA_MESSAGE_SIZE);
+        for (int i = 0; i < messageToSend->length; i++)
+        {
+          messageToSend->message[i] = spaMessage[i];
+        }
+        xQueueSend(spaReadQueue, &messageToSend, 0);
+      }
+
       if(spaMessage.size() >= 8)
       {
         int received_crc = spaMessage[spaMessage.size() - 2];

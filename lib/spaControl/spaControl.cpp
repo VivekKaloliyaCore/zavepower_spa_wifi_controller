@@ -32,7 +32,6 @@ bool sendSpaCmdSend = false;
 static spaControlParams_t spaControlParams = {0};
 static spaControlStatus_t spaControlStatus = {0};
 
-filterCycleData_t filterCycleData = {0};
 // SpaFilterSettingsData spaFilterSettingsData = {0};
 
 // Local Function
@@ -139,6 +138,7 @@ spaControlStatus_t get_spaControlStatus(void)
 
 void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
 {
+  printdeviceInfoCopy();
   spaControlStatus.deviceStatus = _spaControlStatus.deviceStatus;
   spaControlStatus.bootupPacket = _spaControlStatus.bootupPacket;
   spaControlStatus.currentTemp = _spaControlStatus.currentTemp;
@@ -349,9 +349,6 @@ void spaControl_action(void)
 
 void spaControl_mqtt_action(void)
 {
-
-  // Log.notice("SpaControl_mqtt_action!!!");
-
   if(spaControlStatus.deviceStatus)
   {
     spaControlStatus.deviceStatus = false;
@@ -383,7 +380,7 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_setTemp(spa_status_data, json_str);
-
+    // printdeviceInfoCopy();
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
@@ -584,33 +581,35 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlParams->is_filterCycle_present = true;
         if(doc["payload"]["filterCycle"].containsKey("1"))
         {
+          Log.notice("Filter 1 Received\n");
           spaFilterSettingsData.filt1Hour = doc["payload"]["filterCycle"]["1"]["startTimeHr"];
           spaFilterSettingsData.filt1Minute = doc["payload"]["filterCycle"]["1"]["startTimeMin"];
           spaFilterSettingsData.filt1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
           spaFilterSettingsData.filt1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
-
-          // filterCycleData.filter1StartHour = doc["payload"]["filterCycle"]["1"]["startTimeHr"];
-          // filterCycleData.filter1StartMinute = doc["payload"]["filterCycle"]["1"]["startTimeMin"];
-          // filterCycleData.filter1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
-          // filterCycleData.filter1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
         }
         if(doc["payload"]["filterCycle"].containsKey("2"))
         {
 
-          Log.notice("Payload 2 Received\n");
-          spaFilterSettingsData.filt2Enable = 1;
-          spaFilterSettingsData.filt2Hour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
-          spaFilterSettingsData.filt2Minute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
-          spaFilterSettingsData.filt2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
-          spaFilterSettingsData.filt2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
-          // filterCycleData.filter2StartHour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
-          // filterCycleData.filter2StartMinute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
-          // filterCycleData.filter2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
-          // filterCycleData.filter2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
+          Log.notice("Filter 2 Received\n");
+          if(doc["payload"]["filterCycle"]["2"]["enable"] == true)
+          {
+            spaFilterSettingsData.filt2Enable = 1;
+            spaFilterSettingsData.filt2Hour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
+            spaFilterSettingsData.filt2Minute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
+            spaFilterSettingsData.filt2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
+            spaFilterSettingsData.filt2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
+          }
+          else
+          { 
+            spaFilterSettingsData.filt2Enable = 0;
+            spaFilterSettingsData.filt2Hour = 0;
+            spaFilterSettingsData.filt2Minute = 0;
+            spaFilterSettingsData.filt2DurationHour = 0;
+            spaFilterSettingsData.filt2DurationMinute = 0;
+          }
         }
         else
         {
-          Log.notice("Payload 2 Not Received\n");
           spaFilterSettingsData.filt2Enable = 0;
           spaFilterSettingsData.filt2Hour = 0;
           spaFilterSettingsData.filt2Minute = 0;
@@ -678,19 +677,23 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
     }
     if(doc.containsKey("device_info"))
     {
-      spaControlStatus->device_info = true;
+      // spaControlStatus->device_info = true;
       
-      deviceInfoCopy = doc["device_info"];
+      JsonObject xyz = doc["device_info"];
+
+      memcpy(&deviceInfoCopy, &xyz, sizeof(JsonObject));
+
+      Log.notice("%d \n",deviceInfoCopy["user_id"]);
 
       // Create a new object and copy the data
-      JsonObject copiedDeviceInfo = deviceInfoDoc.to<JsonObject>();
-      copiedDeviceInfo.set(deviceInfoCopy);  // Deep copy
+      // JsonObject copiedDeviceInfo = deviceInfoDoc.to<JsonObject>();
+      // copiedDeviceInfo.set(deviceInfoCopy);  // Deep copy
 
-      for(JsonPair kv : deviceInfoCopy)
-      {
-        char *key = (char *)(kv.key().c_str());
-        Log.notice(">>>> key: %s | %s | %s\n", key, kv.key().c_str(), kv.key());
-      }
+      // for(JsonPair kv : deviceInfoCopy)
+      // {
+      //   char *key = (char *)(kv.key().c_str());
+      //   Log.notice(">>>> key: %s | %s | %s\n", key, kv.key().c_str(), kv.key());
+      // }
 
       // deviceInfoCopy = deviceInfoCopy.createNestedObject("device_info");
       // for(JsonPair kv : objj)
@@ -743,7 +746,9 @@ void spaControl_appand_device_info(DynamicJsonDocument* doc)
   // (*doc)["device_info"].addElement();
 
   JsonObject device_info = doc->createNestedObject("device_info");
-  device_info.set(deviceInfoCopy);  // Deep copy
+  device_info = deviceInfoCopy;
+  // memcpy(&device_info, &deviceInfoCopy, sizeof(JsonObject));
+  // device_info.set(deviceInfoCopy);  // Deep copy
 
   // JsonObject device_info = doc->createNestedObject("device_info");
   // for(JsonPair kv : deviceInfoCopy)
@@ -762,32 +767,39 @@ void spaControl_appand_device_info(DynamicJsonDocument* doc)
 void spaControl_create_filter_cycle(char *json_str)
 {
   // Create a JSON document
-  DynamicJsonDocument doc(200);
+  DynamicJsonDocument doc(350);
 
   // Add key-value pairs
   doc["action"] = "response";
   doc["msgT"] = "filterCycle";
 
   JsonObject payload = doc.createNestedObject("payload");
+  if(spaControlStatus.filter1)
+  {
     // spaControlStatus.filter1 = false;
     payload["filter1StartHour"] = spaFilterSettingsData.filt1Hour;
     payload["filter1StartMin"] = spaFilterSettingsData.filt1Minute;
     payload["filter1DurationHour"] = spaFilterSettingsData.filt1DurationHour;
-    payload["filter1DurationHour"] = spaFilterSettingsData.filt1DurationMinute;
+    payload["filter1DurationMin"] = spaFilterSettingsData.filt1DurationMinute;
+  }
+  if(spaControlStatus.filter2)
+  {
+    if(spaFilterSettingsData.filt2Enable)
+    {
+      // spaControlStatus.filter2 = false;
+      // spaFilterSettingsData.filt2Hour = spaFilterSettingsData.filt2Hour & ~(1 << 7);
+      payload["filter2StartHour"] = spaFilterSettingsData.filt2Hour;
+      payload["filter2StartMin"] = spaFilterSettingsData.filt2Minute;
+      payload["filter2DurationHour"] = spaFilterSettingsData.filt2DurationHour;
+      payload["filter2DurationMin"] = spaFilterSettingsData.filt2DurationMinute;
+    }
+    else
+    {
+      payload["filter2"] = "Disabled";
+    }
+  }
 
-  if(spaFilterSettingsData.filt2Enable)
-  {
-    // spaControlStatus.filter2 = false;
-    // spaFilterSettingsData.filt2Hour = spaFilterSettingsData.filt2Hour & ~(1 << 7);
-    payload["filter2StartHour"] = spaFilterSettingsData.filt2Hour;
-    payload["filter2StartMin"] = spaFilterSettingsData.filt2Minute;
-    payload["filter2DurationHour"] = spaFilterSettingsData.filt2DurationHour;
-    payload["filter2DurationMin"] = spaFilterSettingsData.filt2DurationMinute;
-  }
-  else
-  {
-    payload["filter2"] = "Disabled";
-  }
+  
 
   if(spaControlStatus.device_info)
   {

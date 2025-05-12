@@ -7,29 +7,11 @@
 #include <balboa.h>
 
 
-
-typedef struct{
-  int filter1StartHour;
-  int filter1StartMinute;
-  int filter1DurationHour;
-  int filter1DurationMinute;
-  int filter2StartHour;
-  int filter2StartMinute;
-  int filter2DurationHour;
-  int filter2DurationMinute;
-}filterCycleData_t;
-
-
 typedef struct {
   bool is_mqtt_topic_postfix_present;
   char mqtt_topic_postfix[128];
 } mqtt_params_t;
 
-typedef struct 
-{
-  float setTemp;
-  float measuredTemp;
-}spaTempData;
 
 typedef struct {
   bool  is_jet1_present;

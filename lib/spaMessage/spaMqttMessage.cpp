@@ -148,6 +148,7 @@ void publishSpaConfigurationData()
 
 void publishSpaFilterSettingsData()
 {
+  Log.notice("pub filter data\n");
   PUBLISH_FILTER_SETTINGS_ELEMENT(crc, "%u");
   PUBLISH_FILTER_SETTINGS_ELEMENT(lastUpdate, "%lu");
   PUBLISH_FILTER_SETTINGS_ELEMENT(lastRequest, "%lu");
