@@ -5,7 +5,7 @@ CONCLUSIONS :::
 
 
 
-Temperature Range Conclution ::
+Temperature Range ::
 ======================================================================================
 There are two temperature ranges, HIGH and LOW. Set by Client;
 Temp range HIGH = Set temp ranges from 26.5 degree celcius to 40 degree celcius;
@@ -55,6 +55,7 @@ The details for these bits are not mantioned in the referance document as well. 
 
 When we go out of the priming mode to the normal mode, circulation autometically starts;
 
+7e 07 10 bf 11 01 00 2b 7e	|	Command to switch to Normal Operation(Exit Priming Mode).
 
 
 
@@ -92,3 +93,39 @@ Where the 5th byte having 0x23 indicaes that it is a "Filter Cycles Message".
 11th byte indicates Cycle 2's Start time Minute
 12th byte indicates Cycle 2's Duration Hours
 13th byte indicates Cycle 2's Duration Minutes
+
+
+Set Time ::
+===========================================================
+After power on, machine give a message/notification to set the time once.
+
+We can set the time manually using the following command :
+7e 07 10 bf 21 [] [] 89 7e
+
+6th index byte	|	Hour; In hour's byte, the MSB should be 1 for some reason.
+7th index byte	|	Minute
+
+
+Error Codes ::
+==========================================================
+In a device status frame, 
+
+Byte Index 6 : State/Initialization Mode/Stage/Message etc.
+0x00	|	Idle
+0x01	|	Priming Mode
+0x02	|	Fault/Error
+0x03	|	Reminder/Message/Information
+.
+.
+.
+.
+
+Byte Index 11 : Reminder/Message/Error Code in HEX.
+
+Example : 
+---------
+When there is a Set time message from the machine,
+6th index byte - 0x03	|	11th index byte 0x28(indicating Message Code 40)
+
+If there is an error on the display we can send the following command :
+7e 07 10 bf 11 03 00 01 7e	|	Clear Notification.
