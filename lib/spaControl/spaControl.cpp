@@ -11,6 +11,8 @@
 #include "spaControl.h"
 #include "rs485.h"
 #include "spaMqttMessage.h"
+#include "PubSubClient.h"
+#include "mqttModule.h"
 #include <wifiModule.h>
 #include "../../src/config.h"
 #include "../../src/main.h"
@@ -261,7 +263,6 @@ void spaControl_action(void)
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
         toggleLight1();
-
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
       }
@@ -358,7 +359,7 @@ void spaControl_mqtt_action(void)
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_deviceStatus(spa_status_data, json_str);
 
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.currentTemp)
@@ -380,7 +381,6 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_setTemp(spa_status_data, json_str);
-    // printdeviceInfoCopy();
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
@@ -391,8 +391,7 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_heatMode(spa_status_data, json_str);
-
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.tempRange)
@@ -403,8 +402,7 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_tempRange(spa_status_data, json_str);
-
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.filterCycle)
@@ -414,8 +412,7 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
     spaControl_create_filter_cycle(json_str);
-
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.bootupPacket)
@@ -425,8 +422,8 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     // SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_bootupPacket(json_str);
-
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    mqtt.publish(&mqtt_params.mqtt_topic_postfix[0], (uint8_t*)"", 0, false);
     Log.notice("Boot Up pacage Published\n");
   }
 }
@@ -905,7 +902,7 @@ void spaControl_create_heatMode(SpaStatusData _SpaStatusData, char *json_str)
 
   // Add key-value pairs
   doc["action"] = "response";
-  doc["msgT"] = "setTemp";
+  doc["msgT"] = "heatMode";
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
@@ -941,7 +938,7 @@ void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str)
 
   // Add key-value pairs
   doc["action"] = "response";
-  doc["msgT"] = "setTemp";
+  doc["msgT"] = "tempRange";
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");

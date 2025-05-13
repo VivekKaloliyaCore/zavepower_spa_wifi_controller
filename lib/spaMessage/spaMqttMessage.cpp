@@ -304,10 +304,13 @@ void publishWiFiModuleConfigurationData()
   publishElement("macAddress", "wifiModuleConfig", wiFiModuleConfigurationData.macAddress);
 }
 
+
+
 void spaMqttMessage_publish_message(char *topic, char *msg, int msg_len)
 {
   char topic_final[128];
   snprintf(topic_final, sizeof(topic_final), "%s%s", mqttTopic.c_str(), topic);
   // Log.verbose("Publishing %s: %s\n", topic_final, msg);
-  mqtt.publish(topic_final, msg, msg_len);
+  // mqtt.publish(topic_final, msg, msg_len);
+  mqtt.publish(topic_final, (uint8_t*)msg, msg_len, false);
 }

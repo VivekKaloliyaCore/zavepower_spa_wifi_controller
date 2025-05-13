@@ -569,6 +569,30 @@ bool parseStatusMessage(u_int8_t *message, int length)
       spaControlStatus.deviceStatus = true;
       set_spaControlStatus(spaControlStatus);
     }
+    else if(spaControlParams.is_jet3_present)
+    {
+      spaControlParams.is_jet3_present = false;
+      spaControlParams.jet3 = 0;
+      set_spaControlParams(spaControlParams);
+
+      Log.notice("Sending AUTO deviceStatus...\n");
+      spaControlStatus_t spaControlStatus = {0};
+      memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
+      spaControlStatus.deviceStatus = true;
+      set_spaControlStatus(spaControlStatus);
+    }
+    else if(spaControlParams.is_jet4_present)
+    {
+      spaControlParams.is_jet4_present = false;
+      spaControlParams.jet4 = 0;
+      set_spaControlParams(spaControlParams);
+
+      Log.notice("Sending AUTO deviceStatus...\n");
+      spaControlStatus_t spaControlStatus = {0};
+      memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
+      spaControlStatus.deviceStatus = true;
+      set_spaControlStatus(spaControlStatus);
+    }
     else if(spaControlParams.is_blower1_present)
     {
       spaControlParams.is_blower1_present = false;
@@ -598,7 +622,7 @@ bool parseStatusMessage(u_int8_t *message, int length)
       Log.notice("Sending SYNC deviceStatus...\n");
       spaControlStatus_t spaControlStatus = {0};
       memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
-      spaControlStatus.deviceStatus = true;
+      spaControlStatus.deviceStatus = true; // Commenting for Test
       set_spaControlStatus(spaControlStatus);
     }
 

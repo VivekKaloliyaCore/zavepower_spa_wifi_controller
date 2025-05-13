@@ -74,7 +74,7 @@ void mqttModuleLoop()
   {
     reconnect();
   }
-  sendStatus.update(); // Commented for Test
+  sendStatus.update();
   mqtt.loop();
   spaControl_mqtt_action();
 

@@ -11,6 +11,7 @@ void publishSpaInformationData();
 void publishWiFiModuleConfigurationData();
 void publishSpaSettings0x04Data();
 
+
 void spaMqttMessage_publish_message(char *topic, char *msg, int msg_len);
 
 #endif

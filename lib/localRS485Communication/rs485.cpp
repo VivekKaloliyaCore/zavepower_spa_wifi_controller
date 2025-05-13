@@ -163,7 +163,7 @@ void rs485Loop()
         {
           last_crc = received_crc;
           Log.verbose(F("[rs485]: Received: %d - %s" CR), id, msgToString(spaMessage).c_str());
-          spaMqttMessage_publish_message("debug", (char *)msgToString(spaMessage).c_str(), spaMessage.size());
+                    spaMqttMessage_publish_message("debug", (char *)msgToString(spaMessage).c_str(), spaMessage.size());
         }
       }
 
