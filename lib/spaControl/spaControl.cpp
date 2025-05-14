@@ -18,7 +18,7 @@
 #include "../../src/main.h"
 #include <balboa.h>
 
-StaticJsonDocument<256> globalDeviceInfo; // Adjust size as needed
+StaticJsonDocument<512> globalDeviceInfo; // Adjust size as needed
 
 static mqtt_params_t mqtt_params = {0};
 
@@ -936,7 +936,7 @@ void spaControl_create_filter_cycle(char *json_str)
 void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str)
 {
   // Create a JSON document
-  DynamicJsonDocument doc(300);
+  DynamicJsonDocument doc(400);
 
   // Add key-value pairs
   doc["action"] = "response";
