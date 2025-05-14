@@ -18,6 +18,7 @@
 #include <rs485.h>
 #include "spaMessage.h"
 #include "spaControl.h"
+#include "spaMqttMessage.h"
 
 // Local Functions
 void reconnect();
@@ -30,7 +31,7 @@ WiFiClientSecure wifiClientSecure;
 PubSubClient mqtt(wifiClientSecure);
 String mqttTopic = "Spa/"; // root topic, gets appeanded with node mac address
 
-TickTwo sendStatus(nodeStateReport, 1.5 * 60 * 1000); // 5 minutes
+// TickTwo sendStatus(nodeStateReport, 1.5 * 60 * 1000); // 5 minutes
 
 /* OTA */
 static bool otaUpdateRunning = false;
@@ -63,7 +64,7 @@ void mqttModuleSetup()
   // Log.notice("MQTT Server: %s:%d\n", MQTT_SERVER, MQTT_PORT);
   Log.notice("MQTT Server: %s:%d\n", MQTTS_SERVER, MQTTS_PORT);
   Log.notice("MQTT Topic: %s\n", mqttTopic.c_str());
-  sendStatus.start();
+  // sendStatus.start();
 
   // sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
   
@@ -72,6 +73,13 @@ void mqttModuleSetup()
   mqtt_params.is_mqtt_topic_postfix_present = true;
   sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
   set_mqtt_params(mqtt_params);
+  spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
+  spaMqttMessage_publish_message("response/server", NULL, 0);
+  spaMqttMessage_publish_message("debug", NULL, 0);
+  spaMqttMessage_publish_message("bridge/msg", NULL, 0);
+  spaMqttMessage_publish_message("debug/message", NULL, 0);
+  spaMqttMessage_publish_message("debug/error", NULL, 0);
+  spaMqttMessage_publish_message("status", NULL, 0);
 }
 
 void mqttModuleLoop()
@@ -81,7 +89,7 @@ void mqttModuleLoop()
   {
     reconnect();
   }
-  sendStatus.update();
+  // sendStatus.update();
   mqtt.loop();
   spaControl_mqtt_action();
 
@@ -123,7 +131,7 @@ void reconnect()
 
     if (mqtt.connected())
     {
-      publishError("MQTT Timeout - Reconnect Successfully Run");
+      publishError("MQTT Timeout - Reconnect Successfully Run", false);
       mqtt.subscribe((mqttTopic + "command").c_str());
       mqtt.subscribe((mqttTopic + "command/server").c_str());
       
@@ -329,30 +337,30 @@ void nodeStateReport()
 {
   if (mqtt.connected())
   {
-    publishNodeStatus("ip", WiFi.localIP().toString().c_str());
-    publishNodeStatus("mac", WiFi.macAddress().c_str());
-    publishNodeStatus("gateway", gatewayName);
-    publishNodeStatus("restartReason", getLastRestartReason().c_str());
-    publishNodeStatus("uptime", String(millis() / 1000).c_str());
-    publishNodeStatus("getTime", String(getTime()).c_str());
-    publishNodeStatus("state", "ON", true);
-    publishNodeStatus("flashsize", String(ESP.getFlashChipSize()).c_str());
-    publishNodeStatus("chipid", String(ESP.getChipModel()).c_str());
-    publishNodeStatus("speed", String(ESP.getCpuFreqMHz()).c_str());
-    publishNodeStatus("heap", String(ESP.getFreeHeap()).c_str());
-    publishNodeStatus("psram", String(ESP.getFreePsram()).c_str());
-    publishNodeStatus("stack", String(uxTaskGetStackHighWaterMark(NULL)).c_str());
+    publishNodeStatus("ip", WiFi.localIP().toString().c_str(), false);
+    publishNodeStatus("mac", WiFi.macAddress().c_str(), false);
+    publishNodeStatus("gateway", gatewayName, false);
+    publishNodeStatus("restartReason", getLastRestartReason().c_str(), false);
+    publishNodeStatus("uptime", String(millis() / 1000).c_str(), false);
+    publishNodeStatus("getTime", String(getTime()).c_str(), false);
+    publishNodeStatus("state", "ON", false);
+    publishNodeStatus("flashsize", String(ESP.getFlashChipSize()).c_str(), false);
+    publishNodeStatus("chipid", String(ESP.getChipModel()).c_str(), false);
+    publishNodeStatus("speed", String(ESP.getCpuFreqMHz()).c_str(), false);
+    publishNodeStatus("heap", String(ESP.getFreeHeap()).c_str(), false);
+    publishNodeStatus("psram", String(ESP.getFreePsram()).c_str(), false);
+    publishNodeStatus("stack", String(uxTaskGetStackHighWaterMark(NULL)).c_str(), false);
 
-    publishNodeStatus("rs485 messagesToday", String(rs485Stats.messagesToday).c_str());
-    publishNodeStatus("rs485 crcToday", String(rs485Stats.crcToday).c_str());
-    publishNodeStatus("rs485 messagesYesterday", String(rs485Stats.messagesYesterday).c_str());
-    publishNodeStatus("rs485 crcYesterday", String(rs485Stats.crcYesterday).c_str());
-    publishNodeStatus("rs485 badFormatToday", String(rs485Stats.badFormatToday).c_str());
-    publishNodeStatus("rs485 badFormatYesterday", String(rs485Stats.badFormatYesterday).c_str());
+    publishNodeStatus("rs485 messagesToday", String(rs485Stats.messagesToday).c_str(), false);
+    publishNodeStatus("rs485 crcToday", String(rs485Stats.crcToday).c_str(), false);
+    publishNodeStatus("rs485 messagesYesterday", String(rs485Stats.messagesYesterday).c_str(), false);
+    publishNodeStatus("rs485 crcYesterday", String(rs485Stats.crcYesterday).c_str(), false);
+    publishNodeStatus("rs485 badFormatToday", String(rs485Stats.badFormatToday).c_str(), false);
+    publishNodeStatus("rs485 badFormatYesterday", String(rs485Stats.badFormatYesterday).c_str(), false);
 
     String release = String(__DATE__) + " - " + String(__TIME__);
-    publishNodeStatus("release", release.c_str());
-    publishNodeStatus("buildDefinition", buildDefinitionString.c_str());
+    publishNodeStatus("release", release.c_str(), false);
+    publishNodeStatus("buildDefinition", buildDefinitionString.c_str(), false);
   }
 }
 
