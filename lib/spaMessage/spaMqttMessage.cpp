@@ -24,7 +24,7 @@ void publishElement(const char *element, const char *group, const char *value)
   char topic[128];
   snprintf(topic, sizeof(topic), "%s%s/%s", mqttTopic.c_str(), group, element);
   // Log.verbose("Publishing %s: %s\n", topic, value);
-  mqtt.publish(topic, value);
+  mqtt.publish(topic, value, false);
 }
 
 #define convertRawDataToHex(structure, outputBuffer)                             \
@@ -311,6 +311,13 @@ void spaMqttMessage_publish_message(char *topic, char *msg, int msg_len)
   char topic_final[128];
   snprintf(topic_final, sizeof(topic_final), "%s%s", mqttTopic.c_str(), topic);
   // Log.verbose("Publishing %s: %s\n", topic_final, msg);
-  // mqtt.publish(topic_final, msg, msg_len);
-  mqtt.publish(topic_final, (uint8_t*)msg, msg_len, false);
+
+  if(msg_len)
+  {
+    mqtt.publish(topic_final, (uint8_t*)msg, msg_len, false);
+  }
+  else
+  {
+    mqtt.publish(topic_final, (uint8_t*)"", true);
+  }
 }

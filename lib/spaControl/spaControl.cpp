@@ -577,7 +577,7 @@ spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, str
     // SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_bootupPacket(json_str);
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
-    mqtt.publish(&mqtt_params.mqtt_topic_postfix[0], (uint8_t*)"", 0, false);
+    // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
     Log.notice("Boot Up pacage Published\n");
   }
 }
