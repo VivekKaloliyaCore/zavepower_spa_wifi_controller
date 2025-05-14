@@ -64,7 +64,14 @@ void mqttModuleSetup()
   Log.notice("MQTT Server: %s:%d\n", MQTTS_SERVER, MQTTS_PORT);
   Log.notice("MQTT Topic: %s\n", mqttTopic.c_str());
   sendStatus.start();
+
+  // sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
+  
+  mqtt_params_t mqtt_params = {0};
+  memset(&mqtt_params, 0, sizeof(mqtt_params_t));
+  mqtt_params.is_mqtt_topic_postfix_present = true;
   sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
+  set_mqtt_params(mqtt_params);
 }
 
 void mqttModuleLoop()
@@ -136,6 +143,7 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
   // Log.notice(">>>> %s | %d | %s\n", p_topic, p_length, p_payload);
 
   mqtt_params_t mqtt_params = {0};
+  memset(&mqtt_params, 0, sizeof(mqtt_params_t));
   if(strstr(p_topic, "/server"))
   {
     mqtt_params.is_mqtt_topic_postfix_present = true;
@@ -149,153 +157,160 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
     set_mqtt_params(mqtt_params);
   }
 
-  char payload[1024] = {0};
-  memset(payload, 0, sizeof(payload));
-  memcpy(payload, (char *)p_payload, p_length);
+  memset(&mqtt_params, 0, sizeof(mqtt_params_t));
+  mqtt_params.is_parse_mqtt_msg_present = true;
+  mqtt_params.parse_mqtt_msg = true;
+  mqtt_params.mqtt_msg_len = p_length;
+  memset(mqtt_params.mqtt_msg, 0, sizeof(mqtt_params.mqtt_msg));
+  memcpy(mqtt_params.mqtt_msg, (char *)p_payload, p_length);
+  set_mqtt_params(mqtt_params);
 
-  spaControlParams_t spaControlParams = {0};
-  memset(&spaControlParams, 0, sizeof(spaControlParams_t));
+  // char payload[1024] = {0};
+  // memset(payload, 0, sizeof(payload));
+  // memcpy(payload, (char *)p_payload, p_length);
 
-  spaControlStatus_t spaControlStatus = {0};
-  memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
+  // spaControlParams_t spaControlParams = {0};
+  // memset(&spaControlParams, 0, sizeof(spaControlParams_t));
 
-  otaParams_t otaParams = {0};
-  memset(&otaParams, 0, sizeof(otaParams_t));
+  // spaControlStatus_t spaControlStatus = {0};
+  // memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
 
-  if(spaControl_parse_action_command((char *)payload, &spaControlParams, &spaControlStatus, &otaParams))
-  {
-    printdeviceInfoCopy();
+  // otaParams_t otaParams = {0};
+  // memset(&otaParams, 0, sizeof(otaParams_t));
 
-    Log.notice("parse_action_command\n");
-    if(spaControlStatus.deviceStatus)
-    {
-      Log.notice("Sending deviceStatus...\n");
-      set_spaControlStatus(spaControlStatus);
-    }
-    else if(spaControlStatus.currentTemp)
-    {
-      Log.notice("Sending currentTemp...\n");
-      set_spaControlStatus(spaControlStatus);
-    }
-    else if(spaControlStatus.setTemp)
-    {
-      Log.notice("Sending setTemp...\n");
-      set_spaControlStatus(spaControlStatus);
-    }
-    else if(spaControlStatus.heatMode)
-    {
-      Log.notice("Sending heatMode...\n");
-      set_spaControlStatus(spaControlStatus);
-    }
-    else if(spaControlStatus.tempRange)
-    {
-      Log.notice("Sending tempRange...\n");
-      set_spaControlStatus(spaControlStatus);
-    }
-    else if(spaControlStatus.device_info)
-    {
-      set_spaControlStatus(spaControlStatus);
-    }
-    else if(spaControlStatus.filterCycle)
-    {
-      set_spaControlStatus(spaControlStatus);
-    }
+  // if(spaControl_parse_action_command((char *)payload, &spaControlParams, &spaControlStatus, &otaParams))
+  // {
 
-    if(spaControlParams.is_jet1_present)
-    {
-      Log.notice("Sending jet 1 command...\n");
-      set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_jet2_present)
-    {
-      Log.notice("Sending jet 2 command...\n");
-      set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_jet3_present)
-    {
-      Log.notice("Sending jet 3 command...\n");
-      set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_jet4_present)
-    {
-      Log.notice("Sending jet 4 command...\n");
-      set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_blower1_present)
-    {
-      Log.notice("Sending Blower 1 command...\n");
-      set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_light1_present)
-    {
-      Log.notice("Sending Light 1 command...\n");
-      set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_reset_wifi_sta_present)
-    {
-      Log.notice("Reset WiFi STA...\n");
+  //   Log.notice("parse_action_command\n");
+  //   if(spaControlStatus.deviceStatus)
+  //   {
+  //     Log.notice("Sending deviceStatus...\n");
+  //     set_spaControlStatus(spaControlStatus);
+  //   }
+  //   else if(spaControlStatus.currentTemp)
+  //   {
+  //     Log.notice("Sending currentTemp...\n");
+  //     set_spaControlStatus(spaControlStatus);
+  //   }
+  //   else if(spaControlStatus.setTemp)
+  //   {
+  //     Log.notice("Sending setTemp...\n");
+  //     set_spaControlStatus(spaControlStatus);
+  //   }
+  //   else if(spaControlStatus.heatMode)
+  //   {
+  //     Log.notice("Sending heatMode...\n");
+  //     set_spaControlStatus(spaControlStatus);
+  //   }
+  //   else if(spaControlStatus.tempRange)
+  //   {
+  //     Log.notice("Sending tempRange...\n");
+  //     set_spaControlStatus(spaControlStatus);
+  //   }
+  //   else if(spaControlStatus.device_info)
+  //   {
+  //     set_spaControlStatus(spaControlStatus);
+  //   }
+  //   else if(spaControlStatus.filterCycle)
+  //   {
+  //     set_spaControlStatus(spaControlStatus);
+  //   }
 
-      if(spaControlParams.reset_wifi_sta)
-      {
-        wifiModuleEraseStaConfig();
+  //   if(spaControlParams.is_jet1_present)
+  //   {
+  //     Log.notice("Sending jet 1 command...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_jet2_present)
+  //   {
+  //     Log.notice("Sending jet 2 command...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_jet3_present)
+  //   {
+  //     Log.notice("Sending jet 3 command...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_jet4_present)
+  //   {
+  //     Log.notice("Sending jet 4 command...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_blower1_present)
+  //   {
+  //     Log.notice("Sending Blower 1 command...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_light1_present)
+  //   {
+  //     Log.notice("Sending Light 1 command...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_reset_wifi_sta_present)
+  //   {
+  //     Log.notice("Reset WiFi STA...\n");
 
-        Log.notice("WiFi STA config reset. Rebooting...\n");
-        delay(2000);
-        ESP.restart();
-      }
+  //     if(spaControlParams.reset_wifi_sta)
+  //     {
+  //       wifiModuleEraseStaConfig();
 
-      // set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_temp_range_high_present)
-    {
-      // Log.notice("Sending currentTemp...\n");
-      set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_temp_range_low_present)
-    {
-      // Log.notice("Sending currentTemp...\n");
-      set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_ready_mode_present)
-    {
-      // Log.notice("Sending currentTemp...\n");
-      set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_resting_mode_present)
-    {
-      // Log.notice("Sending currentTemp...\n");
-      set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_set_temp_present)
-    {
-      // Log.notice("Sending currentTemp...\n");
-      set_spaControlParams(spaControlParams);
-    }
-    else if(spaControlParams.is_filterCycle_present)
-    {
-      // Log.notice("Sending currentTemp...\n");
-      set_spaControlParams(spaControlParams);
-    }
+  //       Log.notice("WiFi STA config reset. Rebooting...\n");
+  //       delay(2000);
+  //       ESP.restart();
+  //     }
 
-    if(otaParams.is_url_present)
-    {
-      String message;
-      for (unsigned int i = 0; i < strlen(otaParams.url); i++) {
-          message += (char)otaParams.url[i];
-      }
+  //     // set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_temp_range_high_present)
+  //   {
+  //     // Log.notice("Sending currentTemp...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_temp_range_low_present)
+  //   {
+  //     // Log.notice("Sending currentTemp...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_ready_mode_present)
+  //   {
+  //     // Log.notice("Sending currentTemp...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_resting_mode_present)
+  //   {
+  //     // Log.notice("Sending currentTemp...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_set_temp_present)
+  //   {
+  //     // Log.notice("Sending currentTemp...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+  //   else if(spaControlParams.is_filterCycle_present)
+  //   {
+  //     // Log.notice("Sending currentTemp...\n");
+  //     set_spaControlParams(spaControlParams);
+  //   }
+
+  //   if(otaParams.is_url_present)
+  //   {
+  //     String message;
+  //     for (unsigned int i = 0; i < strlen(otaParams.url); i++) {
+  //         message += (char)otaParams.url[i];
+  //     }
   
-      Log.notice("Firmware URL: %s\n", message.c_str());
+  //     Log.notice("Firmware URL: %s\n", message.c_str());
       
-      if(strstr(message.c_str(), "https"))
-      {
-        performOTA(message);
-      }
-      else
-      {
-        performOTA_unsecured(message);
-      }
-    }
-  }
+  //     if(strstr(message.c_str(), "https"))
+  //     {
+  //       performOTA(message);
+  //     }
+  //     else
+  //     {
+  //       performOTA_unsecured(message);
+  //     }
+  //   }
+  // }
 
   // if(strstr((char *)p_payload, "jet 1"))
   // {
@@ -308,7 +323,6 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
   // }
 
   // mqtt.publish(p_topic, p_payload, p_length);
-  printdeviceInfoCopy();
 }
 
 void nodeStateReport()

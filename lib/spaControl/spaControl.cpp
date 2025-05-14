@@ -18,11 +18,9 @@
 #include "../../src/main.h"
 #include <balboa.h>
 
-//Create the second JSON document
-JsonObject deviceInfoCopy;
-DynamicJsonDocument deviceInfoDoc(256);
+StaticJsonDocument<256> globalDeviceInfo; // Adjust size as needed
 
-mqtt_params_t mqtt_params = {0};
+static mqtt_params_t mqtt_params = {0};
 
 // Global variable to send temp to set.
 float sendSetTemp = 0;
@@ -85,6 +83,15 @@ void set_mqtt_params(mqtt_params_t _mqtt_params)
     memset(&mqtt_params.mqtt_topic_postfix[0] ,0, sizeof(mqtt_params.mqtt_topic_postfix));
     memcpy(&mqtt_params.mqtt_topic_postfix[0] ,&_mqtt_params.mqtt_topic_postfix[0], strlen(_mqtt_params.mqtt_topic_postfix));
   }
+
+  mqtt_params.is_parse_mqtt_msg_present = _mqtt_params.is_parse_mqtt_msg_present;
+  if(mqtt_params.is_parse_mqtt_msg_present)
+  {
+    mqtt_params.parse_mqtt_msg = _mqtt_params.parse_mqtt_msg;
+    mqtt_params.mqtt_msg_len = _mqtt_params.mqtt_msg_len;
+    memset(&mqtt_params.mqtt_msg[0] ,0, sizeof(mqtt_params.mqtt_msg));
+    memcpy(&mqtt_params.mqtt_msg[0] ,&_mqtt_params.mqtt_msg[0], strlen(_mqtt_params.mqtt_msg));
+  }
 }
 
 spaControlParams_t get_spaControlParams(void)
@@ -140,7 +147,6 @@ spaControlStatus_t get_spaControlStatus(void)
 
 void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
 {
-  printdeviceInfoCopy();
   spaControlStatus.deviceStatus = _spaControlStatus.deviceStatus;
   spaControlStatus.bootupPacket = _spaControlStatus.bootupPacket;
   spaControlStatus.currentTemp = _spaControlStatus.currentTemp;
@@ -164,6 +170,154 @@ void spaControl_action(void)
   //   spaControlParams.setTempCommand = false;
   //   setTemp(0x1E);
   // }
+
+  if(mqtt_params.parse_mqtt_msg)
+  {
+    mqtt_params.is_parse_mqtt_msg_present = false;
+    mqtt_params.parse_mqtt_msg = false;
+
+    spaControlParams_t spaControlParams = {0};
+    memset(&spaControlParams, 0, sizeof(spaControlParams_t));
+
+    spaControlStatus_t spaControlStatus = {0};
+    memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
+
+    otaParams_t otaParams = {0};
+    memset(&otaParams, 0, sizeof(otaParams_t));
+
+    if(spaControl_parse_action_command((char *)mqtt_params.mqtt_msg, &spaControlParams, &spaControlStatus, &otaParams))
+    {
+      Log.notice("parse_action_command\n");
+      if(spaControlStatus.deviceStatus)
+      {
+        Log.notice("Sending deviceStatus...\n");
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.currentTemp)
+      {
+        Log.notice("Sending currentTemp...\n");
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.setTemp)
+      {
+        Log.notice("Sending setTemp...\n");
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.heatMode)
+      {
+        Log.notice("Sending heatMode...\n");
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.tempRange)
+      {
+        Log.notice("Sending tempRange...\n");
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.device_info)
+      {
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.filterCycle)
+      {
+        set_spaControlStatus(spaControlStatus);
+      }
+
+      if(spaControlParams.is_jet1_present)
+      {
+        Log.notice("Sending jet 1 command...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_jet2_present)
+      {
+        Log.notice("Sending jet 2 command...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_jet3_present)
+      {
+        Log.notice("Sending jet 3 command...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_jet4_present)
+      {
+        Log.notice("Sending jet 4 command...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_blower1_present)
+      {
+        Log.notice("Sending Blower 1 command...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_light1_present)
+      {
+        Log.notice("Sending Light 1 command...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_reset_wifi_sta_present)
+      {
+        Log.notice("Reset WiFi STA...\n");
+
+        if(spaControlParams.reset_wifi_sta)
+        {
+          wifiModuleEraseStaConfig();
+
+          Log.notice("WiFi STA config reset. Rebooting...\n");
+          delay(2000);
+          ESP.restart();
+        }
+
+        // set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_temp_range_high_present)
+      {
+        // Log.notice("Sending currentTemp...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_temp_range_low_present)
+      {
+        // Log.notice("Sending currentTemp...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_ready_mode_present)
+      {
+        // Log.notice("Sending currentTemp...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_resting_mode_present)
+      {
+        // Log.notice("Sending currentTemp...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_set_temp_present)
+      {
+        // Log.notice("Sending currentTemp...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_filterCycle_present)
+      {
+        // Log.notice("Sending currentTemp...\n");
+        set_spaControlParams(spaControlParams);
+      }
+
+      if(otaParams.is_url_present)
+      {
+        String message;
+        for (unsigned int i = 0; i < strlen(otaParams.url); i++) {
+            message += (char)otaParams.url[i];
+        }
+    
+        Log.notice("Firmware URL: %s\n", message.c_str());
+        
+        if(strstr(message.c_str(), "https"))
+        {
+          performOTA(message);
+        }
+        else
+        {
+          performOTA_unsecured(message);
+        }
+      }
+    }
+  }
 
 
   if(spaControlParams.is_jet1_present)
@@ -672,38 +826,19 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         }
       }
     }
+
     if(doc.containsKey("device_info"))
     {
-      // spaControlStatus->device_info = true;
-      
-      JsonObject xyz = doc["device_info"];
+      spaControlStatus->device_info = true;
 
-      memcpy(&deviceInfoCopy, &xyz, sizeof(JsonObject));
+      JsonObject deviceInfo = doc["device_info"];
+      globalDeviceInfo.clear();
+      globalDeviceInfo.set(deviceInfo);
 
-      Log.notice("%d \n",deviceInfoCopy["user_id"]);
-
-      // Create a new object and copy the data
-      // JsonObject copiedDeviceInfo = deviceInfoDoc.to<JsonObject>();
-      // copiedDeviceInfo.set(deviceInfoCopy);  // Deep copy
-
-      // for(JsonPair kv : deviceInfoCopy)
+      // for(JsonPair kv : deviceInfo)
       // {
       //   char *key = (char *)(kv.key().c_str());
       //   Log.notice(">>>> key: %s | %s | %s\n", key, kv.key().c_str(), kv.key());
-      // }
-
-      // deviceInfoCopy = deviceInfoCopy.createNestedObject("device_info");
-      // for(JsonPair kv : objj)
-      // {
-      //   deviceInfoCopy[kv.key()] = kv.value();
-      // }
-
-      // if(doc["device_info"].containsKey("user_id"))
-      // {
-      //   // Log.notice("hehe\n");
-      //   spaControlStatus->device_info = true;
-      //   spaControlStatus->device_id = doc["device_info"]["device_id"];
-      //   spaControlStatus->user_id = doc["device_info"]["user_id"];
       // }
     }
 
@@ -740,25 +875,13 @@ void spaControl_appand_device_info(DynamicJsonDocument* doc)
 {
   spaControlStatus.device_info = false;
 
-  // (*doc)["device_info"].addElement();
-
-  JsonObject device_info = doc->createNestedObject("device_info");
-  device_info = deviceInfoCopy;
-  // memcpy(&device_info, &deviceInfoCopy, sizeof(JsonObject));
-  // device_info.set(deviceInfoCopy);  // Deep copy
-
-  // JsonObject device_info = doc->createNestedObject("device_info");
-  // for(JsonPair kv : deviceInfoCopy)
-  // {
-  //   char *key = (char *)(kv.key().c_str());
-  //   Log.notice(">>>> key: %s | %s | %s\n", key, kv.key().c_str(), kv.key());
-
-  //   device_info[kv.key().c_str()] = kv.value();
-  // }
-  
-  // JsonObject device_info = doc->createNestedObject("device_info");
-  // device_info["device_id"] = spaControlStatus.device_id;
-  // device_info["user_id"] = spaControlStatus.user_id;
+  JsonObject deviceInfo = doc->createNestedObject("device_info");
+  for (JsonPair kv : globalDeviceInfo.as<JsonObject>())
+  {
+    // char *key = (char *)(kv.key().c_str());
+    // Log.notice("<<<< key: %s | %s | %s\n", key, kv.key().c_str(), kv.key());
+    deviceInfo[kv.key()] = kv.value();
+  }
 }
 
 void spaControl_create_filter_cycle(char *json_str)
@@ -1153,13 +1276,4 @@ void filterCycleTrial(void)
   }
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);
-}
-
-void printdeviceInfoCopy(void)
-{
-  for(JsonPair kv : deviceInfoCopy)
-  {
-    char *key = (char *)(kv.key().c_str());
-    Log.notice(">>>> key: %s | %s | %s\n", key, kv.key().c_str(), kv.key());
-  }
 }

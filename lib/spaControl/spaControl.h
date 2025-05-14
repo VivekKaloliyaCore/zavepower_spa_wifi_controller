@@ -10,6 +10,11 @@
 typedef struct {
   bool is_mqtt_topic_postfix_present;
   char mqtt_topic_postfix[128];
+
+  bool is_parse_mqtt_msg_present;
+  bool parse_mqtt_msg;
+  char mqtt_msg[256];
+  int mqtt_msg_len;
 } mqtt_params_t;
 
 
@@ -93,8 +98,6 @@ void spaControl_create_heatMode(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_bootupPacket(char *json_str);
 
-void printdeviceInfoCopy(void);
-
-extern mqtt_params_t mqtt_params;
+// extern mqtt_params_t mqtt_params;
 
 #endif

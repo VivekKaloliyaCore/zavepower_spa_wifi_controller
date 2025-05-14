@@ -73,13 +73,11 @@ void setup()
 void loop()
 {
   // rs485Loop();
-  // printdeviceInfoCopy();
   wifiModuleLoop();
 
   if (WiFi.status() == WL_CONNECTED)
   {
     rs485Loop();
-    printdeviceInfoCopy();
     mqttModuleLoop();
     spaMessageLoop();
   }
