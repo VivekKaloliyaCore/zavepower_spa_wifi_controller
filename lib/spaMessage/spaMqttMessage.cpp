@@ -316,8 +316,8 @@ void spaMqttMessage_publish_message(char *topic, char *msg, int msg_len)
   {
     mqtt.publish(topic_final, (uint8_t*)msg, msg_len, false);
   }
-  else
+  else if(msg_len == 0)
   {
-    mqtt.publish(topic_final, (uint8_t*)"", true);
+    mqtt.publish(topic_final, (uint8_t*)"", 0, true);
   }
 }

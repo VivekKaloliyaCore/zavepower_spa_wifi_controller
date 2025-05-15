@@ -513,7 +513,7 @@ void spaControl_mqtt_action(void)
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_deviceStatus(spa_status_data, json_str);
 
-spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.currentTemp)
@@ -545,7 +545,7 @@ spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, str
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_heatMode(spa_status_data, json_str);
-spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.tempRange)
@@ -556,7 +556,7 @@ spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, str
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_tempRange(spa_status_data, json_str);
-spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.filterCycle)
@@ -566,7 +566,7 @@ spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, str
     memset(&json_str[0], 0, sizeof(json_str));
     // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
     spaControl_create_filter_cycle(json_str);
-spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.bootupPacket)

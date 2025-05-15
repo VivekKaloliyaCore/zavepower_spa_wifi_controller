@@ -75,6 +75,8 @@ void loop()
   // rs485Loop();
   wifiModuleLoop();
 
+
+
   if (WiFi.status() == WL_CONNECTED)
   {
     rs485Loop();

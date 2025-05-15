@@ -21,6 +21,8 @@
 QueueHandle_t spaWriteQueue;
 QueueHandle_t spaReadQueue;
 
+
+
 // Global Variables
 RTC_NOINIT_ATTR SpaStatusData spaStatusData;
 RTC_NOINIT_ATTR SpaConfigurationData spaConfigurationData;
@@ -197,6 +199,31 @@ void spaMessageLoop()
     //  Log.verbose(F("[Mess]: No messages in Read Queue" CR));
   }
   temperatureHistory.update();
+
+  if(spaStatusData.initMode == 0x02)
+  {
+    if(spaStatusData.reminderType == 0x1E)
+    {
+      char errorMessage[] = "HeaterTooHigh";
+      // sendErrorCode(errorMessage);
+    }
+    else
+    {
+
+    }
+  }
+  if(spaStatusData.initMode == 0x03)
+  {
+    if(spaStatusData.reminderType == 0x28)
+    {
+      char errorMessage[] = "SetTime";
+      // sendErrorCode(errorMessage);
+    }
+    else
+    {
+
+    }
+  }
 }
 
 void configurationRequest()

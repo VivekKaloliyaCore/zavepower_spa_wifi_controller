@@ -144,7 +144,7 @@ void rs485Loop()
   {
     if (isMessageValid(spaMessage))
     {
-      if(spaMessage[4] == 0x23)
+      if(spaMessage[4] == 0x23) // Filter Cycle Message
       {
         SpaReadQueueMessage *messageToSend = new SpaReadQueueMessage;
         messageToSend->length = (spaMessage.size() < BALBOA_MESSAGE_SIZE ? spaMessage.size() : BALBOA_MESSAGE_SIZE);
@@ -163,7 +163,7 @@ void rs485Loop()
         {
           last_crc = received_crc;
           Log.verbose(F("[rs485]: Received: %d - %s" CR), id, msgToString(spaMessage).c_str());
-                    spaMqttMessage_publish_message("debug", (char *)msgToString(spaMessage).c_str(), spaMessage.size());
+          spaMqttMessage_publish_message("debug", (char *)msgToString(spaMessage).c_str(), spaMessage.size());
         }
       }
 

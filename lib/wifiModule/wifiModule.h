@@ -451,4 +451,10 @@ String getStringTime();
 
 void wifiModuleEraseStaConfig(void);
 
+
+bool wifiModuleCnnectToWiFiOneTime(void);
+
+extern bool restart_esp;
+extern bool ap_configuration_on;
+
 #endif
