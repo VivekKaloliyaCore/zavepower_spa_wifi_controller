@@ -44,8 +44,10 @@ void toggleJet4(void);
 void toggleLight1(void);
 void toggleBlower1(void);
 void setTemp(float temp);
+void informationRequest(void);
 void spaControl_appand_device_info(DynamicJsonDocument* doc);
 void spaControl_create_filter_cycle(char *json_str);
+
 
 void myFunction()
 {
@@ -950,11 +952,11 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   payload["jet4"] = getMapDescription(_SpaStatusData.pump4, pumpMap);
   payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
   payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
-  payload["heatingMode"] = getMapDescription(_SpaStatusData.heatingMode, heatingModeMap);
-  payload["tempRange"] = getMapDescription(_SpaStatusData.tempRange, tempRangeMap);
   payload["currentTemp"] = _SpaStatusData.currentTemp;
   payload["setTemp"] = _SpaStatusData.setTemp;
-  payload["heatingStatus"] = getMapDescription(_SpaStatusData.heatingState, heatingStateMap);
+  payload["heatMode"] = getMapDescription(_SpaStatusData.heatingMode, heatingModeMap);
+  payload["tempRange"] = getMapDescription(_SpaStatusData.tempRange, tempRangeMap);
+  payload["heatStatus"] = getMapDescription(_SpaStatusData.heatingState, heatingStateMap);
 
   if(spaControlStatus.device_info)
   {
@@ -1274,6 +1276,20 @@ void filterCycleTrial(void)
     dataBuffer.push(0); // Filter 2 Duration hours 23
     dataBuffer.push(0); // Filter 2 Duration hours 23
   }
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+}
+
+void informationRequest(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(WIFI_MODULE_ID);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x22);
+  dataBuffer.push(0x00);
+  dataBuffer.push(0x00);
+  // dataBuffer.push(0x32); // 08 10 BF 05 04 08 00 - Config request doesn't seem to work
+
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);
 }
