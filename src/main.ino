@@ -12,6 +12,7 @@
 #include <bridge.h>
 
 #include "main.h"
+#include "../httpsClient/httpsClient.h"
 
 String buildDefinitionString = "";
 #define addBuildDefinition(name) buildDefinitionString += #name " ";
@@ -68,6 +69,8 @@ void setup()
   esp_log_level_set("*", ESP_LOG_DEBUG);
   
   // // logSection("This is UPDATED FIRMWARE....");
+
+
 }
 
 void loop()

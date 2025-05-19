@@ -19,7 +19,7 @@
 #include "spaMessage.h"
 #include "spaControl.h"
 #include "spaMqttMessage.h"
-
+#include "httpsClient.h"
 // Local Functions
 void reconnect();
 void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length);
@@ -182,6 +182,11 @@ void reconnect()
       memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
       spaControlStatus.bootupPacket = true;
       set_spaControlStatus(spaControlStatus);
+
+
+      httpStart();
+      delay(2000);
+      Log.notice("http Started \n");
 
       // nodeStateReport();
     }
