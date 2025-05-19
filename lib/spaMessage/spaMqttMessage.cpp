@@ -318,6 +318,7 @@ void spaMqttMessage_publish_message(char *topic, char *msg, int msg_len)
   }
   else
   {
-    mqtt.publish(topic_final, (uint8_t*)"", true);
+    Serial.printf(">>>> Sending empty message\n");
+    mqtt.publish(topic_final, (uint8_t*)"", 0, (boolean)true);
   }
 }

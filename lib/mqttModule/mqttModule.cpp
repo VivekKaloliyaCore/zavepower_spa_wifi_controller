@@ -68,18 +68,18 @@ void mqttModuleSetup()
 
   // sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
   
-  mqtt_params_t mqtt_params = {0};
-  memset(&mqtt_params, 0, sizeof(mqtt_params_t));
-  mqtt_params.is_mqtt_topic_postfix_present = true;
-  sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
-  set_mqtt_params(mqtt_params);
-  spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
-  spaMqttMessage_publish_message("response/server", NULL, 0);
-  spaMqttMessage_publish_message("debug", NULL, 0);
-  spaMqttMessage_publish_message("bridge/msg", NULL, 0);
-  spaMqttMessage_publish_message("debug/message", NULL, 0);
-  spaMqttMessage_publish_message("debug/error", NULL, 0);
-  spaMqttMessage_publish_message("status", NULL, 0);
+  // mqtt_params_t mqtt_params = {0};
+  // memset(&mqtt_params, 0, sizeof(mqtt_params_t));
+  // mqtt_params.is_mqtt_topic_postfix_present = true;
+  // sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
+  // set_mqtt_params(mqtt_params);
+  // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
+  // spaMqttMessage_publish_message("response/server", NULL, 0);
+  // spaMqttMessage_publish_message("debug", NULL, 0);
+  // spaMqttMessage_publish_message("bridge/msg", NULL, 0);
+  // spaMqttMessage_publish_message("debug/message", NULL, 0);
+  // spaMqttMessage_publish_message("debug/error", NULL, 0);
+  // spaMqttMessage_publish_message("status", NULL, 0);
 }
 
 void mqttModuleLoop()
@@ -131,6 +131,20 @@ void reconnect()
 
     if (mqtt.connected())
     {
+      mqtt_params_t mqtt_params = {0};
+      memset(&mqtt_params, 0, sizeof(mqtt_params_t));
+      mqtt_params.is_mqtt_topic_postfix_present = true;
+      sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
+      set_mqtt_params(mqtt_params);
+
+      // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
+      // spaMqttMessage_publish_message("response/server", NULL, 0);
+      // spaMqttMessage_publish_message("debug", NULL, 0);
+      // spaMqttMessage_publish_message("bridge/msg", NULL, 0);
+      // spaMqttMessage_publish_message("debug/message", NULL, 0);
+      // spaMqttMessage_publish_message("debug/error", NULL, 0);
+      // spaMqttMessage_publish_message("status", NULL, 0);
+
       publishError("MQTT Timeout - Reconnect Successfully Run", false);
       mqtt.subscribe((mqttTopic + "command").c_str());
       mqtt.subscribe((mqttTopic + "command/server").c_str());
@@ -140,7 +154,7 @@ void reconnect()
       spaControlStatus.bootupPacket = true;
       set_spaControlStatus(spaControlStatus);
 
-      nodeStateReport();
+      // nodeStateReport();
     }
   }
   mqtt.setBufferSize(512); // increase pubsubclient buffer size
