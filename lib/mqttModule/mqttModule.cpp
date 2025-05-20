@@ -9,6 +9,7 @@
 #include "HttpsOTAUpdate.h"
 #include <HTTPClient.h>
 #include <Update.h>
+// #include <Preferences.h>
 
 // Local Libraries
 #include <wifiModule.h>
@@ -20,6 +21,7 @@
 #include "spaControl.h"
 #include "spaMqttMessage.h"
 #include "httpsClient.h"
+#include "../httpServer/httpServer.h"
 // Local Functions
 void reconnect();
 void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length);
@@ -100,6 +102,7 @@ void mqttModuleLoop()
     if (otastatus == HTTPS_OTA_SUCCESS)
     {
       otaUpdateRunning = false;
+      preferences.putString("boot_up", "false");
       Log.notice("OTA completed. Firmware written successfully.\n");
       Log.notice("Restarting in 5 sec...\n");
       delay(5000);
@@ -166,13 +169,22 @@ void reconnect()
       sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
       set_mqtt_params(mqtt_params);
 
-      // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
-      // spaMqttMessage_publish_message("response/server", NULL, 0);
-      // spaMqttMessage_publish_message("debug", NULL, 0);
-      // spaMqttMessage_publish_message("bridge/msg", NULL, 0);
-      // spaMqttMessage_publish_message("debug/message", NULL, 0);
-      // spaMqttMessage_publish_message("debug/error", NULL, 0);
-      // spaMqttMessage_publish_message("status", NULL, 0);
+      preferences.begin("device", false);
+      String boot_up = preferences.getString("boot_up", "");
+ 
+      if(!strstr(boot_up.c_str(), "true"))
+      {
+        preferences.putString("boot_up", "true");
+    
+        /* enable retain code */
+        spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
+        spaMqttMessage_publish_message("response/server", NULL, 0);
+        spaMqttMessage_publish_message("debug", NULL, 0);
+        spaMqttMessage_publish_message("bridge/msg", NULL, 0);
+        spaMqttMessage_publish_message("debug/message", NULL, 0);
+        spaMqttMessage_publish_message("debug/error", NULL, 0);
+        spaMqttMessage_publish_message("status", NULL, 0);
+      }
 
       publishError("MQTT Timeout - Reconnect Successfully Run", false);
       mqtt.subscribe((mqttTopic + "command").c_str());
