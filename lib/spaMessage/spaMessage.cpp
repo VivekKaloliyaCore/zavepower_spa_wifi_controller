@@ -779,6 +779,11 @@ SpaStatusData spaMessage_get_spaStatusData(void)
   return spaStatusData;
 }
 
+SpaInformationData spaMessage_get_spaInformationData(void)
+{
+  return spaInformationData;
+}
+
 SpaFilterSettingsData spaMessage_get_spaFilterData(void)
 {
   return spaFilterSettingsData;

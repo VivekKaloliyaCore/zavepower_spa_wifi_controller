@@ -5,6 +5,7 @@
 #include "balboa.h"
 #include "spaControl.h"
 
+
 extern RTC_NOINIT_ATTR SpaStatusData spaStatusData;
 extern RTC_NOINIT_ATTR SpaConfigurationData spaConfigurationData;
 extern RTC_NOINIT_ATTR SpaInformationData spaInformationData;
@@ -25,5 +26,6 @@ String getMapDescription(uint8_t element, const std::map<uint8_t, const char*>& 
 SpaStatusData spaMessage_get_spaStatusData(void);
 SpaFilterSettingsData spaMessage_get_spaFilterData(void);
 SpaStatusData spa_get_tempStatusData(void);
+SpaInformationData spaMessage_get_spaInformationData(void);
 
 #endif

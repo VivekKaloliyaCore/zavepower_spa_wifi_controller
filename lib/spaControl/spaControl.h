@@ -68,7 +68,7 @@ typedef struct {
   bool device_info;
   int device_id;
   int user_id;
-
+  bool setupInfo;
   bool filterCycle;
   bool filter1;
   bool filter2;
@@ -97,6 +97,7 @@ void spaControl_create_setTemp(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_heatMode(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_bootupPacket(char *json_str);
+void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *json_str);
 
 // extern mqtt_params_t mqtt_params;
 
