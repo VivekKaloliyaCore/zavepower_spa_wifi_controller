@@ -21,6 +21,9 @@
 QueueHandle_t spaWriteQueue;
 QueueHandle_t spaReadQueue;
 
+char flagHeaterTooHigh = 0;
+char flagsendErrorCode = 0;
+char flagSetTime = 0;
 
 
 // Global Variables
@@ -204,24 +207,28 @@ void spaMessageLoop()
   {
     if(spaStatusData.reminderType == 0x1E)
     {
-      char errorMessage[] = "HeaterTooHigh";
+      flagHeaterTooHigh = 1;
+      flagsendErrorCode = 1;
+      // char errorMessage[] = "HeaterTooHigh";
       // sendErrorCode(errorMessage);
     }
     else
     {
-
+      flagHeaterTooHigh = 0;
+      flagsendErrorCode = 0;
     }
   }
   if(spaStatusData.initMode == 0x03)
   {
     if(spaStatusData.reminderType == 0x28)
     {
-      char errorMessage[] = "SetTime";
-      // sendErrorCode(errorMessage);
+      flagSetTime = 1;
+      flagsendErrorCode = 1;
     }
     else
     {
-
+      flagHeaterTooHigh = 0;
+      flagsendErrorCode = 0;
     }
   }
 }

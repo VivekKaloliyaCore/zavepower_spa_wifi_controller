@@ -38,10 +38,10 @@ Circulation in normal mode ::
 When Heating Mode is Ready, circulation starts autometically;
 
 If Jet1, Jet2 or Blower1 starts, circulation starts autometically even if the Heating Mode is Resting.
+Circulation can not be controlled manually while in a normal mode.
 
 
-
-Circulation in Priming mode conclution ::
+Circulation in Priming mode ::
 =========================================================
 In Priming mode, Circulation is not synced with Jet1 or Jet2. It is operated separately.
 Circulation On and Off command from the Client(Display)::
@@ -129,3 +129,34 @@ When there is a Set time message from the machine,
 
 If there is an error on the display we can send the following command :
 7e 07 10 bf 11 03 00 01 7e	|	Clear Notification.
+
+
+
+
+Setup Number & DIP Switch status ::
+==========================================================
+In order to get these info, client needs to send an Information Request command i.e. 7E 08 0A BF 22 02 00 00 [crc] 7E; Type of message is 0x22[Settings request].
+The controller will provide information response. Ex.: 7e 1a 10 bf 24 64 e2 2b 00 42 50 36 30 31 33 47 32 01 f7 1f e5 eb 03 0a 13 00 d3 7e;
+17th Index shows "Setup Numtber"
+24th and 25th index shows "DIP Switch Position" where bit 0 of byte index 24 is for position 1 of the dip switch.
+Type of message will be 0x24[Information Response]
+
+
+Hold Mode ::
+==========================================================
+The command to toggle between normal and Hold mode is 7e 07 10 bf 11 3c 00 3b 7e;
+In the Status message, the byte index 5 shows 0x05 if the machine is in the hold mode. 0x00 if is in normal working mode.
+
+
+Cleanup Cycle ::
+=========================================================
+Command to set cleanup cycle : 7e 07 10 bf 27 03 02 93 7e - Message type 0x27[Set Preferance request]
+Byte index 5 is 0x03 which indicates that it is a cleanup cycle request.
+The next byte indicates minutes; Can be set from 0 to 8. 0 means off, 1 means 0.5 hours, 2 means 1 hours, 3 means 1.5 hours and so on; Maximum can be 4 hours;
+
+When we send an preferance request to set the clean up cycle, we get following preferance response;
+7e 17 ff af 26 00 87 00 01 01 03 00 00 01 00 00 00 00 00 00 00 00 00 cc 7e; Type of message is 0x26
+Byte index 10 shows the minutes/time duration for clean up cycle. Hear, 0x03 shows 1.5 hours.
+
+if clean up cycle is on or off can be checked from the byte index 24, bit 0-3 of the status message.
+

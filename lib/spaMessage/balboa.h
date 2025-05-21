@@ -313,6 +313,12 @@ const std::map<uint8_t, const char *> initModeMap = {
     {5, "Stage 3"},
     {0x42, "Stage 2"}};
 
+const std::map<uint8_t, const char *> reminderTypeMap = {
+    {0, "No Error"},
+    {0x13, "Priming Mode"},
+    {0x28, "Set Time"}, // initModeMap should be "Reminder" at this time
+    {0x1E, "Heat Too Hot"}}; // initModeMpap should be "Fault" at this time
+
 const std::map<uint8_t, const char *> filterModeMap = {
     {0, "Off"},
     {1, "Cycle 1"},
@@ -345,6 +351,5 @@ const std::map<uint8_t, const char *> heatingStateMap = {
   {0, "Off"},
   {1, "Heating"},
   {2, "Heat Waiting"}};
-
 
 #endif

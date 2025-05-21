@@ -20,7 +20,7 @@
 
 StaticJsonDocument<512> globalDeviceInfo; // Adjust size as needed
 
-static mqtt_params_t mqtt_params = {0};
+mqtt_params_t mqtt_params = {0};
 
 // Global variable to send temp to set.
 float sendSetTemp = 0;
@@ -323,6 +323,7 @@ void spaControl_action(void)
         {
           performOTA_unsecured(message);
         }
+
       }
     }
   }
@@ -508,7 +509,71 @@ void spaControl_action(void)
   // }
 }
 
+void sendOTAStarted(void)
+{
+  char json_str[512];
+  memset(&json_str[0], 0, sizeof(json_str));
+  // Create a JSON document
+  DynamicJsonDocument doc(200);
 
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "OTA Info";
+
+  // Create "payload" as a nested object
+  JsonObject payload = doc.createNestedObject("payload");
+  payload["OTA Status"] = "OTA Update Started";
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+  spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+}
+
+void sendOTASuccess(void)
+{
+  char json_str[512];
+  memset(&json_str[0], 0, sizeof(json_str));
+  // Create a JSON document
+  DynamicJsonDocument doc(200);
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "OTA Info";
+
+  // Create "payload" as a nested object
+  JsonObject payload = doc.createNestedObject("payload");
+  payload["OTA Status"] = "OTA completed. Firmware written successfully. Restarting in 5 sec...";
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+  spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+}
+
+void sendOTAFail(void)
+{
+  char json_str[512];
+  memset(&json_str[0], 0, sizeof(json_str));
+  // Create a JSON document
+  DynamicJsonDocument doc(200);
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "OTA Info";
+
+  // Create "payload" as a nested object
+  JsonObject payload = doc.createNestedObject("payload");
+  payload["OTA Status"] = "OTA failed. Firmware Upgrade Fail!!!";
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+  spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+}
 
 void spaControl_mqtt_action(void)
 {

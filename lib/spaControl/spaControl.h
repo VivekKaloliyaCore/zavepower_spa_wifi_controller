@@ -100,5 +100,8 @@ void spaControl_create_bootupPacket(char *json_str);
 void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *json_str);
 
 // extern mqtt_params_t mqtt_params;
+void sendOTASuccess(void);
+void sendOTAFail(void);
+void sendOTAStarted(void);
 
 #endif

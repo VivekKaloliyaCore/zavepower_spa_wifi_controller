@@ -28,4 +28,7 @@ SpaFilterSettingsData spaMessage_get_spaFilterData(void);
 SpaStatusData spa_get_tempStatusData(void);
 SpaInformationData spaMessage_get_spaInformationData(void);
 
+extern char flagHeaterTooHigh;
+extern char flagsendErrorCode;
+extern char flagSetTime;
 #endif

@@ -105,6 +105,9 @@ void mqttModuleLoop()
       preferences.putString("boot_up", "false");
       Log.notice("OTA completed. Firmware written successfully.\n");
       Log.notice("Restarting in 5 sec...\n");
+
+      sendOTASuccess();
+      
       delay(5000);
       ESP.restart();
     }
@@ -112,6 +115,7 @@ void mqttModuleLoop()
     {
       otaUpdateRunning = false;
       Log.notice("OTA failed. Firmware Upgrade Fail!!!\n");
+      sendOTAFail();
     }
   }
 }
@@ -196,9 +200,9 @@ void reconnect()
       set_spaControlStatus(spaControlStatus);
 
 
-      httpStart();
-      delay(2000);
-      Log.notice("http Started \n");
+      // httpStart();
+      // delay(2000);
+      // Log.notice("http Started \n");
 
       // nodeStateReport();
     }
@@ -431,15 +435,18 @@ void performOTA(String firmwareURL)
   memset(&fw_url[0], 0, sizeof(fw_url));
   memcpy(&fw_url[0], firmwareURL.c_str(), strlen(firmwareURL.c_str()));
   Log.notice("Starting OTA from URL: %s\n", fw_url);
+  
   HttpsOTA.begin(fw_url, ota_server_certificate);
-
+  sendOTAStarted();
   otaUpdateRunning = true;
+
+
 }
 
 void performOTA_unsecured(String firmwareURL)
 {
     Log.notice("Starting OTA from URL: %s\n", firmwareURL.c_str());
-
+    sendOTAStarted();
     HTTPClient http;
     http.begin(firmwareURL);  // Start HTTP connection
 
@@ -462,25 +469,31 @@ void performOTA_unsecured(String firmwareURL)
               // ESP.restart();
             } else {
               Log.notice("Firmware write failed! Only %d bytes written out of %d\n", written, contentLength);
+              sendOTAFail();
             }
 
             if (Update.end()) {
               Log.notice("Update finished!\n");
                 if (Update.isFinished()) {
                     Log.notice("Restarting in 5 sec...\n");
+                    sendOTASuccess();
                     delay(5000);
                     ESP.restart();
                 } else {
                     Log.notice("Update not finished? Something went wrong.\n");
+                    sendOTAFail();
                 }
             } else {
                 Log.notice("Update failed! Error: %s\n", Update.errorString());
+                sendOTAFail();
             }
         } else {
             Log.notice("Not enough space for OTA update!\n");
+            sendOTAFail();
         }
     } else {
         Log.notice("HTTP request failed, error: %s\n", http.errorToString(httpCode).c_str());
+        sendOTAFail();
     }
 
     http.end();
