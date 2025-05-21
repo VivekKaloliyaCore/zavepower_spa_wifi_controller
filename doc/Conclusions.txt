@@ -4,7 +4,6 @@ CONCLUSIONS :::
 
 
 
-
 Temperature Range ::
 ======================================================================================
 There are two temperature ranges, HIGH and LOW. Set by Client;
@@ -121,6 +120,11 @@ Byte Index 6 : State/Initialization Mode/Stage/Message etc.
 .
 
 Byte Index 11 : Reminder/Message/Error Code in HEX.
+0x00	|	Idle / No Error
+0x13	|	In priming mode
+0x28	|	Set Time
+0x1E	|	Heater Too Hot
+
 
 Example : 
 ---------
@@ -136,6 +140,7 @@ If there is an error on the display we can send the following command :
 Setup Number & DIP Switch status ::
 ==========================================================
 In order to get these info, client needs to send an Information Request command i.e. 7E 08 0A BF 22 02 00 00 [crc] 7E; Type of message is 0x22[Settings request].
+The next byte 0x02 means it is an Information Request.
 The controller will provide information response. Ex.: 7e 1a 10 bf 24 64 e2 2b 00 42 50 36 30 31 33 47 32 01 f7 1f e5 eb 03 0a 13 00 d3 7e;
 17th Index shows "Setup Numtber"
 24th and 25th index shows "DIP Switch Position" where bit 0 of byte index 24 is for position 1 of the dip switch.
@@ -159,4 +164,3 @@ When we send an preferance request to set the clean up cycle, we get following p
 Byte index 10 shows the minutes/time duration for clean up cycle. Hear, 0x03 shows 1.5 hours.
 
 if clean up cycle is on or off can be checked from the byte index 24, bit 0-3 of the status message.
-

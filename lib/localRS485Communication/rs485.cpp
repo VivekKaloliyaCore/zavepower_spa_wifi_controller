@@ -154,7 +154,7 @@ void rs485Loop()
         }
         xQueueSend(spaReadQueue, &messageToSend, 0);
       }
-
+      
       if(spaMessage.size() >= 8)
       {
         int received_crc = spaMessage[spaMessage.size() - 2];

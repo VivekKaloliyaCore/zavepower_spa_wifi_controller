@@ -160,9 +160,9 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.user_id = _spaControlStatus.user_id;
   spaControlStatus.heatingState = _spaControlStatus.heatingState;
   spaControlStatus.filterCycle = _spaControlStatus.filterCycle;
+  spaControlStatus.setupInfo = _spaControlStatus.setupInfo;
   spaControlStatus.filter1 = _spaControlStatus.filter1;
   spaControlStatus.filter2 = _spaControlStatus.filter2;
-  spaControlStatus.setupInfo = _spaControlStatus.setupInfo;
 }
 
 
@@ -211,17 +211,16 @@ void spaControl_action(void)
         Log.notice("Sending heatMode...\n");
         set_spaControlStatus(spaControlStatus);
       }
-      else if(spaControlStatus.setupInfo)
-      {
-        Log.notice("Sending heatMode...\n");
-        set_spaControlStatus(spaControlStatus);
-      }
       else if(spaControlStatus.tempRange)
       {
         Log.notice("Sending tempRange...\n");
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.device_info)
+      {
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.setupInfo)
       {
         set_spaControlStatus(spaControlStatus);
       }
@@ -623,6 +622,7 @@ void spaControl_mqtt_action(void)
 
   if(spaControlStatus.setupInfo)
   {
+    delay(500);
     spaControlStatus.setupInfo = false;
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
@@ -896,6 +896,11 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
 
         spaControlStatus->tempRange = true;
       }
+      else if(doc["payload"].containsKey("setupInfo"))
+      {
+        informationRequest();
+        // delay(500);
+      }
       else if(doc["payload"].containsKey("filterCycle"))
       {
         spaControlStatus->filterCycle = true;
@@ -907,10 +912,6 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         {
           spaControlStatus->filter2 = true;
         }
-      }
-      else if(doc["payload"].containsKey("setupInfo"))
-      {
-        spaControlStatus->setupInfo = true;
       }
     }
 
@@ -1153,8 +1154,8 @@ void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
   
-    payload["setupNumber"] = spaInformationData.setupNumber;
-    payload["DIPSwitch"] = spaInformationData.dipSwitch;
+  payload["setupNumber"] = spaInformationData.setupNumber;
+  payload["DIPSwitch"] = spaInformationData.dipSwitch;
 
   if(spaControlStatus.device_info)
   {
@@ -1395,14 +1396,15 @@ void filterCycleTrial(void)
 void informationRequest(void)
 {
   CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-  dataBuffer.push(WIFI_MODULE_ID);
+  dataBuffer.push(id);
   dataBuffer.push(0xBF);
   dataBuffer.push(0x22);
   dataBuffer.push(0x02);
   dataBuffer.push(0x00);
   dataBuffer.push(0x00);
-  // dataBuffer.push(0x32); // 08 10 BF 05 04 08 00 - Config request doesn't seem to work
 
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);
+  
+  spaControlStatus.setupInfo = true;
 }
