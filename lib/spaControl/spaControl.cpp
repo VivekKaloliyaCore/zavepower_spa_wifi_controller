@@ -517,11 +517,11 @@ void sendOTAStarted(void)
 
   // Add key-value pairs
   doc["action"] = "response";
-  doc["msgT"] = "OTA Info";
+  doc["msgT"] = "ota";
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
-  payload["OTA Status"] = "OTA Update Started";
+  payload["msg"] = "device upgrading...";
 
   // Serialize JSON to a string
   String output;
@@ -539,11 +539,11 @@ void sendOTASuccess(void)
 
   // Add key-value pairs
   doc["action"] = "response";
-  doc["msgT"] = "OTA Info";
+  doc["msgT"] = "msg";
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
-  payload["OTA Status"] = "OTA completed. Firmware written successfully. Restarting in 5 sec...";
+  payload["ota"] = "device upgraded successfully. device restarts in 5 sec...";
 
   // Serialize JSON to a string
   String output;
@@ -561,11 +561,11 @@ void sendOTAFail(void)
 
   // Add key-value pairs
   doc["action"] = "response";
-  doc["msgT"] = "OTA Info";
+  doc["msgT"] = "msg";
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
-  payload["OTA Status"] = "OTA failed. Firmware Upgrade Fail!!!";
+  payload["ota"] = "device upgrade failed.";
 
   // Serialize JSON to a string
   String output;
@@ -1431,4 +1431,18 @@ void informationRequest(void)
   sendMessageToSpa(dataBuffer);
   
   spaControlStatus.setupInfo = true;
+}
+
+
+void toggleHoldState(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(0x0A);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x11);
+  dataBuffer.push(0x3C);
+  dataBuffer.push(0x00);
+
+  addCRC(dataBuffer);
+  rs485Write(dataBuffer);
 }

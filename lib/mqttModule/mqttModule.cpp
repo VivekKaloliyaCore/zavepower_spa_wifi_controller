@@ -122,31 +122,31 @@ void mqttModuleLoop()
 
 void sendErrorCode(char *errorMessage[])
 {
-char post_data[64];
-    snprintf(post_data, sizeof(post_data), "{\"temperature\": %s}", errorMessage);
+  char post_data[64];
+  snprintf(post_data, sizeof(post_data), "{\"temperature\": %s}", errorMessage);
 
-    esp_http_client_config_t config = {
-        .url = "http://example.com/temperature",  // 🔁 Replace with your real endpoint
-    };
+  esp_http_client_config_t config = {
+      .url = "http://example.com/temperature",  // 🔁 Replace with your real endpoint
+  };
 
-    esp_http_client_handle_t client = esp_http_client_init(&config);
+  esp_http_client_handle_t client = esp_http_client_init(&config);
 
-    esp_http_client_set_method(client, HTTP_METHOD_POST);
-    esp_http_client_set_header(client, "Content-Type", "application/json");
-    esp_http_client_set_post_field(client, post_data, strlen(post_data));
+  esp_http_client_set_method(client, HTTP_METHOD_POST);
+  esp_http_client_set_header(client, "Content-Type", "application/json");
+  esp_http_client_set_post_field(client, post_data, strlen(post_data));
 
-    // esp_err_t err = esp_http_client_perform(client);
-    esp_http_client_perform(client);
+  // esp_err_t err = esp_http_client_perform(client);
+  esp_http_client_perform(client);
 
-    // if (err == ESP_OK) {
-    //     ESP_LOGI(TAG, "Status = %d, content_length = %d",
-    //              esp_http_client_get_status_code(client),
-    //              esp_http_client_get_content_length(client));
-    // } else {
-    //     ESP_LOGE(TAG, "POST failed: %s", esp_err_to_name(err));
-    // }
+  // if (err == ESP_OK) {
+  //     ESP_LOGI(TAG, "Status = %d, content_length = %d",
+  //              esp_http_client_get_status_code(client),
+  //              esp_http_client_get_content_length(client));
+  // } else {
+  //     ESP_LOGE(TAG, "POST failed: %s", esp_err_to_name(err));
+  // }
 
-    esp_http_client_cleanup(client);
+  esp_http_client_cleanup(client);
 }
 
 void reconnect()

@@ -12,6 +12,7 @@
 void rs485Setup();
 void rs485Loop();
 void rs485ClearToSend();
+void rs485Write(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data);
 
 // void rs485Send(uint8_t *data, int length, boolean addCrc, boolean force = false);
 // void rs485Send(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data, boolean addCrc, boolean force = false);

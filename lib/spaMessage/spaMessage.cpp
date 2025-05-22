@@ -522,13 +522,13 @@ bool parseStatusMessage(u_int8_t *message, int length)
 
     u_int8_t *hexArray = message + 5;
 
-    if( (hexArray[1] == 0x02) && ((spaStatusData.initMode != hexArray[1]) || (spaStatusData.reminderType != hexArray[6])) )
+    if( ((spaStatusData.initMode != hexArray[1]) || (spaStatusData.reminderType != hexArray[6])) )
     {
       Log.noticeln("Sending error codes to the server...");
       spaStatusData.initMode = hexArray[1];
       spaStatusData.reminderType = hexArray[6];
 
-      httpClientSendPostReqForErrorCodes("https://admin.corefragment.com/api/errorCodes", spaStatusData.initMode, spaStatusData.reminderType);
+      httpClientSendPostReqForErrorCodes("https://qa-api.zavepower.cloud/api/device/error-logs-mac-address", spaStatusData.initMode, spaStatusData.reminderType);
     }
 
     spaStatusData.spaState = hexArray[0];

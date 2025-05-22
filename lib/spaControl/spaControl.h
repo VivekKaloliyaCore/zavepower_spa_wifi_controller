@@ -104,5 +104,6 @@ void spaControl_create_errorCode_message(char *json_str, uint8_t initMode, uint8
 void sendOTASuccess(void);
 void sendOTAFail(void);
 void sendOTAStarted(void);
+void toggleHoldState(void);
 
 #endif
