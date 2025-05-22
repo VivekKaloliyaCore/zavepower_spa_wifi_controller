@@ -119,11 +119,12 @@ Byte Index 6 : State/Initialization Mode/Stage/Message etc.
 .
 .
 
-Byte Index 11 : Reminder/Message/Error Code in HEX.
-0x00	|	Idle / No Error
-0x13	|	In priming mode
-0x28	|	Set Time
-0x1E	|	Heater Too Hot
+Byte Index 11 : Reminder/Message/Error Code in HEX.				Byte Index 6 : at that time
+0x00	|	Idle / No Error										0x00	|	Normal Working/Idle/No messgae
+0x0F	|	Sensors are out of sync								0x03	|	Message
+0x13	|	In priming mode										0x01	|	Priming mode
+0x28	|	Set Time											0x03	|	Message
+0x1E	|	Heater Too Hot										0x02	|	Error
 
 
 Example : 

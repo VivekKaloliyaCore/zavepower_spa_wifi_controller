@@ -317,7 +317,7 @@ const std::map<uint8_t, const char *> reminderTypeMap = {
     {0, "No Error"},
     {0x13, "Priming Mode"},
     {0x28, "Set Time"}, // initModeMap should be "Reminder" at this time
-    {0x1E, "Heat Too Hot"}}; // initModeMpap should be "Fault" at this time
+    {0x1E, "The heater is too hot."}}; // initModeMpap should be "Fault" at this time
 
 const std::map<uint8_t, uint8_t> reminderTypeToerrorCodeMap = {
     {0, 0},
