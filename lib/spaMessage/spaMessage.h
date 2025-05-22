@@ -22,6 +22,7 @@ void sendMessageToSpa(uint8_t *data, int length);
 void sendMessageToSpa(CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> &data);
 
 String getMapDescription(uint8_t element, const std::map<uint8_t, const char*>& suppliedMap);
+uint8_t getMapDescription_uint8(uint8_t element, const std::map<uint8_t, uint8_t> &suppliedMap);
 
 SpaStatusData spaMessage_get_spaStatusData(void);
 SpaFilterSettingsData spaMessage_get_spaFilterData(void);

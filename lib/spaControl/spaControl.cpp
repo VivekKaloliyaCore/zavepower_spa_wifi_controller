@@ -1230,6 +1230,30 @@ void spaControl_create_bootupPacket(char *json_str)
   Log.notice("Bootup Package created\n");
 }
 
+void spaControl_create_errorCode_message(char *json_str, uint8_t initMode, uint8_t reminderType)
+{
+  // Create a JSON document
+  DynamicJsonDocument doc(200);
+
+  /* mac */
+  char macAddr[18];  
+  uint8_t mac[6];
+  WiFi.macAddress(mac);
+  sprintf(macAddr, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+  doc["mac_address"] = macAddr;
+  uint8_t errorCode = getMapDescription_uint8(reminderType, reminderTypeToerrorCodeMap);
+  doc["error_code"] = getMapDescription(errorCode, errorCodeMap);
+  doc["description"] = getMapDescription(reminderType, reminderTypeMap);
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+
+  Log.notice("error code message created\n");
+}
+
 
 // Test:::
 void switchTempRange(void)

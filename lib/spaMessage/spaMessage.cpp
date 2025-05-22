@@ -10,6 +10,7 @@
 #include "rs485.h"
 #include "bridge.h"
 #include "spaControl.h"
+#include "httpsClient.h"
 
 #define TwoBit(value, bit) (((value) >> (bit)) & 0x03)
 
@@ -203,34 +204,34 @@ void spaMessageLoop()
   }
   temperatureHistory.update();
 
-  if(spaStatusData.initMode == 0x02)
-  {
-    if(spaStatusData.reminderType == 0x1E)
-    {
-      flagHeaterTooHigh = 1;
-      flagsendErrorCode = 1;
-      // char errorMessage[] = "HeaterTooHigh";
-      // sendErrorCode(errorMessage);
-    }
-    else
-    {
-      flagHeaterTooHigh = 0;
-      flagsendErrorCode = 0;
-    }
-  }
-  if(spaStatusData.initMode == 0x03)
-  {
-    if(spaStatusData.reminderType == 0x28)
-    {
-      flagSetTime = 1;
-      flagsendErrorCode = 1;
-    }
-    else
-    {
-      flagHeaterTooHigh = 0;
-      flagsendErrorCode = 0;
-    }
-  }
+  // if(spaStatusData.initMode == 0x02)
+  // {
+  //   if(spaStatusData.reminderType == 0x1E)
+  //   {
+  //     flagHeaterTooHigh = 1;
+  //     flagsendErrorCode = 1;
+  //     // char errorMessage[] = "HeaterTooHigh";
+  //     // sendErrorCode(errorMessage);
+  //   }
+  //   else
+  //   {
+  //     flagHeaterTooHigh = 0;
+  //     flagsendErrorCode = 0;
+  //   }
+  // }
+  // if(spaStatusData.initMode == 0x03)
+  // {
+  //   if(spaStatusData.reminderType == 0x28)
+  //   {
+  //     flagSetTime = 1;
+  //     flagsendErrorCode = 1;
+  //   }
+  //   else
+  //   {
+  //     flagHeaterTooHigh = 0;
+  //     flagsendErrorCode = 0;
+  //   }
+  // }
 }
 
 void configurationRequest()
@@ -520,6 +521,16 @@ bool parseStatusMessage(u_int8_t *message, int length)
     spaStatusData.rawDataLength = length;
 
     u_int8_t *hexArray = message + 5;
+
+    if( (spaStatusData.initMode != hexArray[1]) || (spaStatusData.reminderType != hexArray[6]) )
+    {
+      Log.noticeln("Sending error codes to the server...");
+      spaStatusData.initMode = hexArray[1];
+      spaStatusData.reminderType = hexArray[6];
+
+      httpClientSendPostReqForErrorCodes("https://admin.corefragment.com/api/errorCodes", spaStatusData.initMode, spaStatusData.reminderType);
+    }
+
     spaStatusData.spaState = hexArray[0];
     spaStatusData.initMode = hexArray[1];
     spaStatusData.currentTemp = (hexArray[2] != 0xff ? (hexArray[9] & 0x01 ? (float)hexArray[2] / 2 : hexArray[2]) : spaStatusData.currentTemp);
@@ -660,7 +671,7 @@ bool parseStatusMessage(u_int8_t *message, int length)
       set_spaControlStatus(spaControlStatus);
     }
 
-    publishSpaStatusData();
+    // publishSpaStatusData();
     return true;
   }
   return false;
@@ -769,6 +780,16 @@ String getMapDescription(uint8_t element, const std::map<uint8_t, const char *> 
     return String(it->second);
   }
   return String("Unknown - " + String(element));
+}
+
+uint8_t getMapDescription_uint8(uint8_t element, const std::map<uint8_t, uint8_t> &suppliedMap)
+{
+  auto it = suppliedMap.find(element);
+  if (it != suppliedMap.end())
+  {
+    return uint8_t(it->second);
+  }
+  return element;
 }
 
 void updateTemperatureHistory()

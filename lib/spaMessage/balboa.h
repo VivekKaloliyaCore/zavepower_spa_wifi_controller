@@ -319,6 +319,16 @@ const std::map<uint8_t, const char *> reminderTypeMap = {
     {0x28, "Set Time"}, // initModeMap should be "Reminder" at this time
     {0x1E, "Heat Too Hot"}}; // initModeMpap should be "Fault" at this time
 
+const std::map<uint8_t, uint8_t> reminderTypeToerrorCodeMap = {
+    {0, 0},
+    {0x28, 1},
+    {0x1E, 2}};
+
+const std::map<uint8_t, const char *> errorCodeMap = {
+    {0, "No Error"},
+    {1, "Time"},
+    {2, "Temperature"}};
+
 const std::map<uint8_t, const char *> filterModeMap = {
     {0, "Off"},
     {1, "Cycle 1"},

@@ -3,6 +3,39 @@
 
 #include "../spaMessage/spaMessage.h"
 
+
+HTTPClient cli;
+
+bool httpClientSendPostReqForErrorCodes(char *url, uint8_t initMode, uint8_t reminderType)
+{
+  cli.begin(url);
+
+  char json_str[512];
+  memset(&json_str[0], 0, sizeof(json_str));
+  spaControl_create_errorCode_message(json_str, initMode, reminderType);
+
+  Log.notice("Error code message: %s\n", json_str);
+  int httpResponseCode = cli.POST(json_str);
+
+  if (httpResponseCode > 0) 
+  {
+    String response = cli.getString();  // Store response
+    Serial.println("Response code: " + String(httpResponseCode)); 
+    Serial.println("Response body: " + response);
+  } 
+  else 
+  {
+    Serial.println("Error on sending POST: " + String(httpResponseCode));
+    cli.end();
+    return false;
+  }
+
+  cli.end();
+
+  return true;
+}
+
+
 void httpStart(void)
 {
   if(flagsendErrorCode == 1)
@@ -36,23 +69,23 @@ void httpStart(void)
 
 
 
-    HTTPClient cli;
+    // HTTPClient cli;
 
-    cli.begin("https://admin.corefragment.com/api/errorCodes");
+    // cli.begin("https://admin.corefragment.com/api/errorCodes");
 
-    int httpResponseCode = cli.POST("");
+    // int httpResponseCode = cli.POST("");
 
-    if (httpResponseCode > 0) 
-    {
-      String response = cli.getString();  // Store response
-      Serial.println("Response code: " + String(httpResponseCode)); 
-      Serial.println("Response body: " + response);
-    } 
-    else 
-    {
-      Serial.println("Error on sending POST: " + String(httpResponseCode));
-    }
+    // if (httpResponseCode > 0) 
+    // {
+    //   String response = cli.getString();  // Store response
+    //   Serial.println("Response code: " + String(httpResponseCode)); 
+    //   Serial.println("Response body: " + response);
+    // } 
+    // else 
+    // {
+    //   Serial.println("Error on sending POST: " + String(httpResponseCode));
+    // }
 
-    cli.end();
+    // cli.end();
   }
 }
