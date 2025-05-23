@@ -5,7 +5,7 @@
 #include <Ticker.h>
 #include <WiFi.h>
 
-#include  <spaUtilities.h>
+#include <spaUtilities.h>
 #include <spaMessage.h>
 
 #include "spaControl.h"
@@ -33,6 +33,8 @@ static spaControlParams_t spaControlParams = {0};
 static spaControlStatus_t spaControlStatus = {0};
 
 // SpaFilterSettingsData spaFilterSettingsData = {0};
+
+String clientUrl;
 
 // Local Function
 void switchTempRange(void);
@@ -810,7 +812,7 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlParams->reset_wifi_sta = reset_wifi_sta;
       }
 
-      if(doc["payload"].containsKey("filterCycle"))
+      else if(doc["payload"].containsKey("filterCycle"))
       {
         spaControlParams->is_filterCycle_present = true;
         if(doc["payload"]["filterCycle"].containsKey("1"))
@@ -850,6 +852,13 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
           spaFilterSettingsData.filt2DurationHour = 0;
           spaFilterSettingsData.filt2DurationMinute = 0;
         }
+      }
+      else if(doc["payload"].containsKey("errorCodeURL"))
+      {
+        String url = doc["payload"]["errorCodeURL"];
+        clientUrl = url;
+        Log.notice("Received Client URL: %s\n", url.c_str());
+        Log.notice("Copied Client URL: %s\n", clientUrl.c_str());
       }
     }
     else

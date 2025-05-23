@@ -9,7 +9,7 @@
 #include "spaMqttMessage.h"
 #include "rs485.h"
 #include "bridge.h"
-#include "spaControl.h"
+#include "../spaControl/spaControl.h"
 #include "httpsClient.h"
 
 #define TwoBit(value, bit) (((value) >> (bit)) & 0x03)
@@ -527,8 +527,17 @@ bool parseStatusMessage(u_int8_t *message, int length)
       Log.noticeln("Sending error codes to the server...");
       spaStatusData.initMode = hexArray[1];
       spaStatusData.reminderType = hexArray[6];
+      
+      // httpClientSendPostReqForErrorCodes("https://api.zavepower.cloud/api/device/error-logs-mac-address", spaStatusData.initMode, spaStatusData.reminderType);
+      
+      char* xxyz = {""}; //clientUrl.length()
+      memcpy(xxyz, clientUrl.c_str(), clientUrl.length());
+      xxyz[clientUrl.length()] = '\0';
 
-      httpClientSendPostReqForErrorCodes("https://qa-api.zavepower.cloud/api/device/error-logs-mac-address", spaStatusData.initMode, spaStatusData.reminderType);
+      Log.notice("Received @spaMessage of clientUrl: %s\n", clientUrl.c_str());
+      Log.notice("Received @spaMessage of xxyz: %s\n", xxyz);
+
+      httpClientSendPostReqForErrorCodes(xxyz, spaStatusData.initMode, spaStatusData.reminderType);
     }
 
     spaStatusData.spaState = hexArray[0];

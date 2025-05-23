@@ -14,10 +14,11 @@ bool httpClientSendPostReqForErrorCodes(char *url, uint8_t initMode, uint8_t rem
   memset(&json_str[0], 0, sizeof(json_str));
   spaControl_create_errorCode_message(json_str, initMode, reminderType);
 
+  Log.notice("url at the time of : %s\n", url);
   Log.notice("Error code message: %s\n", json_str);
   int httpResponseCode = cli.POST(json_str);
 
-  if (httpResponseCode > 0) 
+  if (httpResponseCode > 0)
   {
     String response = cli.getString();  // Store response
     Serial.println("Response code: " + String(httpResponseCode)); 

@@ -7,6 +7,8 @@
 #include <balboa.h>
 
 
+extern String clientUrl;
+
 typedef struct {
   bool is_mqtt_topic_postfix_present;
   char mqtt_topic_postfix[128];
