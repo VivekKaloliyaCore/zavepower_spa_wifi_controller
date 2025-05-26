@@ -197,6 +197,10 @@ void reconnect()
       spaControlStatus_t spaControlStatus = {0};
       memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
       spaControlStatus.bootupPacket = true;
+
+      configRequest();
+      // spaControlStatus.setupInfo = true;
+      
       set_spaControlStatus(spaControlStatus);
 
 

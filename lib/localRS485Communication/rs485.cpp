@@ -155,7 +155,7 @@ void rs485Loop()
         xQueueSend(spaReadQueue, &messageToSend, 0);
       }
 
-      if(spaMessage[4] == 0x2E) // Filter Cycle Message
+      if(spaMessage[4] == 0x2E) // Configuration Response
       {
         SpaReadQueueMessage *messageToSend = new SpaReadQueueMessage;
         messageToSend->length = (spaMessage.size() < BALBOA_MESSAGE_SIZE ? spaMessage.size() : BALBOA_MESSAGE_SIZE);

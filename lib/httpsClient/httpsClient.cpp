@@ -10,6 +10,7 @@ bool httpClientSendPostReqForErrorCodes(char *url, uint8_t initMode, uint8_t rem
 {
   cli.begin(url);
 
+  cli.addHeader("Content-Type", "application/json");
   char json_str[512];
   memset(&json_str[0], 0, sizeof(json_str));
   spaControl_create_errorCode_message(json_str, initMode, reminderType);

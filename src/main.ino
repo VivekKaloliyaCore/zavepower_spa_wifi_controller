@@ -75,6 +75,12 @@ void setup()
 
 void loop()
 {
+  if(j == 0)
+  {
+    configRequest();
+    j = 1;
+  }
+
   // rs485Loop();
   wifiModuleLoop();
 
@@ -94,11 +100,6 @@ void loop()
   // toggleHoldState();
   // delay(3000);
 
-  // if(j == 0)
-  // {
-  //   configRequest();
-  //   j = 1;
-  // }
   
 
 }

@@ -74,6 +74,7 @@ typedef struct {
   bool filterCycle;
   bool filter1;
   bool filter2;
+  bool fwVersion;
 } spaControlStatus_t;
 
 typedef struct {
@@ -81,7 +82,7 @@ typedef struct {
   char  url[512];
 } otaParams_t;
 
-void configRequest(void);
+
 
 void startSpaCmdSendTimer();
 void stopSpaCmdSendTimer();
@@ -103,11 +104,12 @@ void spaControl_create_tempRange(SpaStatusData _SpaStatusData, char *json_str);
 void spaControl_create_bootupPacket(char *json_str);
 void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *json_str);
 void spaControl_create_errorCode_message(char *json_str, uint8_t initMode, uint8_t reminderType);
+void spaControl_create_fwVersion(char *json_str);
 
 // extern mqtt_params_t mqtt_params;
 void sendOTASuccess(void);
 void sendOTAFail(void);
 void sendOTAStarted(void);
 void toggleHoldState(void);
-
+void configRequest(void);
 #endif

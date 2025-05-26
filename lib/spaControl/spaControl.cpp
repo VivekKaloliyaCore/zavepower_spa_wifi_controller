@@ -36,6 +36,8 @@ static spaControlStatus_t spaControlStatus = {0};
 
 String clientUrl;
 
+char k = 0;
+
 // Local Function
 void switchTempRange(void);
 void switchHeatMode(void);
@@ -49,6 +51,7 @@ void setTemp(float temp);
 void informationRequest(void);
 void spaControl_appand_device_info(DynamicJsonDocument* doc);
 void spaControl_create_filter_cycle(char *json_str);
+void spaControl_create_fwVersion(char *json_str);
 
 
 void myFunction()
@@ -165,6 +168,7 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.setupInfo = _spaControlStatus.setupInfo;
   spaControlStatus.filter1 = _spaControlStatus.filter1;
   spaControlStatus.filter2 = _spaControlStatus.filter2;
+  spaControlStatus.fwVersion = _spaControlStatus.fwVersion;
 }
 
 
@@ -227,6 +231,10 @@ void spaControl_action(void)
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.filterCycle)
+      {
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.fwVersion)
       {
         set_spaControlStatus(spaControlStatus);
       }
@@ -629,6 +637,7 @@ void spaControl_mqtt_action(void)
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
     SpaInformationData spa_information_data = spaMessage_get_spaInformationData();
+    k = 0;
     spaControl_create_setupInfo(spa_information_data, json_str);
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
@@ -654,6 +663,16 @@ void spaControl_mqtt_action(void)
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
+  if(spaControlStatus.fwVersion)
+  {
+    spaControlStatus.fwVersion = false;
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
+    spaControl_create_fwVersion(json_str);
+    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+  }
+
   if(spaControlStatus.bootupPacket)
   {
     spaControlStatus.bootupPacket = false;
@@ -664,6 +683,8 @@ void spaControl_mqtt_action(void)
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
     // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
     Log.notice("Boot Up pacage Published\n");
+    
+   spaControlStatus.setupInfo = true;
   }
 }
 
@@ -907,7 +928,7 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("setupInfo"))
       {
-        informationRequest();
+        // informationRequest();
         // configRequest();
         spaControlStatus->setupInfo = true;
         // delay(500);
@@ -923,6 +944,10 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         {
           spaControlStatus->filter2 = true;
         }
+      }
+      else if(doc["payload"].containsKey("fwVersion"))
+      {
+          spaControlStatus->fwVersion = true;
       }
     }
 
@@ -981,6 +1006,31 @@ void spaControl_appand_device_info(DynamicJsonDocument* doc)
     // Log.notice("<<<< key: %s | %s | %s\n", key, kv.key().c_str(), kv.key());
     deviceInfo[kv.key()] = kv.value();
   }
+}
+
+void spaControl_create_fwVersion(char *json_str)
+{
+  // Create a JSON document
+  DynamicJsonDocument doc(200);
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "fwVersion";
+
+  // Create "payload" as a nested object
+  JsonObject payload = doc.createNestedObject("payload");
+  payload["fwVersion"] = FW_REV_STR;
+
+  if(spaControlStatus.device_info)
+  {
+    spaControl_appand_device_info(&doc);
+  }
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
 }
 
 void spaControl_create_filter_cycle(char *json_str)
@@ -1043,12 +1093,42 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
+  // if(spaConfigurationData.pump1 >= 1)
+  // {
+  // payload["jet1"] = getMapDescription(_SpaStatusData.pump1, pumpMap);
+  // }
+  // if(spaConfigurationData.pump2 >= 1)
+  // {
+  // payload["jet2"] = getMapDescription(_SpaStatusData.pump2, pumpMap);
+  // }
+  // if(spaConfigurationData.pump3 >= 1)
+  // {
+  // payload["jet3"] = getMapDescription(_SpaStatusData.pump3, pumpMap);
+  // }
+  // if(spaConfigurationData.pump4 >= 1)
+  // {
+  // payload["jet4"] = getMapDescription(_SpaStatusData.pump4, pumpMap);
+  // }
+  // if(spaConfigurationData.blower >= 1)
+  // {
+  // payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
+  // }
+  // if(spaConfigurationData.light1 >= 1)
+  // {
+  // payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
+  // }
+  // if(spaConfigurationData.light2 >= 1)
+  // {
+  // payload["light2"] = getMapDescription(_SpaStatusData.light2, onOffMap);
+  // }
+
   payload["jet1"] = getMapDescription(_SpaStatusData.pump1, pumpMap);
   payload["jet2"] = getMapDescription(_SpaStatusData.pump2, pumpMap);
   payload["jet3"] = getMapDescription(_SpaStatusData.pump3, pumpMap);
   payload["jet4"] = getMapDescription(_SpaStatusData.pump4, pumpMap);
   payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
   payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
+
   payload["currentTemp"] = _SpaStatusData.currentTemp;
   payload["setTemp"] = _SpaStatusData.setTemp;
   payload["heatMode"] = getMapDescription(_SpaStatusData.heatingMode, heatingModeMap);
@@ -1165,7 +1245,7 @@ void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
   
-  payload["setupNumber"] = spaInformationData.setupNumber;
+  // payload["setupNumber"] = spaInformationData.setupNumber;
   payload["Jet1"] = spaConfigurationData.pump1;
   payload["Jet2"] = spaConfigurationData.pump2;
   payload["Jet3"] = spaConfigurationData.pump3;
@@ -1182,7 +1262,18 @@ void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *
 
   
   // payload["DIPSwitch"] = spaInformationData.dipSwitch;
-
+   if(k == 0)
+  {
+    Log.notice("Cofig ::: Pump1 : %d, Pump2 : %d, Pump3 : %d\n \
+       Pump4 : %d, Pump5 : %d, Pump6 : %d\n \
+       Blower : %d, Circulation : %d\n \
+       Light1 : %d, Light2 : %d\n \
+       Aux1 : %d, Aux2 : %d, Mister : %d\n" \
+       , spaConfigurationData.pump1, spaConfigurationData.pump2, spaConfigurationData.pump3, spaConfigurationData.pump4, \
+       spaConfigurationData.pump5, spaConfigurationData.pump6, spaConfigurationData.blower, spaConfigurationData.circulationPump, \
+       spaConfigurationData.light1, spaConfigurationData.light2, spaConfigurationData.aux1, spaConfigurationData.aux2, spaConfigurationData.mister);
+    k = 1;
+  }
   if(spaControlStatus.device_info)
   {
     spaControl_appand_device_info(&doc);
@@ -1469,7 +1560,7 @@ void configRequest(void)
   dataBuffer.push(0x01);
 
   addCRC(dataBuffer);
-  sendMessageToSpa(dataBuffer);
+  rs485Write(dataBuffer);
   
   // spaControlStatus.setupInfo = true;
 }
