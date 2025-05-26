@@ -1164,7 +1164,7 @@ void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *
   JsonObject payload = doc.createNestedObject("payload");
   
   payload["setupNumber"] = spaInformationData.setupNumber;
-  payload["DIPSwitch"] = spaInformationData.dipSwitch;
+  // payload["DIPSwitch"] = spaInformationData.dipSwitch;
 
   if(spaControlStatus.device_info)
   {
