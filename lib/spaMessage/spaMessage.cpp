@@ -26,6 +26,8 @@ char flagHeaterTooHigh = 0;
 char flagsendErrorCode = 0;
 char flagSetTime = 0;
 
+char k = 0;
+char kk = 0;
 
 // Global Variables
 RTC_NOINIT_ATTR SpaStatusData spaStatusData;
@@ -50,6 +52,7 @@ void configurationRequest();
 void updateTemperatureHistory();
 
 TickTwo temperatureHistory(updateTemperatureHistory, .75 * 60 * 1000); // Initial interval is 1 minute, then hourly on first execution
+
 
 void spaMessageSetup()
 {
@@ -232,6 +235,15 @@ void spaMessageLoop()
   //     flagsendErrorCode = 0;
   //   }
   // }
+
+
+// if(kk == 0)
+//   {
+//     configurationRequest();
+//     kk = 1;
+//   }
+
+   
 }
 
 void configurationRequest()
@@ -429,6 +441,12 @@ void parseConfigurationResponse(u_int8_t *message, int length)
 
   // Log.verbose(F("[Mess]: Configuration Response: %s" CR), msgToString(hexArray, length - 7).c_str());
   publishSpaConfigurationData();
+
+  //  if(k < 5)
+  // {
+  //   Log.notice("Cofig ::: Pump1 : %d, Pump2 : %d, Pump3 : %d, Pump4 : %d, Pump5 : %d, Pump6 : %d, Blower : %d, Circulation : %d.\n", spaConfigurationData.pump1, spaConfigurationData.pump2, spaConfigurationData.pump3, spaConfigurationData.pump4, spaConfigurationData.pump5, spaConfigurationData.pump6, spaConfigurationData.blower, spaConfigurationData.circulationPump);
+  //   k++;
+  // }
 }
 
 /*

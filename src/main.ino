@@ -17,6 +17,8 @@
 String buildDefinitionString = "";
 #define addBuildDefinition(name) buildDefinitionString += #name " ";
 
+char j = 0;
+
 void setup()
 {
   // Launch serial for debugging purposes
@@ -69,8 +71,6 @@ void setup()
   esp_log_level_set("*", ESP_LOG_DEBUG);
   
   // // logSection("This is UPDATED FIRMWARE....");
-
-
 }
 
 void loop()
@@ -87,9 +87,18 @@ void loop()
     spaMessageLoop();
   }
 
+  
+
   // toggleHoldState();
   // delay(3000);
   // toggleHoldState();
   // delay(3000);
+
+  // if(j == 0)
+  // {
+  //   configRequest();
+  //   j = 1;
+  // }
+  
 
 }

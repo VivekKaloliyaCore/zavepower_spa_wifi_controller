@@ -81,6 +81,8 @@ typedef struct {
   char  url[512];
 } otaParams_t;
 
+void configRequest(void);
+
 void startSpaCmdSendTimer();
 void stopSpaCmdSendTimer();
 

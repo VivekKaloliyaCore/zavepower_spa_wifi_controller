@@ -908,6 +908,8 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       else if(doc["payload"].containsKey("setupInfo"))
       {
         informationRequest();
+        // configRequest();
+        spaControlStatus->setupInfo = true;
         // delay(500);
       }
       else if(doc["payload"].containsKey("filterCycle"))
@@ -1154,7 +1156,7 @@ void spaControl_create_heatMode(SpaStatusData _SpaStatusData, char *json_str)
 void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *json_str)
 {
   // Create a JSON document
-  DynamicJsonDocument doc(200);
+  DynamicJsonDocument doc(350);
 
   // Add key-value pairs
   doc["action"] = "response";
@@ -1164,6 +1166,21 @@ void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *
   JsonObject payload = doc.createNestedObject("payload");
   
   payload["setupNumber"] = spaInformationData.setupNumber;
+  payload["Jet1"] = spaConfigurationData.pump1;
+  payload["Jet2"] = spaConfigurationData.pump2;
+  payload["Jet3"] = spaConfigurationData.pump3;
+  payload["Jet4"] = spaConfigurationData.pump4;
+  payload["Jet5"] = spaConfigurationData.pump5;
+  payload["Jet6"] = spaConfigurationData.pump6;
+  payload["Blower1"] = spaConfigurationData.blower;
+  payload["Circulation_Pump"] = spaConfigurationData.circulationPump;
+  payload["Light1"] = spaConfigurationData.light1;
+  payload["Light2"] = spaConfigurationData.light2;
+  payload["Aux1"] = spaConfigurationData.aux1;
+  payload["Aux2"] = spaConfigurationData.aux2;
+  payload["Mister"] = spaConfigurationData.mister;
+
+  
   // payload["DIPSwitch"] = spaInformationData.dipSwitch;
 
   if(spaControlStatus.device_info)
@@ -1438,8 +1455,23 @@ void informationRequest(void)
 
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);
+}
+
+
+void configRequest(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x22);
+  dataBuffer.push(0x00);
+  dataBuffer.push(0x00);
+  dataBuffer.push(0x01);
+
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
   
-  spaControlStatus.setupInfo = true;
+  // spaControlStatus.setupInfo = true;
 }
 
 

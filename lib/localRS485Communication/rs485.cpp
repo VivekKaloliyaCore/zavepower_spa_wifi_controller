@@ -154,6 +154,17 @@ void rs485Loop()
         }
         xQueueSend(spaReadQueue, &messageToSend, 0);
       }
+
+      if(spaMessage[4] == 0x2E) // Filter Cycle Message
+      {
+        SpaReadQueueMessage *messageToSend = new SpaReadQueueMessage;
+        messageToSend->length = (spaMessage.size() < BALBOA_MESSAGE_SIZE ? spaMessage.size() : BALBOA_MESSAGE_SIZE);
+        for (int i = 0; i < messageToSend->length; i++)
+        {
+          messageToSend->message[i] = spaMessage[i];
+        }
+        xQueueSend(spaReadQueue, &messageToSend, 0);
+      }
       
       if(spaMessage.size() >= 8)
       {
@@ -243,6 +254,8 @@ void rs485Loop()
     rs485Stats.badFormatYesterday = rs485Stats.badFormatToday;
     rs485Stats.badFormatToday = 0;
   }
+
+  
 };
 
 void rs485ClearToSend()
