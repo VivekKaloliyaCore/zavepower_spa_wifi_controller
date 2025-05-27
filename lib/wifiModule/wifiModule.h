@@ -2,6 +2,7 @@
 #define WIFI_MODULE_H
 #include <Arduino.h>
 
+
 #include "../../src/config.h" // Default passwords and SSID
 
 #ifndef WIFI_SSID
@@ -456,5 +457,8 @@ bool wifiModuleCnnectToWiFiOneTime(void);
 
 extern bool restart_esp;
 extern bool ap_configuration_on;
+
+// #include <Preferences.h>
+// Preferences preferences;
 
 #endif

@@ -539,16 +539,17 @@ bool parseStatusMessage(u_int8_t *message, int length)
       spaStatusData.initMode = hexArray[1];
       spaStatusData.reminderType = hexArray[6];
       
-      httpClientSendPostReqForErrorCodes("https://api.zavepower.cloud/api/device/error-logs-mac-address", spaStatusData.initMode, spaStatusData.reminderType);
+      // httpClientSendPostReqForErrorCodes("https://api.zavepower.cloud/api/device/error-logs-mac-address", spaStatusData.initMode, spaStatusData.reminderType);
       
-      // char* xxyz = {""}; //clientUrl.length()
+      // char* xxyz; //clientUrl.length()
       // memcpy(xxyz, clientUrl.c_str(), clientUrl.length());
-      // xxyz[clientUrl.length()] = '\0';
+      // xxyz[sizeof(clientUrl)] = '\0'
 
       // Log.notice("Received @spaMessage of clientUrl: %s\n", clientUrl.c_str());
       // Log.notice("Received @spaMessage of xxyz: %s\n", xxyz);
 
       // httpClientSendPostReqForErrorCodes(xxyz, spaStatusData.initMode, spaStatusData.reminderType);
+      httpClientSendPostReqForErrorCodes(spaStatusData.initMode, spaStatusData.reminderType);
     }
 
     spaStatusData.spaState = hexArray[0];

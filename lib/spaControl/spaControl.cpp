@@ -684,7 +684,7 @@ void spaControl_mqtt_action(void)
     // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
     Log.notice("Boot Up pacage Published\n");
     
-   spaControlStatus.setupInfo = true;
+    // spaControlStatus.setupInfo = true;// Enable this to send setupinfo at the time of bootup.
   }
 }
 
@@ -878,7 +878,8 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       {
         String url = doc["payload"]["errorCodeURL"];
         clientUrl = url;
-        Log.notice("Received Client URL: %s\n", url.c_str());
+        // cliUrl.putString("clientUrl", clientUrl);
+        // Log.notice("Received Client URL: %s\n", url.c_str());
         Log.notice("Copied Client URL: %s\n", clientUrl.c_str());
       }
     }
@@ -926,13 +927,13 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
 
         spaControlStatus->tempRange = true;
       }
-      else if(doc["payload"].containsKey("setupInfo"))
-      {
-        // informationRequest();
-        // configRequest();
-        spaControlStatus->setupInfo = true;
-        // delay(500);
-      }
+      // else if(doc["payload"].containsKey("setupInfo"))
+      // {
+      //   // informationRequest();
+      //   // configRequest();
+      //   spaControlStatus->setupInfo = true;
+      //   // delay(500);
+      // }
       else if(doc["payload"].containsKey("filterCycle"))
       {
         spaControlStatus->filterCycle = true;
@@ -945,10 +946,10 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
           spaControlStatus->filter2 = true;
         }
       }
-      else if(doc["payload"].containsKey("fwVersion"))
-      {
-          spaControlStatus->fwVersion = true;
-      }
+      // else if(doc["payload"].containsKey("fwVersion"))
+      // {
+      //     spaControlStatus->fwVersion = true;
+      // }
     }
 
     if(doc.containsKey("device_info"))
@@ -1560,7 +1561,7 @@ void configRequest(void)
   dataBuffer.push(0x01);
 
   addCRC(dataBuffer);
-  rs485Write(dataBuffer);
+  sendMessageToSpa(dataBuffer);
   
   // spaControlStatus.setupInfo = true;
 }

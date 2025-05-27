@@ -5,9 +5,13 @@
 #include <CircularBuffer.hpp>
 #include "../../src/main.h"
 #include <balboa.h>
+// #include <Preferences.h>
 
+// extern Preferences cliUrl;
 
 extern String clientUrl;
+
+
 
 typedef struct {
   bool is_mqtt_topic_postfix_present;
