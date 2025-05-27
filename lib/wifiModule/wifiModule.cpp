@@ -158,6 +158,24 @@ void wifiModuleSetup()
 
   String user_id = preferences.getString("user_id", "");
   Log.notice(F("[WiFi]: User ID: %s" CR), user_id.c_str());
+
+  api.begin("myapi", true);
+  String url = api.getString("apiurl", "");
+  if (url == "")
+  {
+    api.end();
+    Log.notice("><><><>><>>> it was null\n");
+    api.begin("myapi", false);
+    api.putString("apiurl", "https://api.zavepower.cloud/api/device/error-logs-mac-address");
+    api.end();
+  }
+  else
+  {
+    Log.notice("><><><>><>>> Was not null!!!\n");
+    api.end();
+  }
+  
+  
 }
 
 void wifiModuleLoop()

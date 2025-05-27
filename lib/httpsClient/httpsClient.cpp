@@ -3,6 +3,7 @@
 
 #include "../spaMessage/spaMessage.h"
 #include "../spaControl/spaControl.h"
+#include "../httpServer/httpServer.h"
 
 HTTPClient cli;
 
@@ -10,6 +11,10 @@ HTTPClient cli;
 bool httpClientSendPostReqForErrorCodes(uint8_t initMode, uint8_t reminderType)
 {
   // cli.begin(url);
+  api.begin("myapi", true);
+  clientUrl = api.getString("apiurl", "Default");
+  api.end();
+
   cli.begin(clientUrl);
   // cli.begin(cliUrl->clientUrl);
 

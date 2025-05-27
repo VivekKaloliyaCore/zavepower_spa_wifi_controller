@@ -17,6 +17,7 @@
 #include "../../src/config.h"
 #include "../../src/main.h"
 #include <balboa.h>
+#include <Preferences.h>
 
 StaticJsonDocument<512> globalDeviceInfo; // Adjust size as needed
 
@@ -35,6 +36,7 @@ static spaControlStatus_t spaControlStatus = {0};
 // SpaFilterSettingsData spaFilterSettingsData = {0};
 
 String clientUrl;
+Preferences api;
 
 char k = 0;
 
@@ -877,10 +879,21 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       else if(doc["payload"].containsKey("errorCodeURL"))
       {
         String url = doc["payload"]["errorCodeURL"];
-        clientUrl = url;
+
+        api.begin("myapi", false);
+        api.putString("apiurl", url);
+        api.end();
+        // Log.notice("Received URL: %s\n", api.getString("apiurl", ""));
+        delay(1000);
+
+        // api.begin("myapi", true);
+        // clientUrl = api.getString("apiurl", "Default");
+        // api.end();
+
+
+        // clientUrl = url;
         // cliUrl.putString("clientUrl", clientUrl);
         // Log.notice("Received Client URL: %s\n", url.c_str());
-        Log.notice("Copied Client URL: %s\n", clientUrl.c_str());
       }
     }
     else
