@@ -101,7 +101,7 @@ After power on, machine give a message/notification to set the time once.
 We can set the time manually using the following command :
 7e 07 10 bf 21 [] [] 89 7e
 
-6th index byte	|	Hour; In hour's byte, the MSB should be 1 for some reason.
+6th index byte	|	Hour; In hour's byte, if the existing ClockMode[Time format] is 24H then the MSB should be 1 or ifelse it is 12H then the msb should be 0.
 7th index byte	|	Minute
 
 
@@ -165,3 +165,24 @@ When we send an preferance request to set the clean up cycle, we get following p
 Byte index 10 shows the minutes/time duration for clean up cycle. Hear, 0x03 shows 1.5 hours.
 
 if clean up cycle is on or off can be checked from the byte index 24, bit 0-3 of the status message.
+
+
+M8 ::
+=========================================================
+According to the referance document, M8 is some Artificial Intelligence
+It can be toggeled using the following command 
+7e 07 10 bf 27 06 01 db 7e - Command type 0x27, next byte is preferance code 0x06 which means it is for M8, next byte is preferance value(0 = off, 1 = on).
+
+
+Temperature Unit ::
+==========================================================
+Command to set cleanup cycle : 7e 07 10 bf 27 01 00 b7 7e - Message type 0x27[Set Preferance request]
+5th index, Preferance Code : 0x01 for temp unit.
+6th index, Preferance value : 0x00 means F and 0x01 means celceus.
+
+
+Time format [Clock Mode]::
+==========================================================
+Command to set cleanup cycle : 7e 07 10 bf 27 02 00 b7 7e - Message type 0x27[Set Preferance request].
+5th index, Preferance Code : 0x01 for time format.
+6th index, Preferance value : 0x00 means 12H format and 0x01 means 24H format.

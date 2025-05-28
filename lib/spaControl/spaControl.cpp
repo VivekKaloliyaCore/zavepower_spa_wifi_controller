@@ -28,6 +28,7 @@ float sendSetTemp = 0;
 
 uint8_t hour = 0;
 uint8_t minute = 0;
+uint8_t cleanupCycleTime = 0;
 
 Ticker spaCmdSendTimer;
 bool spaCmdSendTimerRunning = false;
@@ -57,7 +58,8 @@ void informationRequest(void);
 void spaControl_appand_device_info(DynamicJsonDocument* doc);
 void spaControl_create_filter_cycle(char *json_str);
 void spaControl_create_fwVersion(char *json_str);
-
+void setCleanupCycle(void);
+void setClockMode(void);
 
 void myFunction()
 {
@@ -153,6 +155,10 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   spaControlParams.hold = _spaControlParams.hold;
 
   spaControlParams.is_time_present = _spaControlParams.is_time_present;
+
+  spaControlParams.is_clockMode_present = _spaControlParams.is_clockMode_present;
+
+  spaControlParams.is_cleanupCycle_present = _spaControlParams.is_cleanupCycle_present;
   // spaControlParams.is_reset_wifi_sta_present = _spaControlParams.is_reset_wifi_sta_present;
   // spaControlParams.reset_wifi_sta = _spaControlParams.reset_wifi_sta;
 }
@@ -331,6 +337,16 @@ void spaControl_action(void)
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_time_present)
+      {
+        Log.notice("Sending time command...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_clockMode_present)
+      {
+        Log.notice("Sending time command...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_cleanupCycle_present)
       {
         Log.notice("Sending time command...\n");
         set_spaControlParams(spaControlParams);
@@ -546,13 +562,18 @@ void spaControl_action(void)
   }
   else if(spaControlParams.is_time_present)
   {
-      if(sendSpaCmdSend || !spaCmdSendTimerRunning)
-      {
-        setTime(hour, minute);
-
-        sendSpaCmdSend = false;
-        startSpaCmdSendTimer();
-      }
+    setTime(hour, minute);
+    spaControlParams.is_time_present = false;
+  }
+  else if(spaControlParams.is_clockMode_present)
+  {
+    setClockMode();
+    spaControlParams.is_clockMode_present = false;
+  }
+  else if(spaControlParams.is_cleanupCycle_present)
+  {
+    setCleanupCycle();
+    spaControlParams.is_cleanupCycle_present = false;
   }
   // else if(spaControlParams.is_reset_wifi_sta_present)
   // {
@@ -954,7 +975,7 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       {
         uint8_t hr = doc["payload"]["time"]["hour"];
         uint8_t min = doc["payload"]["time"]["minute"];
-        
+
         if(hr <= 23 && min <= 59)
         {
           hour = hr;
@@ -967,7 +988,27 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
           minute = minute;
           spaControlParams->is_time_present = false;
         }
-
+      }
+      else if(doc["payload"].containsKey("clockMode"))
+      {
+        spaStatusData.clockMode = doc["payload"]["clockMode"];
+        
+        spaControlParams->is_clockMode_present = true;
+      }
+      else if(doc["payload"].containsKey("cleanupCycle"))
+      {
+        uint8_t cleanmin = doc["payload"]["cleanupCycle"];
+        
+        if(cleanmin <= 8 )
+        {
+          cleanupCycleTime = cleanmin;
+          spaControlParams->is_cleanupCycle_present = true;
+        }
+        else
+        {
+          cleanupCycleTime = cleanupCycleTime;
+          spaControlParams->is_cleanupCycle_present = false;
+        }
       }
     }
     else
@@ -1037,6 +1078,13 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       // {
       //     spaControlStatus->fwVersion = true;
       // }
+      else if(doc["payload"].containsKey("hold"))
+      {
+        int heatMode = doc["payload"]["hold"];
+        Log.notice("Heat Mode : %d\n", heatMode);
+
+        // spaControlStatus->heatMode = true;
+      }
     }
 
     if(doc.containsKey("device_info"))
@@ -1657,7 +1705,7 @@ void configRequest(void)
 void toggleHoldState(void)
 {
   CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-  dataBuffer.push(0x0A);
+  dataBuffer.push(id);
   dataBuffer.push(0xBF);
   dataBuffer.push(0x11);
   dataBuffer.push(0x3C);
@@ -1670,14 +1718,48 @@ void toggleHoldState(void)
 
 void setTime(int hour, int minute)
 {
-  hour |= (1 << 7);
+  if(spaStatusData.clockMode)
+  {
+    hour |= (1 << 7);
+  }
+  else if(spaStatusData.clockMode = 0)
+  {
+    hour = hour;
+  }
+  
   CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-  dataBuffer.push(0x0A);
+  dataBuffer.push(id);
   dataBuffer.push(0xBF);
   dataBuffer.push(0x21);
   dataBuffer.push(hour);
   dataBuffer.push(minute);
 
   addCRC(dataBuffer);
-  rs485Write(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+}
+
+void setCleanupCycle(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x27);
+  dataBuffer.push(0x03);
+  dataBuffer.push(cleanupCycleTime);
+
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+}
+
+void setClockMode(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x27);
+  dataBuffer.push(0x02);
+  dataBuffer.push(spaStatusData.clockMode);
+
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
 }

@@ -11,8 +11,9 @@
 
 extern String clientUrl;
 
-extern uint8_t hour;
-extern uint8_t minute;
+// extern uint8_t hour;
+// extern uint8_t minute;
+// extern uint8_t cleanupCycleTime;
 
 typedef struct {
   bool is_mqtt_topic_postfix_present;
@@ -67,6 +68,9 @@ typedef struct {
 
   bool  is_time_present;
   bool  time;
+
+  bool is_clockMode_present;
+  bool is_cleanupCycle_present;
 } spaControlParams_t;
 
 typedef struct {
@@ -125,4 +129,5 @@ void sendOTAStarted(void);
 void toggleHoldState(void);
 void configRequest(void);
 void setTime(int hour, int minute);
+void setCleanupCycle(void);
 #endif

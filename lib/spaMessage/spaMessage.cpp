@@ -552,6 +552,19 @@ bool parseStatusMessage(u_int8_t *message, int length)
       httpClientSendPostReqForErrorCodes(spaStatusData.initMode, spaStatusData.reminderType);
     }
 
+    if( (spaStatusData.spaState != hexArray[0]) )
+    {
+
+      // spaStatusData.spaState = hexArray[0];
+      // if(spaStatusData.spaState == 0x05)
+      // {
+      //   Log.noticeln("Hold Mode");
+      //   spaControlStatus.hold = true;
+      // }
+      
+      // httpClientSendPostReqForErrorCodes(spaStatusData.initMode, spaStatusData.reminderType);
+    }
+
     spaStatusData.spaState = hexArray[0];
     spaStatusData.initMode = hexArray[1];
     spaStatusData.currentTemp = (hexArray[2] != 0xff ? (hexArray[9] & 0x01 ? (float)hexArray[2] / 2 : hexArray[2]) : spaStatusData.currentTemp);
@@ -695,17 +708,17 @@ bool parseStatusMessage(u_int8_t *message, int length)
       spaControlStatus.deviceStatus = true;
       set_spaControlStatus(spaControlStatus);
     }
-    else if(spaControlParams.is_time_present)
-    {
-      spaControlParams.is_time_present = false;
-      set_spaControlParams(spaControlParams);
+    // else if(spaControlParams.is_time_present)
+    // {
+    //   spaControlParams.is_time_present = false;
+    //   set_spaControlParams(spaControlParams);
 
-      Log.notice("Sending AUTO deviceStatus...\n");
-      spaControlStatus_t spaControlStatus = {0};
-      memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
-      spaControlStatus.deviceStatus = true;
-      set_spaControlStatus(spaControlStatus);
-    }
+    //   Log.notice("Sending AUTO deviceStatus...\n");
+    //   spaControlStatus_t spaControlStatus = {0};
+    //   memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
+    //   spaControlStatus.deviceStatus = true;
+    //   set_spaControlStatus(spaControlStatus);
+    // }
     else
     {
       Log.notice("Sending SYNC deviceStatus...\n");

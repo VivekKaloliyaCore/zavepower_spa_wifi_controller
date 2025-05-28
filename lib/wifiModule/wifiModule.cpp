@@ -174,8 +174,6 @@ void wifiModuleSetup()
     Log.notice("><><><>><>>> Was not null!!!\n");
     api.end();
   }
-  
-  
 }
 
 void wifiModuleLoop()
