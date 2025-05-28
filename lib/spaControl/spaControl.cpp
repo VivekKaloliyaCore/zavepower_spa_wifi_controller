@@ -26,6 +26,9 @@ mqtt_params_t mqtt_params = {0};
 // Global variable to send temp to set.
 float sendSetTemp = 0;
 
+uint8_t hour = 0;
+uint8_t minute = 0;
+
 Ticker spaCmdSendTimer;
 bool spaCmdSendTimerRunning = false;
 bool sendSpaCmdSend = false;
@@ -145,6 +148,11 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   spaControlParams.setTempCommand = _spaControlParams.setTempCommand;
 
   spaControlParams.is_filterCycle_present = _spaControlParams.is_filterCycle_present;
+
+  spaControlParams.is_hold_present = _spaControlParams.is_hold_present;
+  spaControlParams.hold = _spaControlParams.hold;
+
+  spaControlParams.is_time_present = _spaControlParams.is_time_present;
   // spaControlParams.is_reset_wifi_sta_present = _spaControlParams.is_reset_wifi_sta_present;
   // spaControlParams.reset_wifi_sta = _spaControlParams.reset_wifi_sta;
 }
@@ -171,6 +179,7 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.filter1 = _spaControlStatus.filter1;
   spaControlStatus.filter2 = _spaControlStatus.filter2;
   spaControlStatus.fwVersion = _spaControlStatus.fwVersion;
+  spaControlStatus.hold = _spaControlStatus.hold;
 }
 
 
@@ -314,6 +323,16 @@ void spaControl_action(void)
       else if(spaControlParams.is_filterCycle_present)
       {
         // Log.notice("Sending currentTemp...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_hold_present)
+      {
+        Log.notice("Sending Hold command...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_time_present)
+      {
+        Log.notice("Sending time command...\n");
         set_spaControlParams(spaControlParams);
       }
 
@@ -506,6 +525,34 @@ void spaControl_action(void)
   {
       spaControlParams.is_filterCycle_present = false;
       filterCycleTrial();
+  }
+  else if(spaControlParams.is_hold_present)
+  {
+    if(spaControlParams.hold)
+    {
+      if(sendSpaCmdSend || !spaCmdSendTimerRunning)
+      {
+        toggleHoldState();
+
+        sendSpaCmdSend = false;
+        startSpaCmdSendTimer();
+      }
+    }
+    else
+    {
+      sendSpaCmdSend = false;
+      stopSpaCmdSendTimer();
+    }
+  }
+  else if(spaControlParams.is_time_present)
+  {
+      if(sendSpaCmdSend || !spaCmdSendTimerRunning)
+      {
+        setTime(hour, minute);
+
+        sendSpaCmdSend = false;
+        startSpaCmdSendTimer();
+      }
   }
   // else if(spaControlParams.is_reset_wifi_sta_present)
   // {
@@ -894,6 +941,33 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         // clientUrl = url;
         // cliUrl.putString("clientUrl", clientUrl);
         // Log.notice("Received Client URL: %s\n", url.c_str());
+      }
+      else if(doc["payload"].containsKey("hold"))
+      {
+        int hold = doc["payload"]["hold"];
+        Log.notice("Hold: %d\n", hold);
+
+        spaControlParams->is_hold_present = true;
+        spaControlParams->hold = hold;
+      }
+      else if(doc["payload"].containsKey("time"))
+      {
+        uint8_t hr = doc["payload"]["time"]["hour"];
+        uint8_t min = doc["payload"]["time"]["minute"];
+        
+        if(hr <= 23 && min <= 59)
+        {
+          hour = hr;
+          minute = min;
+          spaControlParams->is_time_present = true;
+        }
+        else
+        {
+          hour = hour;
+          minute = minute;
+          spaControlParams->is_time_present = false;
+        }
+
       }
     }
     else
@@ -1588,6 +1662,21 @@ void toggleHoldState(void)
   dataBuffer.push(0x11);
   dataBuffer.push(0x3C);
   dataBuffer.push(0x00);
+
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+}
+
+
+void setTime(int hour, int minute)
+{
+  hour |= (1 << 7);
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(0x0A);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x21);
+  dataBuffer.push(hour);
+  dataBuffer.push(minute);
 
   addCRC(dataBuffer);
   rs485Write(dataBuffer);

@@ -11,7 +11,8 @@
 
 extern String clientUrl;
 
-
+extern uint8_t hour;
+extern uint8_t minute;
 
 typedef struct {
   bool is_mqtt_topic_postfix_present;
@@ -60,6 +61,12 @@ typedef struct {
   bool setModeRest;
 
   bool is_filterCycle_present;
+
+  bool  is_hold_present;
+  bool  hold;
+
+  bool  is_time_present;
+  bool  time;
 } spaControlParams_t;
 
 typedef struct {
@@ -79,6 +86,7 @@ typedef struct {
   bool filter1;
   bool filter2;
   bool fwVersion;
+  bool hold;
 } spaControlStatus_t;
 
 typedef struct {
@@ -116,4 +124,5 @@ void sendOTAFail(void);
 void sendOTAStarted(void);
 void toggleHoldState(void);
 void configRequest(void);
+void setTime(int hour, int minute);
 #endif

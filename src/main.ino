@@ -18,7 +18,6 @@ String buildDefinitionString = "";
 #define addBuildDefinition(name) buildDefinitionString += #name " ";
 
 char j = 0;
-
 void setup()
 {
   // Launch serial for debugging purposes
@@ -93,6 +92,11 @@ void loop()
     spaMessageLoop();
   }
 
+
+  // setTime(hour, minute);
+  // delay(3000);
+  // hour++;
+  // minute++;
   // toggleHoldState();
   // delay(3000);
   // toggleHoldState();
