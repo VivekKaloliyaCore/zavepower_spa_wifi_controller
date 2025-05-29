@@ -29,6 +29,7 @@ float sendSetTemp = 0;
 uint8_t hour = 0;
 uint8_t minute = 0;
 uint8_t cleanupCycleTime = 0;
+uint8_t m8 = 0;
 
 Ticker spaCmdSendTimer;
 bool spaCmdSendTimerRunning = false;
@@ -61,6 +62,7 @@ void spaControl_create_fwVersion(char *json_str);
 void setCleanupCycle(void);
 void setClockMode(void);
 void setTempScale(void);
+void setM8(void);
 
 void myFunction()
 {
@@ -160,6 +162,8 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   spaControlParams.is_clockMode_present = _spaControlParams.is_clockMode_present;
 
   spaControlParams.is_tempScale_present = _spaControlParams.is_tempScale_present;
+
+  spaControlParams.is_m8_present = _spaControlParams.is_m8_present;
 
   spaControlParams.is_cleanupCycle_present = _spaControlParams.is_cleanupCycle_present;
   // spaControlParams.is_reset_wifi_sta_present = _spaControlParams.is_reset_wifi_sta_present;
@@ -350,6 +354,11 @@ void spaControl_action(void)
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_tempScale_present)
+      {
+        Log.notice("Sending time command...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_m8_present)
       {
         Log.notice("Sending time command...\n");
         set_spaControlParams(spaControlParams);
@@ -582,6 +591,11 @@ void spaControl_action(void)
   {
     setTempScale();
     spaControlParams.is_tempScale_present = false;
+  }
+  else if(spaControlParams.is_m8_present)
+  {
+    setM8();
+    spaControlParams.is_m8_present = false;
   }
   else if(spaControlParams.is_cleanupCycle_present)
   {
@@ -1046,6 +1060,12 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         
         spaControlParams->is_tempScale_present = true;
       }
+      else if(doc["payload"].containsKey("m8"))
+      {
+        m8 = doc["payload"]["m8"];
+        
+        spaControlParams->is_m8_present = true;
+      }
       else if(doc["payload"].containsKey("cleanupCycle"))
       {
         float cleanmin = doc["payload"]["cleanupCycle"];
@@ -1162,7 +1182,7 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       //   // informationRequest();
       //   // configRequest();
       //   spaControlStatus->setupInfo = true;
-      //   // delay(500);
+      //   // delay(100);
       // }
       else if(doc["payload"].containsKey("filterCycle"))
       {
@@ -1886,6 +1906,19 @@ void setTempScale(void)
   dataBuffer.push(0x27);
   dataBuffer.push(0x01);
   dataBuffer.push(spaStatusData.tempScale);
+
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+}
+
+void setM8(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x27);
+  dataBuffer.push(0x06);
+  dataBuffer.push(m8);
 
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);
