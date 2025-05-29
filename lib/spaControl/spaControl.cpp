@@ -997,11 +997,51 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("cleanupCycle"))
       {
-        uint8_t cleanmin = doc["payload"]["cleanupCycle"];
-        
-        if(cleanmin <= 8 )
+        float cleanmin = doc["payload"]["cleanupCycle"];
+
+        if(cleanmin == 0)
         {
-          cleanupCycleTime = cleanmin;
+          cleanupCycleTime = 0;
+          spaControlParams->is_cleanupCycle_present = true;
+        }
+        else if(cleanmin == 0.5)
+        {
+          cleanupCycleTime = 1;
+          spaControlParams->is_cleanupCycle_present = true;
+        }
+        else if(cleanmin == 1)
+        {
+          cleanupCycleTime = 2;
+          spaControlParams->is_cleanupCycle_present = true;
+        }
+        else if(cleanmin == 1.5)
+        {
+          cleanupCycleTime = 3;
+          spaControlParams->is_cleanupCycle_present = true;
+        }
+        else if(cleanmin == 2)
+        {
+          cleanupCycleTime = 4;
+          spaControlParams->is_cleanupCycle_present = true;
+        }
+        else if(cleanmin == 2.5)
+        {
+          cleanupCycleTime = 5;
+          spaControlParams->is_cleanupCycle_present = true;
+        }
+        else if(cleanmin == 3)
+        {
+          cleanupCycleTime = 6;
+          spaControlParams->is_cleanupCycle_present = true;
+        }
+        else if(cleanmin == 3.5)
+        {
+          cleanupCycleTime = 7;
+          spaControlParams->is_cleanupCycle_present = true;
+        }
+        else if(cleanmin == 4)
+        {
+          cleanupCycleTime = 8;
           spaControlParams->is_cleanupCycle_present = true;
         }
         else
@@ -1009,6 +1049,17 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
           cleanupCycleTime = cleanupCycleTime;
           spaControlParams->is_cleanupCycle_present = false;
         }
+        
+        // if(cleanmin <= 8 )
+        // {
+        //   cleanupCycleTime = cleanmin;
+        //   spaControlParams->is_cleanupCycle_present = true;
+        // }
+        // else
+        // {
+        //   cleanupCycleTime = cleanupCycleTime;
+        //   spaControlParams->is_cleanupCycle_present = false;
+        // }
       }
     }
     else
