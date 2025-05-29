@@ -1490,9 +1490,21 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   payload["jet4"] = getMapDescription(_SpaStatusData.pump4, pumpMap);
   payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
   payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
+  char currenttemp[20];
+  char settemp[20];
+  if(spaStatusData.tempScale == 0)
+  {
+    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Faranhite", _SpaStatusData.currentTemp);
+    snprintf(settemp, sizeof(settemp), "%3.1f Faranhite", _SpaStatusData.setTemp);
+  }
+  else if(spaStatusData.tempScale == 1)
+  {
+    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Celcious", _SpaStatusData.currentTemp);
+    snprintf(settemp, sizeof(settemp), "%3.1f Celcious", _SpaStatusData.setTemp);
+  }
 
-  payload["currentTemp"] = _SpaStatusData.currentTemp;
-  payload["setTemp"] = _SpaStatusData.setTemp;
+  payload["currentTemp"] = currenttemp;
+  payload["setTemp"] = settemp;
   payload["heatMode"] = getMapDescription(_SpaStatusData.heatingMode, heatingModeMap);
   payload["tempRange"] = getMapDescription(_SpaStatusData.tempRange, tempRangeMap);
   payload["heatStatus"] = getMapDescription(_SpaStatusData.heatingState, heatingStateMap);
