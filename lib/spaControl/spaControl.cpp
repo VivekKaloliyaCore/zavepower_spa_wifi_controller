@@ -59,6 +59,7 @@ void informationRequest(void);
 void spaControl_appand_device_info(DynamicJsonDocument* doc);
 void spaControl_create_filter_cycle(char *json_str);
 void spaControl_create_hold_status(char *json_str);
+void spaControl_create_tempScale_status(char *json_str);
 void spaControl_create_fwVersion(char *json_str);
 void setCleanupCycle(void);
 void setClockMode(void);
@@ -163,6 +164,7 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   spaControlParams.is_clockMode_present = _spaControlParams.is_clockMode_present;
 
   spaControlParams.is_tempScale_present = _spaControlParams.is_tempScale_present;
+  spaControlParams.tempScale = _spaControlParams.tempScale;
 
   spaControlParams.is_m8_present = _spaControlParams.is_m8_present;
 
@@ -194,6 +196,7 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.filter2 = _spaControlStatus.filter2;
   spaControlStatus.fwVersion = _spaControlStatus.fwVersion;
   spaControlStatus.hold = _spaControlStatus.hold;
+  spaControlStatus.tempScale = _spaControlStatus.tempScale;
 }
 
 
@@ -260,6 +263,10 @@ void spaControl_action(void)
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.hold)
+      {
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.tempScale)
       {
         set_spaControlStatus(spaControlStatus);
       }
@@ -595,7 +602,7 @@ void spaControl_action(void)
   else if(spaControlParams.is_tempScale_present)
   {
     setTempScale();
-    spaControlParams.is_tempScale_present = false;
+    // spaControlParams.is_tempScale_present = false;
   }
   else if(spaControlParams.is_m8_present)
   {
@@ -773,6 +780,19 @@ void spaControl_mqtt_action(void)
     // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
     spaControl_create_hold_status(json_str);
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+  }
+
+  if(spaControlStatus.tempScale)
+  {
+    Log.notice("spaControlStatus.tempScale = trueeee\n");
+    spaControlStatus.tempScale = false;
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
+    spaControl_create_tempScale_status(json_str);
+    Log.notice("Created temp scale\n");
+    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    Log.notice("Sent temp scale\n");
   }
 
   if(spaControlStatus.fwVersion)
@@ -1072,6 +1092,8 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaStatusData.tempScale = doc["payload"]["tempScale"];
         
         spaControlParams->is_tempScale_present = true;
+        spaControlParams->tempScale = true;
+
       }
       else if(doc["payload"].containsKey("m8"))
       {
@@ -1217,6 +1239,10 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       {
         spaControlStatus->hold = true;
       }
+      else if(doc["payload"].containsKey("tempScale"))
+      {
+        spaControlStatus->tempScale = true;
+      }
     }
 
     if(doc.containsKey("device_info"))
@@ -1320,6 +1346,41 @@ void spaControl_create_hold_status(char *json_str)
   else
   {
     payload["holdStatus"] = "Not On Hold";
+  }
+
+  if(spaControlStatus.device_info)
+  {
+    spaControl_appand_device_info(&doc);
+  }
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+}
+
+void spaControl_create_tempScale_status(char *json_str)
+{
+  // Create a JSON document
+  DynamicJsonDocument doc(200);
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "tempScale";
+
+  // Create "payload" as a nested object
+  JsonObject payload = doc.createNestedObject("payload");
+  Log.notice("creating payload\n");
+  if(spaStatusData.tempScale == 0)
+  {
+    payload["tempScale"] = "Fahrenheit";
+    Log.notice("Created Fahrenheit\n");
+  }
+  else if(spaStatusData.tempScale == 1)
+  {
+    payload["tempScale"] = "Celsius";
+    Log.notice("Created Celsius\n");
   }
 
   if(spaControlStatus.device_info)

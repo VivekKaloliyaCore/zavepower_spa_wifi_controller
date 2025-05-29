@@ -72,6 +72,7 @@ typedef struct {
   bool is_clockMode_present;
 
   bool is_tempScale_present;
+  bool tempScale;
   
   bool is_m8_present;
 
@@ -96,6 +97,7 @@ typedef struct {
   bool filter2;
   bool fwVersion;
   bool hold;
+  bool tempScale;
 } spaControlStatus_t;
 
 typedef struct {
