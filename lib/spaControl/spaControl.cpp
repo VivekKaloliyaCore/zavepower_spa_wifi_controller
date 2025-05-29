@@ -1494,13 +1494,13 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   char settemp[20];
   if(spaStatusData.tempScale == 0)
   {
-    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Faranhite", _SpaStatusData.currentTemp);
-    snprintf(settemp, sizeof(settemp), "%3.1f Faranhite", _SpaStatusData.setTemp);
+    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Fahrenheit", _SpaStatusData.currentTemp);
+    snprintf(settemp, sizeof(settemp), "%3.1f Fahrenheit", _SpaStatusData.setTemp);
   }
   else if(spaStatusData.tempScale == 1)
   {
-    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Celcious", _SpaStatusData.currentTemp);
-    snprintf(settemp, sizeof(settemp), "%3.1f Celcious", _SpaStatusData.setTemp);
+    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Celsius", _SpaStatusData.currentTemp);
+    snprintf(settemp, sizeof(settemp), "%3.1f Celsius", _SpaStatusData.setTemp);
   }
 
   payload["currentTemp"] = currenttemp;

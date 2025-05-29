@@ -316,19 +316,39 @@ const std::map<uint8_t, const char *> initModeMap = {
 const std::map<uint8_t, const char *> reminderTypeMap = {
     {0, "No Error"},
     {0x0F, "Sensors are out of sync."},
+    {0x10, "The water flow is low."},
+    {0x11, "The water flow has failed."},
+    {0x12, "The settings have been reset."},
     {0x13, "Priming Mode"},
-    {0x28, "Set the time"}, // initModeMap should be "Reminder" at this time
-    {0x1E, "The heater is too hot."}}; // initModeMpap should be "Fault" at this time
+    {0x14, "The clock has failed"},
+    {0x15, "The settings have been reset."},
+    {0x16, "Program memory failure."},
+    {0x1A, "Sensors are out of sync -- Call for service."},
+    {0x1B, "The heater is dry."},
+    {0x1C, "The heater may be dry."},
+    {0x1D, "The water is too hot."},
+    {0x1E, "The heater is too hot."},// initModeMpap should be "Fault" at this time
+    {0x1F, "Sensor A Fault."},
+    {0x20, "Sensor B Fault."}, 
+    {0x22, "A pump may be stuck on."},
+    {0x23, "Hot fault."},
+    {0x24, "The GFCI test failed."},
+    {0x25, "Standby Mode(Hold Mode)."},
+    {0x28, "Set the time"} // initModeMap should be "Reminder" at this time
+    }; 
 
 const std::map<uint8_t, uint8_t> reminderTypeToerrorCodeMap = {
     {0, 0},
-    {0x28, 1},
-    {0x1E, 2}};
+    {0x13, 1},
+    {0x28, 2},
+    {0x23, 3},
+    {0x1E, 3}};
 
 const std::map<uint8_t, const char *> errorCodeMap = {
     {0, "No Error"},
-    {1, "Time Message"},
-    {2, "Temperature"}};
+    {1, "Priming Mode"},
+    {2, "Time Message"},
+    {3, "Temperature"}};
 
 const std::map<uint8_t, const char *> filterModeMap = {
     {0, "Off"},
