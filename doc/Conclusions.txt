@@ -7,9 +7,13 @@ CONCLUSIONS :::
 Temperature Range ::
 ======================================================================================
 There are two temperature ranges, HIGH and LOW. Set by Client;
-Temp range HIGH = Set temp ranges from 26.5 degree celcius to 40 degree celcius;
-Temp range LOW = Set temp ranges from 10 degree celcius to 37 degree celcius;
-
+Temp range HIGH : 
+	In Celsius -- Set temp ranges from 26.5 degree celsius to 40 degree celsius;
+	In Fahrenheit -- 80 degree to 104 degree.
+Temp range LOW :
+	In Celsius -- Set temp ranges from 10 degree celsius to 37 degree celsius;
+	In Fahrenheit -- 50 degree to 99 degree.
+	
 When we change the Temp Range from the client(Display), it sends the following command:
 7e 07 10 bf 11 50 00 32 7e
 
@@ -174,9 +178,10 @@ It can be toggeled using the following command
 7e 07 10 bf 27 06 01 db 7e - Command type 0x27, next byte is preferance code 0x06 which means it is for M8, next byte is preferance value(0 = off, 1 = on).
 
 
-Temperature Unit ::
+Temperature Unit [temperature scale]::
 ==========================================================
-Command to set cleanup cycle : 7e 07 10 bf 27 01 00 b7 7e - Message type 0x27[Set Preferance request]
+Command to set cleanup cycle : 7e 07 10 bf 27 01 00 b7 7e 
+4th index, Message type 0x27[Set Preferance request]
 5th index, Preferance Code : 0x01 for temp unit.
 6th index, Preferance value : 0x00 means F and 0x01 means celceus.
 

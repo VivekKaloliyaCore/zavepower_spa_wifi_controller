@@ -60,6 +60,7 @@ void spaControl_create_filter_cycle(char *json_str);
 void spaControl_create_fwVersion(char *json_str);
 void setCleanupCycle(void);
 void setClockMode(void);
+void setTempScale(void);
 
 void myFunction()
 {
@@ -157,6 +158,8 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   spaControlParams.is_time_present = _spaControlParams.is_time_present;
 
   spaControlParams.is_clockMode_present = _spaControlParams.is_clockMode_present;
+
+  spaControlParams.is_tempScale_present = _spaControlParams.is_tempScale_present;
 
   spaControlParams.is_cleanupCycle_present = _spaControlParams.is_cleanupCycle_present;
   // spaControlParams.is_reset_wifi_sta_present = _spaControlParams.is_reset_wifi_sta_present;
@@ -342,6 +345,11 @@ void spaControl_action(void)
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_clockMode_present)
+      {
+        Log.notice("Sending time command...\n");
+        set_spaControlParams(spaControlParams);
+      }
+      else if(spaControlParams.is_tempScale_present)
       {
         Log.notice("Sending time command...\n");
         set_spaControlParams(spaControlParams);
@@ -569,6 +577,11 @@ void spaControl_action(void)
   {
     setClockMode();
     spaControlParams.is_clockMode_present = false;
+  }
+  else if(spaControlParams.is_tempScale_present)
+  {
+    setTempScale();
+    spaControlParams.is_tempScale_present = false;
   }
   else if(spaControlParams.is_cleanupCycle_present)
   {
@@ -825,18 +838,50 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
 
         if(spaStatusData.tempRange == 1) // Set temp range is HIGH. i.e. : 26.5 degree celcius to 40 degree celcius
         {
-          if(sendSetTemp >= 26.5 && sendSetTemp <= 40)
+          if(spaStatusData.tempScale == 1)
           {
-            spaControlParams->is_set_temp_present = true;
-            spaControlParams->setTempCommand = true;
+            if(sendSetTemp >= 26.5 && sendSetTemp <= 40)
+            {
+              spaControlParams->is_set_temp_present = true;
+              spaControlParams->setTempCommand = true;
+            }
+          }
+          else if(spaStatusData.tempScale == 0)
+          {
+            if(sendSetTemp >= 80 && sendSetTemp <= 104)
+            {
+              spaControlParams->is_set_temp_present = true;
+              spaControlParams->setTempCommand = true;
+            }
+          }
+          else
+          {
+            spaControlParams->is_set_temp_present = false;
+            spaControlParams->setTempCommand = false;
           }
         }
         else if(spaStatusData.tempRange == 0) // Set temp range is LOW. i.e. : 10 degree celcius to 37 degree celcius
         {
-          if(sendSetTemp >= 10 && sendSetTemp <= 37)
+          if(spaStatusData.tempScale == 1)
           {
-            spaControlParams->is_set_temp_present = true;
-            spaControlParams->setTempCommand = true;
+            if(sendSetTemp >= 10 && sendSetTemp <= 37)
+            {
+              spaControlParams->is_set_temp_present = true;
+              spaControlParams->setTempCommand = true;
+            }
+          }
+          else if(spaStatusData.tempScale == 0)
+          {
+            if(sendSetTemp >= 50 && sendSetTemp <= 99)
+            {
+              spaControlParams->is_set_temp_present = true;
+              spaControlParams->setTempCommand = true;
+            }
+          }
+          else
+          {
+            spaControlParams->is_set_temp_present = false;
+            spaControlParams->setTempCommand = false;
           }
         }
         else
@@ -994,6 +1039,12 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaStatusData.clockMode = doc["payload"]["clockMode"];
         
         spaControlParams->is_clockMode_present = true;
+      }
+      else if(doc["payload"].containsKey("tempScale"))
+      {
+        spaStatusData.tempScale = doc["payload"]["tempScale"];
+        
+        spaControlParams->is_tempScale_present = true;
       }
       else if(doc["payload"].containsKey("cleanupCycle"))
       {
@@ -1665,7 +1716,19 @@ void toggleLight1(void)
 
 void setTemp(float temp)
 {
-  temp = temp*2;
+  if(spaStatusData.tempScale)
+  {
+   temp = temp*2;
+  }
+  else if(spaStatusData.tempScale == 0)
+  {
+    temp = temp;
+  }
+  else
+  {
+    temp = temp;
+  }
+
   CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
   dataBuffer.push(id);
   dataBuffer.push(0xBF);
@@ -1810,6 +1873,19 @@ void setClockMode(void)
   dataBuffer.push(0x27);
   dataBuffer.push(0x02);
   dataBuffer.push(spaStatusData.clockMode);
+
+  addCRC(dataBuffer);
+  sendMessageToSpa(dataBuffer);
+}
+
+void setTempScale(void)
+{
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x27);
+  dataBuffer.push(0x01);
+  dataBuffer.push(spaStatusData.tempScale);
 
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);

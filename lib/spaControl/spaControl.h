@@ -70,6 +70,7 @@ typedef struct {
   bool  time;
 
   bool is_clockMode_present;
+    bool is_tempScale_present;
   bool is_cleanupCycle_present;
 } spaControlParams_t;
 
