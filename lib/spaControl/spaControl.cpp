@@ -58,6 +58,7 @@ void setTemp(float temp);
 void informationRequest(void);
 void spaControl_appand_device_info(DynamicJsonDocument* doc);
 void spaControl_create_filter_cycle(char *json_str);
+void spaControl_create_hold_status(char *json_str);
 void spaControl_create_fwVersion(char *json_str);
 void setCleanupCycle(void);
 void setClockMode(void);
@@ -255,6 +256,10 @@ void spaControl_action(void)
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.filterCycle)
+      {
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.hold)
       {
         set_spaControlStatus(spaControlStatus);
       }
@@ -760,6 +765,16 @@ void spaControl_mqtt_action(void)
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
+  if(spaControlStatus.hold)
+  {
+    spaControlStatus.hold = false;
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
+    spaControl_create_hold_status(json_str);
+    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+  }
+
   if(spaControlStatus.fwVersion)
   {
     spaControlStatus.fwVersion = false;
@@ -1024,11 +1039,9 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("hold"))
       {
-        int hold = doc["payload"]["hold"];
-        Log.notice("Hold: %d\n", hold);
-
         spaControlParams->is_hold_present = true;
-        spaControlParams->hold = hold;
+        // spaControlStatus->hold = true;
+        spaControlParams->hold = true;
       }
       else if(doc["payload"].containsKey("time"))
       {
@@ -1200,12 +1213,9 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       // {
       //     spaControlStatus->fwVersion = true;
       // }
-      else if(doc["payload"].containsKey("hold"))
+      else if(doc["payload"].containsKey("holdStatus"))
       {
-        int heatMode = doc["payload"]["hold"];
-        Log.notice("Heat Mode : %d\n", heatMode);
-
-        // spaControlStatus->heatMode = true;
+        spaControlStatus->hold = true;
       }
     }
 
@@ -1278,6 +1288,39 @@ void spaControl_create_fwVersion(char *json_str)
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
   payload["fwVersion"] = FW_REV_STR;
+
+  if(spaControlStatus.device_info)
+  {
+    spaControl_appand_device_info(&doc);
+  }
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+}
+
+void spaControl_create_hold_status(char *json_str)
+{
+  // Create a JSON document
+  DynamicJsonDocument doc(200);
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "holdStatus";
+
+  // Create "payload" as a nested object
+  JsonObject payload = doc.createNestedObject("payload");
+  if(spaStatusData.spaState == 0x05)
+  {
+    payload["holdStatus"] = "On Hold";
+    payload["Remaining Minutes"] = spaStatusData.sensorA;
+  }
+  else
+  {
+    payload["holdStatus"] = "Not On Hold";
+  }
 
   if(spaControlStatus.device_info)
   {

@@ -706,6 +706,7 @@ bool parseStatusMessage(u_int8_t *message, int length)
       spaControlStatus_t spaControlStatus = {0};
       memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
       spaControlStatus.deviceStatus = true;
+      spaControlStatus.hold = true;
       set_spaControlStatus(spaControlStatus);
     }
     // else if(spaControlParams.is_time_present)
