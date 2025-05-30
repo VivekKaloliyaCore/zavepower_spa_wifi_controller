@@ -86,6 +86,7 @@ void mqttModuleSetup()
 
 void mqttModuleLoop()
 {
+
   // TODO: Implement MQTT module loop
   if (!mqtt.connected())
   {

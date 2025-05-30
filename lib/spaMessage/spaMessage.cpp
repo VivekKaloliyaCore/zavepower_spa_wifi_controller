@@ -146,6 +146,7 @@ void spaMessageSetup()
 
 void spaMessageLoop()
 {
+  
   // Log.verbose(F("[Mess]: spaMessageLoop - %d" CR), uxQueueMessagesWaiting(spaReadQueue));
   if (uxQueueMessagesWaiting(spaReadQueue) > 0)
   {

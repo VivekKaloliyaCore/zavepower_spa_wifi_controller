@@ -44,6 +44,7 @@ String clientUrl;
 Preferences api;
 
 char k = 0;
+char j = 0;
 
 // Local Function
 void switchTempRange(void);
@@ -65,6 +66,7 @@ void setCleanupCycle(void);
 void setClockMode(void);
 void setTempScale(void);
 void setM8(void);
+void configRequest(void);
 
 void myFunction()
 {
@@ -207,6 +209,12 @@ void spaControl_action(void)
   //   spaControlParams.setTempCommand = false;
   //   setTemp(0x1E);
   // }
+
+  if(j == 1)
+  {
+    spaControlStatus.setupInfo = true;
+    j++;
+  }
 
   if(mqtt_params.parse_mqtt_msg)
   {
@@ -749,6 +757,7 @@ void spaControl_mqtt_action(void)
     k = 0;
     spaControl_create_setupInfo(spa_information_data, json_str);
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    Log.notice(">>>>Setup Info Published\n");
   }
 
   if(spaControlStatus.tempRange)
@@ -958,27 +967,36 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       }
       else if(doc["payload"].containsKey("jet3"))
       {
-        int jet3 = doc["payload"]["jet3"];
-        Log.notice("Jet3: %d\n", jet3);
+        if(spaConfigurationData.pump3)
+        {
+          int jet3 = doc["payload"]["jet3"];
+          Log.notice("Jet3: %d\n", jet3);
 
-        spaControlParams->is_jet3_present = true;
-        spaControlParams->jet3 = jet3;
+          spaControlParams->is_jet3_present = true;
+          spaControlParams->jet3 = jet3;
+        }
       }
       else if(doc["payload"].containsKey("jet4"))
       {
-        int jet4 = doc["payload"]["jet4"];
-        Log.notice("Jet2: %d\n", jet4);
+        if(spaConfigurationData.pump4)
+        {
+          int jet4 = doc["payload"]["jet4"];
+          Log.notice("Jet4: %d\n", jet4);
 
-        spaControlParams->is_jet4_present = true;
-        spaControlParams->jet4 = jet4;
+          spaControlParams->is_jet4_present = true;
+          spaControlParams->jet4 = jet4;
+        }
       }
       else if(doc["payload"].containsKey("blower1"))
       {
+       if(spaConfigurationData.blower)
+       {
         int blower1 = doc["payload"]["blower1"];
         Log.notice("Blower1: %d\n", blower1);
 
         spaControlParams->is_blower1_present = true;
         spaControlParams->blower1 = blower1;
+       }
       }
       else if(doc["payload"].containsKey("light1"))
       {
@@ -1212,13 +1230,13 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
 
         spaControlStatus->tempRange = true;
       }
-      // else if(doc["payload"].containsKey("setupInfo"))
-      // {
-      //   // informationRequest();
-      //   // configRequest();
-      //   spaControlStatus->setupInfo = true;
-      //   // delay(100);
-      // }
+      else if(doc["payload"].containsKey("setupInfo"))
+      {
+        // informationRequest();
+        // configRequest();
+        spaControlStatus->setupInfo = true;
+        // delay(100);
+      }
       else if(doc["payload"].containsKey("filterCycle"))
       {
         spaControlStatus->filterCycle = true;
@@ -1231,10 +1249,10 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
           spaControlStatus->filter2 = true;
         }
       }
-      // else if(doc["payload"].containsKey("fwVersion"))
-      // {
-      //     spaControlStatus->fwVersion = true;
-      // }
+      else if(doc["payload"].containsKey("fwVersion"))
+      {
+          spaControlStatus->fwVersion = true;
+      }
       else if(doc["payload"].containsKey("holdStatus"))
       {
         spaControlStatus->hold = true;
@@ -1455,41 +1473,41 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
-  // if(spaConfigurationData.pump1 >= 1)
-  // {
-  // payload["jet1"] = getMapDescription(_SpaStatusData.pump1, pumpMap);
-  // }
-  // if(spaConfigurationData.pump2 >= 1)
-  // {
-  // payload["jet2"] = getMapDescription(_SpaStatusData.pump2, pumpMap);
-  // }
-  // if(spaConfigurationData.pump3 >= 1)
-  // {
-  // payload["jet3"] = getMapDescription(_SpaStatusData.pump3, pumpMap);
-  // }
-  // if(spaConfigurationData.pump4 >= 1)
-  // {
-  // payload["jet4"] = getMapDescription(_SpaStatusData.pump4, pumpMap);
-  // }
-  // if(spaConfigurationData.blower >= 1)
-  // {
-  // payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
-  // }
-  // if(spaConfigurationData.light1 >= 1)
-  // {
-  // payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
-  // }
-  // if(spaConfigurationData.light2 >= 1)
-  // {
-  // payload["light2"] = getMapDescription(_SpaStatusData.light2, onOffMap);
-  // }
+  if(spaConfigurationData.pump1 >= 1)
+  {
+    payload["jet1"] = getMapDescription(_SpaStatusData.pump1, pumpMap);
+  }
+  if(spaConfigurationData.pump2 >= 1)
+  {
+    payload["jet2"] = getMapDescription(_SpaStatusData.pump2, pumpMap);
+  }
+  if(spaConfigurationData.pump3 >= 1)
+  {
+    payload["jet3"] = getMapDescription(_SpaStatusData.pump3, pumpMap);
+  }
+  if(spaConfigurationData.pump4 >= 1)
+  {
+    payload["jet4"] = getMapDescription(_SpaStatusData.pump4, pumpMap);
+  }
+  if(spaConfigurationData.blower >= 1)
+  {
+    payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
+  }
+  if(spaConfigurationData.light1 >= 1)
+  {
+    payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
+  }
+  if(spaConfigurationData.light2 >= 1)
+  {
+    payload["light2"] = getMapDescription(_SpaStatusData.light2, onOffMap);
+  }
 
-  payload["jet1"] = getMapDescription(_SpaStatusData.pump1, pumpMap);
-  payload["jet2"] = getMapDescription(_SpaStatusData.pump2, pumpMap);
-  payload["jet3"] = getMapDescription(_SpaStatusData.pump3, pumpMap);
-  payload["jet4"] = getMapDescription(_SpaStatusData.pump4, pumpMap);
-  payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
-  payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
+  // payload["jet1"] = getMapDescription(_SpaStatusData.pump1, pumpMap);
+  // payload["jet2"] = getMapDescription(_SpaStatusData.pump2, pumpMap);
+  // payload["jet3"] = getMapDescription(_SpaStatusData.pump3, pumpMap);
+  // payload["jet4"] = getMapDescription(_SpaStatusData.pump4, pumpMap);
+  // payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
+  // payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
   char currenttemp[20];
   char settemp[20];
   if(spaStatusData.tempScale == 0)
@@ -1532,8 +1550,19 @@ void spaControl_create_currentTemp(SpaStatusData _SpaStatusData, char *json_str)
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
-  payload["currentTemp"] = _SpaStatusData.currentTemp;
+  char currenttemp[20];
+  
+  if(spaStatusData.tempScale == 0)
+  {
+    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Fahrenheit", _SpaStatusData.currentTemp);
+  }
+  else if(spaStatusData.tempScale == 1)
+  {
+    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Celsius", _SpaStatusData.currentTemp);
+  }
 
+  payload["currentTemp"] = currenttemp;
+  
   if(spaControlStatus.device_info)
   {
     spaControl_appand_device_info(&doc);
@@ -1557,7 +1586,18 @@ void spaControl_create_setTemp(SpaStatusData _SpaStatusData, char *json_str)
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
-  payload["setTemp"] = _SpaStatusData.setTemp;
+
+  char settemp[20];
+  if(spaStatusData.tempScale == 0)
+  {
+    snprintf(settemp, sizeof(settemp), "%3.1f Fahrenheit", _SpaStatusData.setTemp);
+  }
+  else if(spaStatusData.tempScale == 1)
+  {
+    snprintf(settemp, sizeof(settemp), "%3.1f Celsius", _SpaStatusData.setTemp);
+  }
+
+  payload["setTemp"] = settemp;
 
   if(spaControlStatus.device_info)
   {

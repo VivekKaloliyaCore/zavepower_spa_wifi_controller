@@ -7,17 +7,18 @@
 #include <wifiModule.h>
 #include <spaMessage.h>
 #include <spaUtilities.h>
-#include <mqttModule.h>
+#include <../lib/mqttModule/mqttModule.h>
 #include <rs485.h>
 #include <bridge.h>
 
 #include "main.h"
 #include "../httpsClient/httpsClient.h"
+#include "../lib/spaControl/spaControl.h"
 
 String buildDefinitionString = "";
 #define addBuildDefinition(name) buildDefinitionString += #name " ";
 
-char j = 0;
+// char j = 0;
 void setup()
 {
   // Launch serial for debugging purposes
@@ -74,10 +75,16 @@ void setup()
 
 void loop()
 {
-  // if(j == 0)
+  if(j == 0)
+  {
+    configRequest(); // Sending config request once
+    Log.notice(">>>>Config Req Sent\n");
+    j++;
+  }
+  // if(j == 1)
   // {
-  //   configRequest();
-  //   j = 1;
+  //   spaControlStatus.setupInfo = true;
+  //   j++;
   // }
 
   // rs485Loop();

@@ -14,6 +14,7 @@ extern String clientUrl;
 // extern uint8_t hour;
 // extern uint8_t minute;
 // extern uint8_t cleanupCycleTime;
+extern char j;
 
 typedef struct {
   bool is_mqtt_topic_postfix_present;
