@@ -440,7 +440,12 @@ void parseConfigurationResponse(u_int8_t *message, int length)
 
   // Log.verbose(F("[Mess]: Configuration Response: %s" CR), msgToString(hexArray, length - 7).c_str());
   publishSpaConfigurationData();
-
+  
+  if(spaControlStatus.setupInfo == 1)
+  {
+    spaControlStatus.setupInfo = 2;
+  }
+  
 }
 
 /*

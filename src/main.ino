@@ -75,18 +75,6 @@ void setup()
 
 void loop()
 {
-  if(j == 0)
-  {
-    configRequest(); // Sending config request once
-    Log.notice(">>>>Config Req Sent\n");
-    j++;
-  }
-  // if(j == 1)
-  // {
-  //   spaControlStatus.setupInfo = true;
-  //   j++;
-  // }
-
   // rs485Loop();
   wifiModuleLoop();
 
@@ -100,12 +88,4 @@ void loop()
   }
 
 
-  // setTime(hour, minute);
-  // delay(3000);
-  // hour++;
-  // minute++;
-  // toggleHoldState();
-  // delay(3000);
-  // toggleHoldState();
-  // delay(3000);
 }

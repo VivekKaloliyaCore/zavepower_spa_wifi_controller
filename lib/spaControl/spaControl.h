@@ -83,7 +83,6 @@ typedef struct {
 
 typedef struct {
   bool deviceStatus;
-  
   bool bootupPacket;
   bool currentTemp;
   bool setTemp;
@@ -93,7 +92,7 @@ typedef struct {
   bool device_info;
   int device_id;
   int user_id;
-  bool setupInfo;
+  uint8_t setupInfo;
   bool filterCycle;
   bool filter1;
   bool filter2;
@@ -108,6 +107,7 @@ typedef struct {
 } otaParams_t;
 
 
+extern spaControlStatus_t spaControlStatus;
 
 void startSpaCmdSendTimer();
 void stopSpaCmdSendTimer();

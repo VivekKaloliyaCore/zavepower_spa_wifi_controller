@@ -36,7 +36,7 @@ bool spaCmdSendTimerRunning = false;
 bool sendSpaCmdSend = false;
 
 static spaControlParams_t spaControlParams = {0};
-static spaControlStatus_t spaControlStatus = {0};
+spaControlStatus_t spaControlStatus = {0};
 
 // SpaFilterSettingsData spaFilterSettingsData = {0};
 
@@ -205,18 +205,6 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
 
 void spaControl_action(void)
 {
-  // if(spaControlParams.setTempCommand)
-  // {
-  //   spaControlParams.setTempCommand = false;
-  //   setTemp(0x1E);
-  // }
-
-  if(j == 1)
-  {
-    spaControlStatus.setupInfo = true;
-    j++;
-  }
-
   if(mqtt_params.parse_mqtt_msg)
   {
     mqtt_params.is_parse_mqtt_msg_present = false;
@@ -263,7 +251,7 @@ void spaControl_action(void)
       {
         set_spaControlStatus(spaControlStatus);
       }
-      else if(spaControlStatus.setupInfo)
+      else if(spaControlStatus.setupInfo >= 1)
       {
         set_spaControlStatus(spaControlStatus);
       }
@@ -752,14 +740,12 @@ void spaControl_mqtt_action(void)
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
-  if(spaControlStatus.setupInfo)
+  if(spaControlStatus.setupInfo == 2)
   {
-    delay(500);
-    spaControlStatus.setupInfo = false;
+    spaControlStatus.setupInfo = 0;
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
     SpaInformationData spa_information_data = spaMessage_get_spaInformationData();
-    k = 0;
     spaControl_create_setupInfo(spa_information_data, json_str);
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
     Log.notice(">>>>Setup Info Published\n");
@@ -1239,7 +1225,7 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       {
         // informationRequest();
         // configRequest();
-        spaControlStatus->setupInfo = true;
+        spaControlStatus->setupInfo = 2;
         // delay(100);
       }
       else if(doc["payload"].containsKey("filterCycle"))
@@ -1680,19 +1666,19 @@ void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *
   payload["Mister"] = spaConfigurationData.mister;
 
   
-  // payload["DIPSwitch"] = spaInformationData.dipSwitch;
-   if(k == 0)
-  {
-    Log.notice("Cofig ::: Pump1 : %d, Pump2 : %d, Pump3 : %d\n \
-       Pump4 : %d, Pump5 : %d, Pump6 : %d\n \
-       Blower : %d, Circulation : %d\n \
-       Light1 : %d, Light2 : %d\n \
-       Aux1 : %d, Aux2 : %d, Mister : %d\n" \
-       , spaConfigurationData.pump1, spaConfigurationData.pump2, spaConfigurationData.pump3, spaConfigurationData.pump4, \
-       spaConfigurationData.pump5, spaConfigurationData.pump6, spaConfigurationData.blower, spaConfigurationData.circulationPump, \
-       spaConfigurationData.light1, spaConfigurationData.light2, spaConfigurationData.aux1, spaConfigurationData.aux2, spaConfigurationData.mister);
-    k = 1;
-  }
+  // // payload["DIPSwitch"] = spaInformationData.dipSwitch;
+  //  if(k == 0)
+  // {
+  //   Log.notice("Cofig ::: Pump1 : %d, Pump2 : %d, Pump3 : %d\n \
+  //      Pump4 : %d, Pump5 : %d, Pump6 : %d\n \
+  //      Blower : %d, Circulation : %d\n \
+  //      Light1 : %d, Light2 : %d\n \
+  //      Aux1 : %d, Aux2 : %d, Mister : %d\n" \
+  //      , spaConfigurationData.pump1, spaConfigurationData.pump2, spaConfigurationData.pump3, spaConfigurationData.pump4, \
+  //      spaConfigurationData.pump5, spaConfigurationData.pump6, spaConfigurationData.blower, spaConfigurationData.circulationPump, \
+  //      spaConfigurationData.light1, spaConfigurationData.light2, spaConfigurationData.aux1, spaConfigurationData.aux2, spaConfigurationData.mister);
+  //   k = 1;
+  // }
   if(spaControlStatus.device_info)
   {
     spaControl_appand_device_info(&doc);
@@ -1991,7 +1977,7 @@ void configRequest(void)
   dataBuffer.push(0x01);
 
   addCRC(dataBuffer);
-  sendMessageToSpa(dataBuffer);
+  rs485Write(dataBuffer);
   
   // spaControlStatus.setupInfo = true;
 }
