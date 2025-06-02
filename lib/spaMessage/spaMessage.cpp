@@ -697,6 +697,20 @@ bool parseStatusMessage(u_int8_t *message, int length)
       spaControlStatus.deviceStatus = true;
       set_spaControlStatus(spaControlStatus);
     }
+    // else if(spaControlParams.is_filterCycle_present)
+    // {
+    //   spaControlParams.is_filterCycle_present = false;
+    //   spaControlParams.filterCycle = 0;
+    //   set_spaControlParams(spaControlParams);
+
+    //   Log.notice("Sending AUTO deviceStatus...\n");
+    //   spaControlStatus_t spaControlStatus = {0};
+    //   memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
+    //   spaControlStatus.filterCycle = true;
+    //   spaControlStatus.filter1 = true;
+    //   spaControlStatus.filter2 = true;
+    //   set_spaControlStatus(spaControlStatus);
+    // }
     else if(spaControlParams.is_hold_present)
     {
       spaControlParams.is_hold_present = false;

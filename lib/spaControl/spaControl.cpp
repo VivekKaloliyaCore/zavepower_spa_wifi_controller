@@ -157,6 +157,7 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   spaControlParams.setTempCommand = _spaControlParams.setTempCommand;
 
   spaControlParams.is_filterCycle_present = _spaControlParams.is_filterCycle_present;
+  spaControlParams.filterCycle = _spaControlParams.filterCycle;
 
   spaControlParams.is_hold_present = _spaControlParams.is_hold_present;
   spaControlParams.hold = _spaControlParams.hold;
@@ -576,8 +577,12 @@ void spaControl_action(void)
   }
   else if(spaControlParams.is_filterCycle_present)
   {
-      spaControlParams.is_filterCycle_present = false;
+    if(spaControlParams.filterCycle)
+    {
+      spaControlParams.filterCycle = false;
       filterCycleTrial();
+    }
+
   }
   else if(spaControlParams.is_hold_present)
   {
@@ -1014,48 +1019,48 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlParams->is_reset_wifi_sta_present = true;
         spaControlParams->reset_wifi_sta = reset_wifi_sta;
       }
+      // else if(doc["payload"].containsKey("filterCycle"))
+      // {
+      //   spaControlParams->is_filterCycle_present = true;
+      //   spaControlParams->filterCycle = true;
+      //   if(doc["payload"]["filterCycle"].containsKey("1"))
+      //   {
+      //     Log.notice("Filter 1 Received\n");
+      //     spaFilterSettingsData.filt1Hour = doc["payload"]["filterCycle"]["1"]["startTimeHr"];
+      //     spaFilterSettingsData.filt1Minute = doc["payload"]["filterCycle"]["1"]["startTimeMin"];
+      //     spaFilterSettingsData.filt1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
+      //     spaFilterSettingsData.filt1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
+      //   }
+      //   if(doc["payload"]["filterCycle"].containsKey("2"))
+      //   {
 
-      else if(doc["payload"].containsKey("filterCycle"))
-      {
-        spaControlParams->is_filterCycle_present = true;
-        if(doc["payload"]["filterCycle"].containsKey("1"))
-        {
-          Log.notice("Filter 1 Received\n");
-          spaFilterSettingsData.filt1Hour = doc["payload"]["filterCycle"]["1"]["startTimeHr"];
-          spaFilterSettingsData.filt1Minute = doc["payload"]["filterCycle"]["1"]["startTimeMin"];
-          spaFilterSettingsData.filt1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
-          spaFilterSettingsData.filt1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
-        }
-        if(doc["payload"]["filterCycle"].containsKey("2"))
-        {
-
-          Log.notice("Filter 2 Received\n");
-          if(doc["payload"]["filterCycle"]["2"]["enable"] == true)
-          {
-            spaFilterSettingsData.filt2Enable = 1;
-            spaFilterSettingsData.filt2Hour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
-            spaFilterSettingsData.filt2Minute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
-            spaFilterSettingsData.filt2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
-            spaFilterSettingsData.filt2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
-          }
-          else
-          { 
-            spaFilterSettingsData.filt2Enable = 0;
-            spaFilterSettingsData.filt2Hour = 0;
-            spaFilterSettingsData.filt2Minute = 0;
-            spaFilterSettingsData.filt2DurationHour = 0;
-            spaFilterSettingsData.filt2DurationMinute = 0;
-          }
-        }
-        else
-        {
-          spaFilterSettingsData.filt2Enable = 0;
-          spaFilterSettingsData.filt2Hour = 0;
-          spaFilterSettingsData.filt2Minute = 0;
-          spaFilterSettingsData.filt2DurationHour = 0;
-          spaFilterSettingsData.filt2DurationMinute = 0;
-        }
-      }
+      //     Log.notice("Filter 2 Received\n");
+      //     if(doc["payload"]["filterCycle"]["2"]["enable"] == true)
+      //     {
+      //       spaFilterSettingsData.filt2Enable = 1;
+      //       spaFilterSettingsData.filt2Hour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
+      //       spaFilterSettingsData.filt2Minute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
+      //       spaFilterSettingsData.filt2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
+      //       spaFilterSettingsData.filt2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
+      //     }
+      //     else
+      //     { 
+      //       spaFilterSettingsData.filt2Enable = 0;
+      //       spaFilterSettingsData.filt2Hour = 0;
+      //       spaFilterSettingsData.filt2Minute = 0;
+      //       spaFilterSettingsData.filt2DurationHour = 0;
+      //       spaFilterSettingsData.filt2DurationMinute = 0;
+      //     }
+      //   }
+      //   else
+      //   {
+      //     spaFilterSettingsData.filt2Enable = 0;
+      //     spaFilterSettingsData.filt2Hour = 0;
+      //     spaFilterSettingsData.filt2Minute = 0;
+      //     spaFilterSettingsData.filt2DurationHour = 0;
+      //     spaFilterSettingsData.filt2DurationMinute = 0;
+      //   }
+      // }
       else if(doc["payload"].containsKey("errorCodeURL"))
       {
         String url = doc["payload"]["errorCodeURL"];

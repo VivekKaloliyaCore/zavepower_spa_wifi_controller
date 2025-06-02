@@ -63,6 +63,7 @@ typedef struct {
   bool setModeRest;
 
   bool is_filterCycle_present;
+  bool filterCycle;
 
   bool  is_hold_present;
   bool  hold;
