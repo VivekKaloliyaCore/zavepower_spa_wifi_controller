@@ -716,19 +716,19 @@ bool parseStatusMessage(u_int8_t *message, int length)
     //   spaControlStatus.filter2 = true;
     //   set_spaControlStatus(spaControlStatus);
     // }
-    else if(spaControlParams.is_hold_present)
-    {
-      spaControlParams.is_hold_present = false;
-      spaControlParams.hold = 0;
-      set_spaControlParams(spaControlParams);
+    // else if(spaControlParams.is_hold_present)
+    // {
+    //   spaControlParams.is_hold_present = false;
+    //   spaControlParams.hold = 0;
+    //   set_spaControlParams(spaControlParams);
 
-      Log.notice("Sending AUTO deviceStatus...\n");
-      spaControlStatus_t spaControlStatus = {0};
-      memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
-      spaControlStatus.deviceStatus = true;
-      spaControlStatus.hold = true;
-      set_spaControlStatus(spaControlStatus);
-    }
+    //   Log.notice("Sending AUTO deviceStatus...\n");
+    //   spaControlStatus_t spaControlStatus = {0};
+    //   memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
+    //   spaControlStatus.deviceStatus = true;
+    //   spaControlStatus.hold = true;
+    //   set_spaControlStatus(spaControlStatus);
+    // }
     else if(spaControlParams.is_tempScale_present)
     {
       spaControlParams.is_tempScale_present = false;

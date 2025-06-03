@@ -28,8 +28,8 @@ float sendSetTemp = 0;
 
 uint8_t hour = 0;
 uint8_t minute = 0;
-uint8_t cleanupCycleTime = 0;
-uint8_t m8 = 0;
+// uint8_t cleanupCycleTime = 0;
+// uint8_t m8 = 0;
 
 Ticker spaCmdSendTimer;
 bool spaCmdSendTimerRunning = false;
@@ -59,13 +59,13 @@ void setTemp(float temp);
 void informationRequest(void);
 void spaControl_appand_device_info(DynamicJsonDocument* doc);
 void spaControl_create_filter_cycle(char *json_str);
-void spaControl_create_hold_status(char *json_str);
+// void spaControl_create_hold_status(char *json_str);
 void spaControl_create_tempScale_status(char *json_str);
 void spaControl_create_fwVersion(char *json_str);
-void setCleanupCycle(void);
+// void setCleanupCycle(void);
 void setClockMode(void);
 void setTempScale(void);
-void setM8(void);
+// void setM8(void);
 void configRequest(void);
 
 void myFunction()
@@ -159,8 +159,8 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   spaControlParams.is_filterCycle_present = _spaControlParams.is_filterCycle_present;
   spaControlParams.filterCycle = _spaControlParams.filterCycle;
 
-  spaControlParams.is_hold_present = _spaControlParams.is_hold_present;
-  spaControlParams.hold = _spaControlParams.hold;
+  // spaControlParams.is_hold_present = _spaControlParams.is_hold_present;
+  // spaControlParams.hold = _spaControlParams.hold;
 
   spaControlParams.is_time_present = _spaControlParams.is_time_present;
 
@@ -169,9 +169,9 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   spaControlParams.is_tempScale_present = _spaControlParams.is_tempScale_present;
   spaControlParams.tempScale = _spaControlParams.tempScale;
 
-  spaControlParams.is_m8_present = _spaControlParams.is_m8_present;
+  // spaControlParams.is_m8_present = _spaControlParams.is_m8_present;
 
-  spaControlParams.is_cleanupCycle_present = _spaControlParams.is_cleanupCycle_present;
+  // spaControlParams.is_cleanupCycle_present = _spaControlParams.is_cleanupCycle_present;
   // spaControlParams.is_reset_wifi_sta_present = _spaControlParams.is_reset_wifi_sta_present;
   // spaControlParams.reset_wifi_sta = _spaControlParams.reset_wifi_sta;
 }
@@ -198,7 +198,7 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.filter1 = _spaControlStatus.filter1;
   spaControlStatus.filter2 = _spaControlStatus.filter2;
   spaControlStatus.fwVersion = _spaControlStatus.fwVersion;
-  spaControlStatus.hold = _spaControlStatus.hold;
+  // spaControlStatus.hold = _spaControlStatus.hold;
   spaControlStatus.tempScale = _spaControlStatus.tempScale;
 }
 
@@ -259,10 +259,10 @@ void spaControl_action(void)
       {
         set_spaControlStatus(spaControlStatus);
       }
-      else if(spaControlStatus.hold)
-      {
-        set_spaControlStatus(spaControlStatus);
-      }
+      // else if(spaControlStatus.hold)
+      // {
+      //   set_spaControlStatus(spaControlStatus);
+      // }
       else if(spaControlStatus.tempScale)
       {
         set_spaControlStatus(spaControlStatus);
@@ -347,11 +347,11 @@ void spaControl_action(void)
         // Log.notice("Sending currentTemp...\n");
         set_spaControlParams(spaControlParams);
       }
-      else if(spaControlParams.is_hold_present)
-      {
-        Log.notice("Sending Hold command...\n");
-        set_spaControlParams(spaControlParams);
-      }
+      // else if(spaControlParams.is_hold_present)
+      // {
+      //   Log.notice("Sending Hold command...\n");
+      //   set_spaControlParams(spaControlParams);
+      // }
       else if(spaControlParams.is_time_present)
       {
         Log.notice("Sending time command...\n");
@@ -367,16 +367,16 @@ void spaControl_action(void)
         Log.notice("Sending time command...\n");
         set_spaControlParams(spaControlParams);
       }
-      else if(spaControlParams.is_m8_present)
-      {
-        Log.notice("Sending time command...\n");
-        set_spaControlParams(spaControlParams);
-      }
-      else if(spaControlParams.is_cleanupCycle_present)
-      {
-        Log.notice("Sending time command...\n");
-        set_spaControlParams(spaControlParams);
-      }
+      // else if(spaControlParams.is_m8_present)
+      // {
+      //   Log.notice("Sending time command...\n");
+      //   set_spaControlParams(spaControlParams);
+      // }
+      // else if(spaControlParams.is_cleanupCycle_present)
+      // {
+      //   Log.notice("Sending time command...\n");
+      //   set_spaControlParams(spaControlParams);
+      // }
 
       if(otaParams.is_url_present)
       {
@@ -568,28 +568,28 @@ void spaControl_action(void)
     if(spaControlParams.filterCycle)
     {
       spaControlParams.filterCycle = false;
-      filterCycleTrial();
+      // filterCycleTrial();
     }
 
   }
-  else if(spaControlParams.is_hold_present)
-  {
-    if(spaControlParams.hold)
-    {
-      if(sendSpaCmdSend || !spaCmdSendTimerRunning)
-      {
-        toggleHoldState();
+  // else if(spaControlParams.is_hold_present)
+  // {
+  //   if(spaControlParams.hold)
+  //   {
+  //     if(sendSpaCmdSend || !spaCmdSendTimerRunning)
+  //     {
+  //       toggleHoldState();
 
-        sendSpaCmdSend = false;
-        startSpaCmdSendTimer();
-      }
-    }
-    else
-    {
-      sendSpaCmdSend = false;
-      stopSpaCmdSendTimer();
-    }
-  }
+  //       sendSpaCmdSend = false;
+  //       startSpaCmdSendTimer();
+  //     }
+  //   }
+  //   else
+  //   {
+  //     sendSpaCmdSend = false;
+  //     stopSpaCmdSendTimer();
+  //   }
+  // }
   else if(spaControlParams.is_time_present)
   {
     setTime(hour, minute);
@@ -605,16 +605,16 @@ void spaControl_action(void)
     setTempScale();
     // spaControlParams.is_tempScale_present = false;
   }
-  else if(spaControlParams.is_m8_present)
-  {
-    setM8();
-    spaControlParams.is_m8_present = false;
-  }
-  else if(spaControlParams.is_cleanupCycle_present)
-  {
-    setCleanupCycle();
-    spaControlParams.is_cleanupCycle_present = false;
-  }
+  // else if(spaControlParams.is_m8_present)
+  // {
+  //   setM8();
+  //   spaControlParams.is_m8_present = false;
+  // }
+  // else if(spaControlParams.is_cleanupCycle_present)
+  // {
+  //   setCleanupCycle();
+  //   spaControlParams.is_cleanupCycle_present = false;
+  // }
   // else if(spaControlParams.is_reset_wifi_sta_present)
   // {
   //   if(spaControlParams.reset_wifi_sta)
@@ -772,15 +772,15 @@ void spaControl_mqtt_action(void)
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
-  if(spaControlStatus.hold)
-  {
-    spaControlStatus.hold = false;
-    char json_str[512];
-    memset(&json_str[0], 0, sizeof(json_str));
-    // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
-    spaControl_create_hold_status(json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
-  }
+  // if(spaControlStatus.hold)
+  // {
+  //   spaControlStatus.hold = false;
+  //   char json_str[512];
+  //   memset(&json_str[0], 0, sizeof(json_str));
+  //   // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
+  //   spaControl_create_hold_status(json_str);
+  //   spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+  // }
 
   if(spaControlStatus.tempScale)
   {
@@ -1066,12 +1066,12 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         // cliUrl.putString("clientUrl", clientUrl);
         // Log.notice("Received Client URL: %s\n", url.c_str());
       }
-      else if(doc["payload"].containsKey("hold"))
-      {
-        spaControlParams->is_hold_present = true;
-        // spaControlStatus->hold = true;
-        spaControlParams->hold = true;
-      }
+      // else if(doc["payload"].containsKey("hold"))
+      // {
+      //   spaControlParams->is_hold_present = true;
+      //   // spaControlStatus->hold = true;
+      //   spaControlParams->hold = true;
+      // }
       else if(doc["payload"].containsKey("time"))
       {
         uint8_t hr = doc["payload"]["time"]["hour"];
@@ -1104,78 +1104,78 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlParams->tempScale = true;
 
       }
-      else if(doc["payload"].containsKey("m8"))
-      {
-        m8 = doc["payload"]["m8"];
+      // else if(doc["payload"].containsKey("m8"))
+      // {
+      //   m8 = doc["payload"]["m8"];
         
-        spaControlParams->is_m8_present = true;
-      }
-      else if(doc["payload"].containsKey("cleanupCycle"))
-      {
-        float cleanmin = doc["payload"]["cleanupCycle"];
+      //   spaControlParams->is_m8_present = true;
+      // }
+      // else if(doc["payload"].containsKey("cleanupCycle"))
+      // {
+      //   float cleanmin = doc["payload"]["cleanupCycle"];
 
-        if(cleanmin == 0)
-        {
-          cleanupCycleTime = 0;
-          spaControlParams->is_cleanupCycle_present = true;
-        }
-        else if(cleanmin == 0.5)
-        {
-          cleanupCycleTime = 1;
-          spaControlParams->is_cleanupCycle_present = true;
-        }
-        else if(cleanmin == 1)
-        {
-          cleanupCycleTime = 2;
-          spaControlParams->is_cleanupCycle_present = true;
-        }
-        else if(cleanmin == 1.5)
-        {
-          cleanupCycleTime = 3;
-          spaControlParams->is_cleanupCycle_present = true;
-        }
-        else if(cleanmin == 2)
-        {
-          cleanupCycleTime = 4;
-          spaControlParams->is_cleanupCycle_present = true;
-        }
-        else if(cleanmin == 2.5)
-        {
-          cleanupCycleTime = 5;
-          spaControlParams->is_cleanupCycle_present = true;
-        }
-        else if(cleanmin == 3)
-        {
-          cleanupCycleTime = 6;
-          spaControlParams->is_cleanupCycle_present = true;
-        }
-        else if(cleanmin == 3.5)
-        {
-          cleanupCycleTime = 7;
-          spaControlParams->is_cleanupCycle_present = true;
-        }
-        else if(cleanmin == 4)
-        {
-          cleanupCycleTime = 8;
-          spaControlParams->is_cleanupCycle_present = true;
-        }
-        else
-        {
-          cleanupCycleTime = cleanupCycleTime;
-          spaControlParams->is_cleanupCycle_present = false;
-        }
+      //   if(cleanmin == 0)
+      //   {
+      //     cleanupCycleTime = 0;
+      //     spaControlParams->is_cleanupCycle_present = true;
+      //   }
+      //   else if(cleanmin == 0.5)
+      //   {
+      //     cleanupCycleTime = 1;
+      //     spaControlParams->is_cleanupCycle_present = true;
+      //   }
+      //   else if(cleanmin == 1)
+      //   {
+      //     cleanupCycleTime = 2;
+      //     spaControlParams->is_cleanupCycle_present = true;
+      //   }
+      //   else if(cleanmin == 1.5)
+      //   {
+      //     cleanupCycleTime = 3;
+      //     spaControlParams->is_cleanupCycle_present = true;
+      //   }
+      //   else if(cleanmin == 2)
+      //   {
+      //     cleanupCycleTime = 4;
+      //     spaControlParams->is_cleanupCycle_present = true;
+      //   }
+      //   else if(cleanmin == 2.5)
+      //   {
+      //     cleanupCycleTime = 5;
+      //     spaControlParams->is_cleanupCycle_present = true;
+      //   }
+      //   else if(cleanmin == 3)
+      //   {
+      //     cleanupCycleTime = 6;
+      //     spaControlParams->is_cleanupCycle_present = true;
+      //   }
+      //   else if(cleanmin == 3.5)
+      //   {
+      //     cleanupCycleTime = 7;
+      //     spaControlParams->is_cleanupCycle_present = true;
+      //   }
+      //   else if(cleanmin == 4)
+      //   {
+      //     cleanupCycleTime = 8;
+      //     spaControlParams->is_cleanupCycle_present = true;
+      //   }
+      //   else
+      //   {
+      //     cleanupCycleTime = cleanupCycleTime;
+      //     spaControlParams->is_cleanupCycle_present = false;
+      //   }
         
-        // if(cleanmin <= 8 )
-        // {
-        //   cleanupCycleTime = cleanmin;
-        //   spaControlParams->is_cleanupCycle_present = true;
-        // }
-        // else
-        // {
-        //   cleanupCycleTime = cleanupCycleTime;
-        //   spaControlParams->is_cleanupCycle_present = false;
-        // }
-      }
+      //   // if(cleanmin <= 8 )
+      //   // {
+      //   //   cleanupCycleTime = cleanmin;
+      //   //   spaControlParams->is_cleanupCycle_present = true;
+      //   // }
+      //   // else
+      //   // {
+      //   //   cleanupCycleTime = cleanupCycleTime;
+      //   //   spaControlParams->is_cleanupCycle_present = false;
+      //   // }
+      // }
     }
     else
       return false;
@@ -1244,10 +1244,10 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       {
           spaControlStatus->fwVersion = true;
       }
-      else if(doc["payload"].containsKey("holdStatus"))
-      {
-        spaControlStatus->hold = true;
-      }
+      // else if(doc["payload"].containsKey("holdStatus"))
+      // {
+      //   spaControlStatus->hold = true;
+      // }
       else if(doc["payload"].containsKey("tempScale"))
       {
         spaControlStatus->tempScale = true;
@@ -1336,38 +1336,38 @@ void spaControl_create_fwVersion(char *json_str)
   memcpy(json_str, output.c_str(), strlen(output.c_str()));
 }
 
-void spaControl_create_hold_status(char *json_str)
-{
-  // Create a JSON document
-  DynamicJsonDocument doc(200);
+// void spaControl_create_hold_status(char *json_str)
+// {
+//   // Create a JSON document
+//   DynamicJsonDocument doc(200);
 
-  // Add key-value pairs
-  doc["action"] = "response";
-  doc["msgT"] = "holdStatus";
+//   // Add key-value pairs
+//   doc["action"] = "response";
+//   doc["msgT"] = "holdStatus";
 
-  // Create "payload" as a nested object
-  JsonObject payload = doc.createNestedObject("payload");
-  if(spaStatusData.spaState == 0x05)
-  {
-    payload["holdStatus"] = "On Hold";
-    payload["Remaining Minutes"] = spaStatusData.sensorA;
-  }
-  else
-  {
-    payload["holdStatus"] = "Not On Hold";
-  }
+//   // Create "payload" as a nested object
+//   JsonObject payload = doc.createNestedObject("payload");
+//   if(spaStatusData.spaState == 0x05)
+//   {
+//     payload["holdStatus"] = "On Hold";
+//     payload["Remaining Minutes"] = spaStatusData.sensorA;
+//   }
+//   else
+//   {
+//     payload["holdStatus"] = "Not On Hold";
+//   }
 
-  if(spaControlStatus.device_info)
-  {
-    spaControl_appand_device_info(&doc);
-  }
+//   if(spaControlStatus.device_info)
+//   {
+//     spaControl_appand_device_info(&doc);
+//   }
 
-  // Serialize JSON to a string
-  String output;
-  serializeJson(doc, output);
+//   // Serialize JSON to a string
+//   String output;
+//   serializeJson(doc, output);
 
-  memcpy(json_str, output.c_str(), strlen(output.c_str()));
-}
+//   memcpy(json_str, output.c_str(), strlen(output.c_str()));
+// }
 
 void spaControl_create_tempScale_status(char *json_str)
 {
@@ -1983,18 +1983,18 @@ void configRequest(void)
 }
 
 
-void toggleHoldState(void)
-{
-  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-  dataBuffer.push(id);
-  dataBuffer.push(0xBF);
-  dataBuffer.push(0x11);
-  dataBuffer.push(0x3C);
-  dataBuffer.push(0x00);
+// void toggleHoldState(void)
+// {
+//   CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+//   dataBuffer.push(id);
+//   dataBuffer.push(0xBF);
+//   dataBuffer.push(0x11);
+//   dataBuffer.push(0x3C);
+//   dataBuffer.push(0x00);
 
-  addCRC(dataBuffer);
-  sendMessageToSpa(dataBuffer);
-}
+//   addCRC(dataBuffer);
+//   sendMessageToSpa(dataBuffer);
+// }
 
 
 void setTime(int hour, int minute)
@@ -2019,18 +2019,18 @@ void setTime(int hour, int minute)
   sendMessageToSpa(dataBuffer);
 }
 
-void setCleanupCycle(void)
-{
-  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-  dataBuffer.push(id);
-  dataBuffer.push(0xBF);
-  dataBuffer.push(0x27);
-  dataBuffer.push(0x03);
-  dataBuffer.push(cleanupCycleTime);
+// void setCleanupCycle(void)
+// {
+//   CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+//   dataBuffer.push(id);
+//   dataBuffer.push(0xBF);
+//   dataBuffer.push(0x27);
+//   dataBuffer.push(0x03);
+//   dataBuffer.push(cleanupCycleTime);
 
-  addCRC(dataBuffer);
-  sendMessageToSpa(dataBuffer);
-}
+//   addCRC(dataBuffer);
+//   sendMessageToSpa(dataBuffer);
+// }
 
 void setClockMode(void)
 {
@@ -2058,15 +2058,15 @@ void setTempScale(void)
   sendMessageToSpa(dataBuffer);
 }
 
-void setM8(void)
-{
-  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
-  dataBuffer.push(id);
-  dataBuffer.push(0xBF);
-  dataBuffer.push(0x27);
-  dataBuffer.push(0x06);
-  dataBuffer.push(m8);
+// void setM8(void)
+// {
+//   CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+//   dataBuffer.push(id);
+//   dataBuffer.push(0xBF);
+//   dataBuffer.push(0x27);
+//   dataBuffer.push(0x06);
+//   dataBuffer.push(m8);
 
-  addCRC(dataBuffer);
-  sendMessageToSpa(dataBuffer);
-}
+//   addCRC(dataBuffer);
+//   sendMessageToSpa(dataBuffer);
+// }
