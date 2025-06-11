@@ -344,7 +344,7 @@ void spaControl_action(void)
       }
       else if(spaControlParams.is_filterCycle_present)
       {
-        // Log.notice("Sending currentTemp...\n");
+        Log.notice("Sending filterCycle...\n");
         set_spaControlParams(spaControlParams);
       }
       // else if(spaControlParams.is_hold_present)
@@ -567,9 +567,25 @@ void spaControl_action(void)
   {
     if(spaControlParams.filterCycle)
     {
-      spaControlParams.filterCycle = false;
-      // filterCycleTrial();
+      if(sendSpaCmdSend || !spaCmdSendTimerRunning)
+      {
+        sendSpaCmdSend = false;
+        filterCycleTrial();
+        spaControlParams.filterCycle = false;
+      }
     }
+    else
+    {
+      sendSpaCmdSend = false;
+      stopSpaCmdSendTimer();
+      spaControlParams.filterCycle = false;
+    }
+
+    // if(spaControlParams.filterCycle)
+    // {
+    // //   spaControlParams.filterCycle = false;
+    //   filterCycleTrial();
+    // }
 
   }
   // else if(spaControlParams.is_hold_present)
@@ -1005,48 +1021,87 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlParams->is_reset_wifi_sta_present = true;
         spaControlParams->reset_wifi_sta = reset_wifi_sta;
       }
-      // else if(doc["payload"].containsKey("filterCycle"))
-      // {
-      //   spaControlParams->is_filterCycle_present = true;
-      //   spaControlParams->filterCycle = true;
-      //   if(doc["payload"]["filterCycle"].containsKey("1"))
-      //   {
-      //     Log.notice("Filter 1 Received\n");
-      //     spaFilterSettingsData.filt1Hour = doc["payload"]["filterCycle"]["1"]["startTimeHr"];
-      //     spaFilterSettingsData.filt1Minute = doc["payload"]["filterCycle"]["1"]["startTimeMin"];
-      //     spaFilterSettingsData.filt1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
-      //     spaFilterSettingsData.filt1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
-      //   }
-      //   if(doc["payload"]["filterCycle"].containsKey("2"))
-      //   {
-
-      //     Log.notice("Filter 2 Received\n");
-      //     if(doc["payload"]["filterCycle"]["2"]["enable"] == true)
-      //     {
-      //       spaFilterSettingsData.filt2Enable = 1;
-      //       spaFilterSettingsData.filt2Hour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
-      //       spaFilterSettingsData.filt2Minute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
-      //       spaFilterSettingsData.filt2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
-      //       spaFilterSettingsData.filt2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
-      //     }
-      //     else
-      //     { 
-      //       spaFilterSettingsData.filt2Enable = 0;
-      //       spaFilterSettingsData.filt2Hour = 0;
-      //       spaFilterSettingsData.filt2Minute = 0;
-      //       spaFilterSettingsData.filt2DurationHour = 0;
-      //       spaFilterSettingsData.filt2DurationMinute = 0;
-      //     }
-      //   }
-      //   else
-      //   {
-      //     spaFilterSettingsData.filt2Enable = 0;
-      //     spaFilterSettingsData.filt2Hour = 0;
-      //     spaFilterSettingsData.filt2Minute = 0;
-      //     spaFilterSettingsData.filt2DurationHour = 0;
-      //     spaFilterSettingsData.filt2DurationMinute = 0;
-      //   }
-      // }
+      else if(doc["payload"].containsKey("filterCycle"))
+      {
+        spaControlParams->is_filterCycle_present = true;
+        spaControlParams->filterCycle = true;
+        if(doc["payload"]["filterCycle"].containsKey("1"))
+        {
+          if(doc["payload"]["filterCycle"]["1"].containsKey("startTimeHr") && \
+          doc["payload"]["filterCycle"]["1"].containsKey("startTimeMin") && \
+          doc["payload"]["filterCycle"]["1"].containsKey("durationHr") && \
+          doc["payload"]["filterCycle"]["1"].containsKey("durationMin"))
+          {
+            if(doc["payload"]["filterCycle"]["1"]["startTimeHr"] <= 23 && \
+              doc["payload"]["filterCycle"]["1"]["startTimeMin"] <= 59 && \
+              doc["payload"]["filterCycle"]["1"]["durationHr"] <= 23 && \
+              doc["payload"]["filterCycle"]["1"]["durationMin"] <= 59)
+            {
+              Log.notice("Filter 1 Received\n");
+              spaFilterSettingsData.filt1Hour = doc["payload"]["filterCycle"]["1"]["startTimeHr"];
+              spaFilterSettingsData.filt1Minute = doc["payload"]["filterCycle"]["1"]["startTimeMin"];
+              spaFilterSettingsData.filt1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
+              spaFilterSettingsData.filt1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
+            }
+          }
+        }
+        if(doc["payload"]["filterCycle"].containsKey("2"))
+        {
+          Log.notice("Filter 2 Received\n");
+          if(doc["payload"]["filterCycle"]["2"]["enable"] == true)
+          {
+            if(doc["payload"]["filterCycle"]["2"].containsKey("startTimeHr") && \
+            doc["payload"]["filterCycle"]["2"].containsKey("startTimeMin") && \
+            doc["payload"]["filterCycle"]["2"].containsKey("durationHr") && \
+            doc["payload"]["filterCycle"]["2"].containsKey("durationMin"))
+            {
+              if(doc["payload"]["filterCycle"]["2"]["startTimeHr"] <= 23 && \
+                doc["payload"]["filterCycle"]["2"]["startTimeMin"] <= 59 && \
+                doc["payload"]["filterCycle"]["2"]["durationHr"] <= 23 && \
+                doc["payload"]["filterCycle"]["2"]["durationMin"] <= 59)
+              {
+                spaFilterSettingsData.filt2Enable = 1;
+                spaFilterSettingsData.filt2Hour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
+                spaFilterSettingsData.filt2Minute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
+                spaFilterSettingsData.filt2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
+                spaFilterSettingsData.filt2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
+              }
+              else
+              {
+                spaFilterSettingsData.filt2Enable = spaFilterSettingsData.filt2Enable;
+                spaFilterSettingsData.filt2Hour = spaFilterSettingsData.filt2Hour;
+                spaFilterSettingsData.filt2Minute= spaFilterSettingsData.filt2Minute;
+                spaFilterSettingsData.filt1DurationHour = spaFilterSettingsData.filt1DurationHour;
+                spaFilterSettingsData.filt1DurationMinute = spaFilterSettingsData.filt1DurationMinute;
+              }
+            }
+            else
+            {
+              spaFilterSettingsData.filt2Enable = spaFilterSettingsData.filt2Enable;
+              spaFilterSettingsData.filt2Hour = spaFilterSettingsData.filt2Hour;
+              spaFilterSettingsData.filt2Minute= spaFilterSettingsData.filt2Minute;
+              spaFilterSettingsData.filt1DurationHour = spaFilterSettingsData.filt1DurationHour;
+              spaFilterSettingsData.filt1DurationMinute = spaFilterSettingsData.filt1DurationMinute;
+            }
+          }
+          else
+          { 
+            spaFilterSettingsData.filt2Enable = 0;
+            spaFilterSettingsData.filt2Hour = 0;
+            spaFilterSettingsData.filt2Minute = 0;
+            spaFilterSettingsData.filt2DurationHour = 0;
+            spaFilterSettingsData.filt2DurationMinute = 0;
+          }
+        }
+        else
+        {
+          spaFilterSettingsData.filt2Enable = 0;
+          spaFilterSettingsData.filt2Hour = 0;
+          spaFilterSettingsData.filt2Minute = 0;
+          spaFilterSettingsData.filt2DurationHour = 0;
+          spaFilterSettingsData.filt2DurationMinute = 0;
+        }
+      }
       else if(doc["payload"].containsKey("errorCodeURL"))
       {
         String url = doc["payload"]["errorCodeURL"];
@@ -1938,7 +1993,6 @@ void filterCycleTrial(void)
     dataBuffer.push(spaFilterSettingsData.filt2Minute); // Filter 2 minutes 23
     dataBuffer.push(spaFilterSettingsData.filt2DurationHour); // Filter 2 Duration hours 23
     dataBuffer.push(spaFilterSettingsData.filt2DurationMinute); // Filter 2 Duration hours 23
-
   }
   else
   {
