@@ -65,8 +65,8 @@ typedef struct {
   bool is_filterCycle_present;
   bool filterCycle;
 
-  // bool  is_hold_present;
-  // bool  hold;
+  bool  is_hold_present;
+  bool  hold;
 
   bool  is_time_present;
   bool  time;
@@ -76,13 +76,14 @@ typedef struct {
   bool is_tempScale_present;
   bool tempScale;
   
-  // bool is_m8_present;
+  bool is_m8_present;
 
-  // bool is_cleanupCycle_present;
+  bool is_cleanupCycle_present;
 } spaControlParams_t;
 
 typedef struct {
   bool deviceStatus;
+  
   bool bootupPacket;
   bool currentTemp;
   bool setTemp;
@@ -92,12 +93,12 @@ typedef struct {
   bool device_info;
   int device_id;
   int user_id;
-  uint8_t setupInfo;
+  bool setupInfo;
   bool filterCycle;
   bool filter1;
   bool filter2;
   bool fwVersion;
-  // bool hold;
+  bool hold;
   bool tempScale;
 } spaControlStatus_t;
 
@@ -107,7 +108,6 @@ typedef struct {
 } otaParams_t;
 
 
-extern spaControlStatus_t spaControlStatus;
 
 void startSpaCmdSendTimer();
 void stopSpaCmdSendTimer();
@@ -135,8 +135,8 @@ void spaControl_create_fwVersion(char *json_str);
 void sendOTASuccess(void);
 void sendOTAFail(void);
 void sendOTAStarted(void);
-// void toggleHoldState(void);
+void toggleHoldState(void);
 void configRequest(void);
 void setTime(int hour, int minute);
-// void setCleanupCycle(void);
+void setCleanupCycle(void);
 #endif

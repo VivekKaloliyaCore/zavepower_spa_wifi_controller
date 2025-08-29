@@ -263,8 +263,6 @@ void wifiModuleEraseStaConfig(void)
 {
   preferences.remove("ssid");
   preferences.remove("pass");
-
-  WiFi.disconnect(true, true);
 }
 
 bool wifiModuleCnnectToWiFiOneTime(void)
