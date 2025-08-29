@@ -1043,7 +1043,28 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
               spaFilterSettingsData.filt1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
               spaFilterSettingsData.filt1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
             }
+            else
+            {
+              spaFilterSettingsData.filt1Hour = spaFilterSettingsData.filt1Hour;
+              spaFilterSettingsData.filt1Minute = spaFilterSettingsData.filt1Minute;
+              spaFilterSettingsData.filt1DurationHour = spaFilterSettingsData.filt1DurationHour;
+              spaFilterSettingsData.filt1DurationMinute = spaFilterSettingsData.filt1DurationMinute;
+            }
           }
+          else
+          {
+            spaFilterSettingsData.filt1Hour = spaFilterSettingsData.filt1Hour;
+            spaFilterSettingsData.filt1Minute = spaFilterSettingsData.filt1Minute;
+            spaFilterSettingsData.filt1DurationHour = spaFilterSettingsData.filt1DurationHour;
+            spaFilterSettingsData.filt1DurationMinute = spaFilterSettingsData.filt1DurationMinute;
+          }
+        }
+        else
+        {
+          spaFilterSettingsData.filt1Hour = spaFilterSettingsData.filt1Hour;
+          spaFilterSettingsData.filt1Minute = spaFilterSettingsData.filt1Minute;
+          spaFilterSettingsData.filt1DurationHour = spaFilterSettingsData.filt1DurationHour;
+          spaFilterSettingsData.filt1DurationMinute = spaFilterSettingsData.filt1DurationMinute;
         }
         if(doc["payload"]["filterCycle"].containsKey("2"))
         {
@@ -1071,8 +1092,8 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
                 spaFilterSettingsData.filt2Enable = spaFilterSettingsData.filt2Enable;
                 spaFilterSettingsData.filt2Hour = spaFilterSettingsData.filt2Hour;
                 spaFilterSettingsData.filt2Minute= spaFilterSettingsData.filt2Minute;
-                spaFilterSettingsData.filt1DurationHour = spaFilterSettingsData.filt1DurationHour;
-                spaFilterSettingsData.filt1DurationMinute = spaFilterSettingsData.filt1DurationMinute;
+                spaFilterSettingsData.filt2DurationHour = spaFilterSettingsData.filt2DurationHour;
+                spaFilterSettingsData.filt2DurationMinute = spaFilterSettingsData.filt2DurationMinute;
               }
             }
             else
@@ -1080,11 +1101,11 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
               spaFilterSettingsData.filt2Enable = spaFilterSettingsData.filt2Enable;
               spaFilterSettingsData.filt2Hour = spaFilterSettingsData.filt2Hour;
               spaFilterSettingsData.filt2Minute= spaFilterSettingsData.filt2Minute;
-              spaFilterSettingsData.filt1DurationHour = spaFilterSettingsData.filt1DurationHour;
-              spaFilterSettingsData.filt1DurationMinute = spaFilterSettingsData.filt1DurationMinute;
+              spaFilterSettingsData.filt2DurationHour = spaFilterSettingsData.filt2DurationHour;
+              spaFilterSettingsData.filt2DurationMinute = spaFilterSettingsData.filt2DurationMinute;
             }
           }
-          else
+          else if(doc["payload"]["filterCycle"]["2"]["enable"] == false)
           { 
             spaFilterSettingsData.filt2Enable = 0;
             spaFilterSettingsData.filt2Hour = 0;
@@ -1092,14 +1113,22 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
             spaFilterSettingsData.filt2DurationHour = 0;
             spaFilterSettingsData.filt2DurationMinute = 0;
           }
+          else
+          {
+            spaFilterSettingsData.filt2Enable = spaFilterSettingsData.filt2Enable;
+            spaFilterSettingsData.filt2Hour = spaFilterSettingsData.filt2Hour;
+            spaFilterSettingsData.filt2Minute= spaFilterSettingsData.filt2Minute;
+            spaFilterSettingsData.filt2DurationHour = spaFilterSettingsData.filt2DurationHour;
+            spaFilterSettingsData.filt2DurationMinute = spaFilterSettingsData.filt2DurationMinute;
+          }
         }
         else
         {
-          spaFilterSettingsData.filt2Enable = 0;
-          spaFilterSettingsData.filt2Hour = 0;
-          spaFilterSettingsData.filt2Minute = 0;
-          spaFilterSettingsData.filt2DurationHour = 0;
-          spaFilterSettingsData.filt2DurationMinute = 0;
+          spaFilterSettingsData.filt2Enable = spaFilterSettingsData.filt2Enable;
+          spaFilterSettingsData.filt2Hour = spaFilterSettingsData.filt2Hour;
+          spaFilterSettingsData.filt2Minute= spaFilterSettingsData.filt2Minute;
+          spaFilterSettingsData.filt2DurationHour = spaFilterSettingsData.filt2DurationHour;
+          spaFilterSettingsData.filt2DurationMinute = spaFilterSettingsData.filt2DurationMinute;
         }
       }
       else if(doc["payload"].containsKey("errorCodeURL"))
@@ -1554,24 +1583,46 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   // payload["jet4"] = getMapDescription(_SpaStatusData.pump4, pumpMap);
   // payload["blower1"] = getMapDescription(_SpaStatusData.blower, onOffMap);
   // payload["light1"] = getMapDescription(_SpaStatusData.light1, onOffMap);
-  char currenttemp[20];
-  char settemp[20];
-  if(spaStatusData.tempScale == 0)
-  {
-    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Fahrenheit", _SpaStatusData.currentTemp);
-    snprintf(settemp, sizeof(settemp), "%3.1f Fahrenheit", _SpaStatusData.setTemp);
-  }
-  else if(spaStatusData.tempScale == 1)
-  {
-    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Celsius", _SpaStatusData.currentTemp);
-    snprintf(settemp, sizeof(settemp), "%3.1f Celsius", _SpaStatusData.setTemp);
-  }
+  // char currenttemp[20];
+  // char settemp[20];
+  // if(spaStatusData.tempScale == 0)
+  // {
+  //   snprintf(currenttemp, sizeof(currenttemp), "%3.1f Fahrenheit", _SpaStatusData.currentTemp);
+  //   snprintf(settemp, sizeof(settemp), "%3.1f Fahrenheit", _SpaStatusData.setTemp);
+  // }
+  // else if(spaStatusData.tempScale == 1)
+  // {
+  //   snprintf(currenttemp, sizeof(currenttemp), "%3.1f Celsius", _SpaStatusData.currentTemp);
+  //   snprintf(settemp, sizeof(settemp), "%3.1f Celsius", _SpaStatusData.setTemp);
+  // }
 
-  payload["currentTemp"] = currenttemp;
-  payload["setTemp"] = settemp;
+  // payload["currentTemp"] = currenttemp;
+  // payload["setTemp"] = settemp;
+  payload["currentTemp"] = _SpaStatusData.currentTemp;
+  payload["setTemp"] = _SpaStatusData.setTemp;
   payload["heatMode"] = getMapDescription(_SpaStatusData.heatingMode, heatingModeMap);
   payload["tempRange"] = getMapDescription(_SpaStatusData.tempRange, tempRangeMap);
   payload["heatStatus"] = getMapDescription(_SpaStatusData.heatingState, heatingStateMap);
+  if(_SpaStatusData.filterMode == 0)
+  {
+    payload["filterCycle1"] = "Off";
+    payload["filterCycle2"] = "Off";
+  }
+  else if(_SpaStatusData.filterMode == 1)
+  {
+    payload["filterCycle1"] = "On";
+    payload["filterCycle2"] = "Off";
+  }
+  else if(_SpaStatusData.filterMode == 2)
+  {
+    payload["filterCycle1"] = "Off";
+    payload["filterCycle2"] = "On";
+  }
+  else if(_SpaStatusData.filterMode == 3)
+  {
+    payload["filterCycle1"] = "On";
+    payload["filterCycle2"] = "On";
+  }
 
   if(spaControlStatus.device_info)
   {
@@ -1596,18 +1647,22 @@ void spaControl_create_currentTemp(SpaStatusData _SpaStatusData, char *json_str)
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
-  char currenttemp[20];
+  // char currenttemp[20];
   
-  if(spaStatusData.tempScale == 0)
-  {
-    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Fahrenheit", _SpaStatusData.currentTemp);
-  }
-  else if(spaStatusData.tempScale == 1)
-  {
-    snprintf(currenttemp, sizeof(currenttemp), "%3.1f Celsius", _SpaStatusData.currentTemp);
-  }
+  // if(spaStatusData.tempScale == 0)
+  // {
+  //   snprintf(currenttemp, sizeof(currenttemp), "%3.1f Fahrenheit", _SpaStatusData.currentTemp);
+  // }
+  // else if(spaStatusData.tempScale == 1)
+  // {
+  //   snprintf(currenttemp, sizeof(currenttemp), "%3.1f Celsius", _SpaStatusData.currentTemp);
+  // }
 
-  payload["currentTemp"] = currenttemp;
+  // payload["currentTemp"] = currenttemp;
+
+
+  
+  payload["currentTemp"] = _SpaStatusData.currentTemp;
   
   if(spaControlStatus.device_info)
   {
@@ -1633,17 +1688,19 @@ void spaControl_create_setTemp(SpaStatusData _SpaStatusData, char *json_str)
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
 
-  char settemp[20];
-  if(spaStatusData.tempScale == 0)
-  {
-    snprintf(settemp, sizeof(settemp), "%3.1f Fahrenheit", _SpaStatusData.setTemp);
-  }
-  else if(spaStatusData.tempScale == 1)
-  {
-    snprintf(settemp, sizeof(settemp), "%3.1f Celsius", _SpaStatusData.setTemp);
-  }
+  // char settemp[20];
+  // if(spaStatusData.tempScale == 0)
+  // {
+  //   snprintf(settemp, sizeof(settemp), "%3.1f Fahrenheit", _SpaStatusData.setTemp);
+  // }
+  // else if(spaStatusData.tempScale == 1)
+  // {
+  //   snprintf(settemp, sizeof(settemp), "%3.1f Celsius", _SpaStatusData.setTemp);
+  // }
 
-  payload["setTemp"] = settemp;
+  // payload["setTemp"] = settemp;
+
+  payload["setTemp"] = _SpaStatusData.setTemp;
 
   if(spaControlStatus.device_info)
   {
@@ -1973,7 +2030,7 @@ void filterCycleTrial(void)
 
   dataBuffer.push(spaFilterSettingsData.filt1Hour); // Filter 1 starting hours 23
   dataBuffer.push(spaFilterSettingsData.filt1Minute); // Filter 1 starting minutes 23
-  dataBuffer.push(spaFilterSettingsData.filt2DurationHour); // Filter 1 Duration hours 23
+  dataBuffer.push(spaFilterSettingsData.filt1DurationHour); // Filter 1 Duration hours 23
   dataBuffer.push(spaFilterSettingsData.filt1DurationMinute); // Filter 1 Duration hours 23
 
   // if(filterCycleData->filter2StartHour != 0)

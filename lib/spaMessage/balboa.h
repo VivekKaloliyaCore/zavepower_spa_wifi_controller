@@ -352,9 +352,9 @@ const std::map<uint8_t, const char *> errorCodeMap = {
 
 const std::map<uint8_t, const char *> filterModeMap = {
     {0, "Off"},
-    {1, "Cycle 1"},
-    {2, "Cycle 2"},
-    {3, "Cycle 1 & 2"}};
+    {1, "Cycle 1 On"},
+    {2, "Cycle 2 On"},
+    {3, "Cycle 1 & 2 On"}};
 
 const std::map<uint8_t, const char *> heatingModeMap = {
     {0, "Ready"},

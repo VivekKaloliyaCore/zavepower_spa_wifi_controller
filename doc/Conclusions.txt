@@ -191,3 +191,43 @@ Time format [Clock Mode]::
 Command to set cleanup cycle : 7e 07 10 bf 27 02 00 b7 7e - Message type 0x27[Set Preferance request].
 5th index, Preferance Code : 0x01 for time format.
 6th index, Preferance value : 0x00 means 12H format and 0x01 means 24H format.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+============||
+Up Next ::::||
+============||
+
+Reminder On Off;
+==========================================================================================================================
+
+Reminder ::::
+7e 08 10 bf 22 08 00 00 8d 7e -- Clicked on the Reminder
+7e 17 10 bf 26 00 87 00 00 01 01 00 00 01 00 00 00 00 00 00 00 00 00 8e 7e
+
+7e 07 10 bf 27 00 01 a5 7e - Changed from Yes to No.
+00:30:07.607 V: [rs485]: Received: 10 - 7e 17 ff af 26 00 87 01 00 01 01 00 00 01 00 00 00 00 00 00 00 00 00 54 7e
+00:30:07.610 V: [Mess]: Preferences Response: 7e 17 ff af 26 00 87 01 00 01 01 00 00 01 00 00 00 00 00 00 00 00 00 54 7e
+00:30:07.611 V: [Mess]: Preferences Response: 00 87 01 00 01 01 00 00 01 00 00 00 00 00 00 00 00 00
+00:30:07.642 V: [rs485]: Received: 10 - 7e 08 10 bf 22 08 00 00 8d 7e
+00:30:07.668 V: [rs485]: Received: 10 - 7e 17 10 bf 26 00 87 01 00 01 01 00 00 01 00 00 00 00 00 00 00 00 00 8c 7e
+
+
+7e 07 10 bf 27 00 00 a2 7e -- Changed from No to Yes
+
+===============================================================================================================
+
+Exit Priming mode :::
+ 7e 07 10 bf 11 01 00 2b 7e - Switch to Normal mode(Exit from Priming mode etc).
