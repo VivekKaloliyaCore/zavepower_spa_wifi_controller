@@ -782,8 +782,8 @@ void spaControl_mqtt_action(void)
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
     // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
-    spaControl_create_filter_cycle(json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    // spaControl_create_filter_cycle(json_str);
+    // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.hold)
@@ -1242,18 +1242,18 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlStatus->setupInfo = true;
         // delay(100);
       }
-      else if(doc["payload"].containsKey("filterCycle"))
-      {
-        spaControlStatus->filterCycle = true;
-        if(doc["payload"]["filterCycle"].containsKey("cycle1"))
-        {
-          spaControlStatus->filter1 = true;
-        }
-        if(doc["payload"]["filterCycle"].containsKey("cycle2"))
-        {
-          spaControlStatus->filter2 = true;
-        }
-      }
+      // else if(doc["payload"].containsKey("filterCycle"))
+      // {
+      //   spaControlStatus->filterCycle = true;
+      //   if(doc["payload"]["filterCycle"].containsKey("cycle1"))
+      //   {
+      //     spaControlStatus->filter1 = true;
+      //   }
+      //   if(doc["payload"]["filterCycle"].containsKey("cycle2"))
+      //   {
+      //     spaControlStatus->filter2 = true;
+      //   }
+      // }
       else if(doc["payload"].containsKey("fwVersion"))
       {
           spaControlStatus->fwVersion = true;
@@ -1533,26 +1533,26 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   payload["heatMode"] = getMapDescription(_SpaStatusData.heatingMode, heatingModeMap);
   payload["tempRange"] = getMapDescription(_SpaStatusData.tempRange, tempRangeMap);
   payload["heatStatus"] = getMapDescription(_SpaStatusData.heatingState, heatingStateMap);
-  if(_SpaStatusData.filterMode == 0)
-  {
-    payload["filterCycle1"] = "Off";
-    payload["filterCycle2"] = "Off";
-  }
-  else if(_SpaStatusData.filterMode == 1)
-  {
-    payload["filterCycle1"] = "On";
-    payload["filterCycle2"] = "Off";
-  }
-  else if(_SpaStatusData.filterMode == 2)
-  {
-    payload["filterCycle1"] = "Off";
-    payload["filterCycle2"] = "On";
-  }
-  else if(_SpaStatusData.filterMode == 3)
-  {
-    payload["filterCycle1"] = "On";
-    payload["filterCycle2"] = "On";
-  }
+  // if(_SpaStatusData.filterMode == 0)
+  // {
+  //   payload["filterCycle1"] = "Off";
+  //   payload["filterCycle2"] = "Off";
+  // }
+  // else if(_SpaStatusData.filterMode == 1)
+  // {
+  //   payload["filterCycle1"] = "On";
+  //   payload["filterCycle2"] = "Off";
+  // }
+  // else if(_SpaStatusData.filterMode == 2)
+  // {
+  //   payload["filterCycle1"] = "Off";
+  //   payload["filterCycle2"] = "On";
+  // }
+  // else if(_SpaStatusData.filterMode == 3)
+  // {
+  //   payload["filterCycle1"] = "On";
+  //   payload["filterCycle2"] = "On";
+  // }
 
   if(spaControlStatus.device_info)
   {
