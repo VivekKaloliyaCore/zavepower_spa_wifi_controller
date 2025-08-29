@@ -27,6 +27,8 @@ char flagHeaterTooHigh = 0;
 char flagsendErrorCode = 0;
 char flagSetTime = 0;
 
+static SpaStatusData spaStatusDataBackup = {0};
+
 // Global Variables
 RTC_NOINIT_ATTR SpaStatusData spaStatusData;
 RTC_NOINIT_ATTR SpaConfigurationData spaConfigurationData;
@@ -440,12 +442,7 @@ void parseConfigurationResponse(u_int8_t *message, int length)
 
   // Log.verbose(F("[Mess]: Configuration Response: %s" CR), msgToString(hexArray, length - 7).c_str());
   publishSpaConfigurationData();
-  
-  if(spaControlStatus.setupInfo == 1)
-  {
-    spaControlStatus.setupInfo = 2;
-  }
-  
+
 }
 
 /*
@@ -528,6 +525,9 @@ bool parseStatusMessage(u_int8_t *message, int length)
 {
   if (spaStatusData.crc != message[message[1]])
   {
+    memset(&spaStatusDataBackup, 0, sizeof(SpaStatusData));
+    memcpy(&spaStatusDataBackup, &spaStatusData, sizeof(SpaStatusData));
+
     spaStatusData.rawData[0] = message[0];
     spaStatusData.crc = message[message[1]];
     spaStatusData.lastUpdate = getTime();
@@ -578,6 +578,7 @@ bool parseStatusMessage(u_int8_t *message, int length)
     uint8_t hour = hexArray[3];
     uint8_t minute = hexArray[4];
     sprintf(spaStatusData.time, "%02d:%02d", hour, minute);
+    Log.notice("Current Time: %s\n", spaStatusData.time);
 
     spaStatusData.heatingMode = hexArray[5];
     spaStatusData.reminderType = hexArray[6];
@@ -702,33 +703,33 @@ bool parseStatusMessage(u_int8_t *message, int length)
       spaControlStatus.deviceStatus = true;
       set_spaControlStatus(spaControlStatus);
     }
-    else if(spaControlParams.is_filterCycle_present)
-    {
-      spaControlParams.is_filterCycle_present = false;
-      spaControlParams.filterCycle = 0;
-      set_spaControlParams(spaControlParams);
-
-      Log.notice("Sending AUTO deviceStatus...\n");
-      spaControlStatus_t spaControlStatus = {0};
-      memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
-      spaControlStatus.filterCycle = true;
-      spaControlStatus.filter1 = true;
-      spaControlStatus.filter2 = true;
-      set_spaControlStatus(spaControlStatus);
-    }
-    // else if(spaControlParams.is_hold_present)
+    // else if(spaControlParams.is_filterCycle_present)
     // {
-    //   spaControlParams.is_hold_present = false;
-    //   spaControlParams.hold = 0;
+    //   spaControlParams.is_filterCycle_present = false;
+    //   spaControlParams.filterCycle = 0;
     //   set_spaControlParams(spaControlParams);
 
     //   Log.notice("Sending AUTO deviceStatus...\n");
     //   spaControlStatus_t spaControlStatus = {0};
     //   memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
-    //   spaControlStatus.deviceStatus = true;
-    //   spaControlStatus.hold = true;
+    //   spaControlStatus.filterCycle = true;
+    //   spaControlStatus.filter1 = true;
+    //   spaControlStatus.filter2 = true;
     //   set_spaControlStatus(spaControlStatus);
     // }
+    else if(spaControlParams.is_hold_present)
+    {
+      spaControlParams.is_hold_present = false;
+      spaControlParams.hold = 0;
+      set_spaControlParams(spaControlParams);
+
+      Log.notice("Sending AUTO deviceStatus...\n");
+      spaControlStatus_t spaControlStatus = {0};
+      memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
+      spaControlStatus.deviceStatus = true;
+      spaControlStatus.hold = true;
+      set_spaControlStatus(spaControlStatus);
+    }
     else if(spaControlParams.is_tempScale_present)
     {
       spaControlParams.is_tempScale_present = false;
@@ -754,11 +755,18 @@ bool parseStatusMessage(u_int8_t *message, int length)
     // }
     else
     {
-      Log.notice("Sending SYNC deviceStatus...\n");
-      spaControlStatus_t spaControlStatus = {0};
-      memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
-      spaControlStatus.deviceStatus = true; // Commenting for Test
-      set_spaControlStatus(spaControlStatus);
+      if(spaMessage_isSpaStatusDataStale())
+      {
+        Log.notice("Sending SYNC deviceStatus...\n");
+        spaControlStatus_t spaControlStatus = {0};
+        memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
+        spaControlStatus.deviceStatus = true; // Commenting for Test
+        set_spaControlStatus(spaControlStatus);
+      }
+      // else
+      // {
+      //   Log.notice("Not sending deviceStatus...\n");
+      // }
     }
 
     // publishSpaStatusData();
@@ -913,3 +921,38 @@ SpaFilterSettingsData spaMessage_get_spaFilterData(void)
 //   spaTempData.measuredTemp = measuredTemp;
 //   return spaTempData;
 // }
+
+bool spaMessage_isSpaStatusDataStale(void)
+{
+  // Log.notice("spaStatusData | pump1: %d, pump2: %d, pump3: %d, pump4: %d, pump5: %d, pump6: %d, blower: %d, light1: %d, light2: %d, currentTemp: %.2f, setTemp: %.2f, heatingMode: %d, tempRange: %d, heatingState: %d\n", 
+  //   spaStatusData.pump1, spaStatusData.pump2, spaStatusData.pump3, spaStatusData.pump4, spaStatusData.pump5, spaStatusData.pump6,
+  //   spaStatusData.blower, spaStatusData.light1, spaStatusData.light2,
+  //   spaStatusData.currentTemp, spaStatusData.setTemp,
+  //   spaStatusData.heatingMode, spaStatusData.tempRange, spaStatusData.heatingState);
+
+  // Log.notice("spaStatusDataBackup | pump1: %d, pump2: %d, pump3: %d, pump4: %d, pump5: %d, pump6: %d, blower: %d, light1: %d, light2: %d, currentTemp: %.2f, setTemp: %.2f, heatingMode: %d, tempRange: %d, heatingState: %d\n", 
+  //   spaStatusDataBackup.pump1, spaStatusDataBackup.pump2, spaStatusDataBackup.pump3, spaStatusDataBackup.pump4, spaStatusDataBackup.pump5, spaStatusDataBackup.pump6,
+  //   spaStatusDataBackup.blower, spaStatusDataBackup.light1, spaStatusDataBackup.light2,
+  //   spaStatusDataBackup.currentTemp, spaStatusDataBackup.setTemp,
+  //   spaStatusDataBackup.heatingMode, spaStatusDataBackup.tempRange, spaStatusDataBackup.heatingState);
+
+  if(spaStatusData.pump1 != spaStatusDataBackup.pump1 || 
+     spaStatusData.pump2 != spaStatusDataBackup.pump2 || 
+     spaStatusData.pump3 != spaStatusDataBackup.pump3 || 
+     spaStatusData.pump4 != spaStatusDataBackup.pump4 || 
+     spaStatusData.pump5 != spaStatusDataBackup.pump5 || 
+     spaStatusData.pump6 != spaStatusDataBackup.pump6 ||
+     spaStatusData.blower != spaStatusDataBackup.blower ||
+     spaStatusData.light1 != spaStatusDataBackup.light1 ||
+     spaStatusData.light2 != spaStatusDataBackup.light2 ||
+     spaStatusData.currentTemp != spaStatusDataBackup.currentTemp ||
+     spaStatusData.setTemp != spaStatusDataBackup.setTemp ||
+     spaStatusData.heatingMode != spaStatusDataBackup.heatingMode ||
+     spaStatusData.tempRange != spaStatusDataBackup.tempRange ||
+     spaStatusData.heatingState != spaStatusDataBackup.heatingState)
+  {
+    return true;
+  }
+
+  return false;
+}
