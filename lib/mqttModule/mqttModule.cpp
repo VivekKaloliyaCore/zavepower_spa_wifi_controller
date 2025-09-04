@@ -26,7 +26,7 @@
 void reconnect();
 void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length);
 void nodeStateReport();
-
+bool mqtt_state();
 // WiFiClient wifiClient;
 // PubSubClient mqtt(wifiClient);
 WiFiClientSecure wifiClientSecure;
@@ -84,6 +84,18 @@ void mqttModuleSetup()
   // spaMqttMessage_publish_message("status", NULL, 0);
 }
 
+bool mqtt_state()
+{
+  if(mqtt.connected())
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
 void mqttModuleLoop()
 {
 
@@ -95,7 +107,6 @@ void mqttModuleLoop()
   // sendStatus.update();
   mqtt.loop();
   spaControl_mqtt_action();
-
 
   if(otaUpdateRunning)
   {
@@ -199,6 +210,20 @@ void reconnect()
       memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
       spaControlStatus.bootupPacket = true;
 
+      bool ota_state = preferences.getBool("ota", "");
+      if(ota_state != true)
+      {
+        if(FW_REV_STR == "2025-09-03-v.1.21")
+        {
+          spaControlStatus.ota_stat = true;
+          preferences.putBool("ota", false);
+        }
+      }
+      else if(ota_state == true)
+      {
+        spaControlStatus.ota_stat = true;
+        preferences.putBool("ota", false);
+      }
       // configRequest();
       // spaControlStatus.setupInfo = true;
       
@@ -257,7 +282,6 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
 
   // if(spaControl_parse_action_command((char *)payload, &spaControlParams, &spaControlStatus, &otaParams))
   // {
-
   //   Log.notice("parse_action_command\n");
   //   if(spaControlStatus.deviceStatus)
   //   {
@@ -336,7 +360,7 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
   //       ESP.restart();
   //     }
 
-  //     // set_spaControlParams(spaControlParams);
+  //     set_spaControlParams(spaControlParams);
   //   }
   //   else if(spaControlParams.is_temp_range_high_present)
   //   {
@@ -389,15 +413,15 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
   //   }
   // }
 
-  // if(strstr((char *)p_payload, "jet 1"))
-  // {
-  //   Log.notice("Sending JET command...\n");
+  // // if(strstr((char *)p_payload, "jet 1"))
+  // // {
+  // //   Log.notice("Sending JET command...\n");
 
-  //   spaControlParams_t spaControlParams = get_spaControlParams();
-  //   spaControlParams.is_jet1_present = true;
-  //   spaControlParams.jet1 = 1;
-  //   set_spaControlParams(spaControlParams);
-  // }
+  // //   spaControlParams_t spaControlParams = get_spaControlParams();
+  // //   spaControlParams.is_jet1_present = true;
+  // //   spaControlParams.jet1 = 1;
+  // //   set_spaControlParams(spaControlParams);
+  // // }
 
   // mqtt.publish(p_topic, p_payload, p_length);
 }
@@ -444,8 +468,6 @@ void performOTA(String firmwareURL)
   HttpsOTA.begin(fw_url, ota_server_certificate);
   sendOTAStarted();
   otaUpdateRunning = true;
-
-
 }
 
 void performOTA_unsecured(String firmwareURL)
@@ -480,10 +502,70 @@ void performOTA_unsecured(String firmwareURL)
             if (Update.end()) {
               Log.notice("Update finished!\n");
                 if (Update.isFinished()) {
+                    // Log.notice("Update finished!\n");
+                    preferences.begin("ota", true);
                     Log.notice("Restarting in 5 sec...\n");
-                    sendOTASuccess();
+
+                    // wifi_forced_restart();
+                    // mqtt.disconnect();
+                    // while(!mqtt.connected())
+                    // {
+                    //   mqtt.connect(gatewayName, (mqttTopic + "node/state").c_str(), 1, true, "OFF");
+                    // }
+
+                    // if(mqtt.connected())
+                    // {
+                      // sendOTASuccess();
+                    // }
+                    
+
+                    // if(WiFi.status() == WL_CONNECTED)
+                    // {
+                    //   Log.notice("WiFi Connedted !!!!\n");
+                    // }
+                    // else
+                    // {
+                    //   Log.notice("WiFi not Connedted !!!!\n");
+                    // }
+                    
+                    // if(mqtt_state)
+                    // {
+                    //   Log.notice("mqtt Connedted !!!!\n");
+                    // }
+                    // else
+                    // {
+                    //   Log.notice("mqtt Not Connedted !!!!\n");
+                    // }
+
+                    // Log.notice("Restarting in 5 sec...\n");
+
+
+                    // if(WiFi.status() == WL_CONNECTED)
+                    // {
+                    //   Log.notice("WiFi Connedted !!!!\n");
+                    // }
+                    // else
+                    // {
+                    //   Log.notice("WiFi not Connedted !!!!\n");
+                    // }
+                    
+                    // if(mqtt_state)
+                    // {
+                    //   Log.notice("mqtt Connedted !!!!\n");
+                    // }
+                    // else
+                    // {
+                    //   Log.notice("mqtt Not Connedted !!!!\n");
+                    // }
+                    // sendOTAStarted();
+                    
+                    // sendOTAStarted();
+                    // sendOTASuccess();
+                    // sendOTAStarted();
+                    // sendOTASuccess();
+                    
                     delay(5000);
-                    ESP.restart();
+                    ESP.restart();// Temp commment
                 } else {
                     Log.notice("Update not finished? Something went wrong.\n");
                     sendOTAFail();

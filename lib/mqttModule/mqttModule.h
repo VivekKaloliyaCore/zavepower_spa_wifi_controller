@@ -246,6 +246,6 @@ void mqttModuleSetup();
 void mqttModuleLoop();
 void performOTA(String firmwareURL);
 void performOTA_unsecured(String firmwareURL);
-
+bool mqtt_state();
 
 #endif

@@ -216,7 +216,6 @@ void spaControl_action(void)
     spaControlStatus.setupInfo = true;
     j++;
   }
-
   if(mqtt_params.parse_mqtt_msg)
   {
     mqtt_params.is_parse_mqtt_msg_present = false;
@@ -675,7 +674,7 @@ void sendOTASuccess(void)
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
-  payload["ota"] = "device upgraded successfully. device restarts in 5 sec...";
+  payload["ota"] = "Device upgraded successfully.";
 
   // Serialize JSON to a string
   String output;
@@ -819,6 +818,12 @@ void spaControl_mqtt_action(void)
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
+  if(spaControlStatus.ota_stat)
+  {
+    spaControlStatus.ota_stat = false;
+    sendOTASuccess();
+  }
+
   if(spaControlStatus.bootupPacket)
   {
     spaControlStatus.bootupPacket = false;
@@ -832,6 +837,8 @@ void spaControl_mqtt_action(void)
     
     // spaControlStatus.setupInfo = true;// Enable this to send setupinfo at the time of bootup.
   }
+
+
 }
 
 bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaControlParams, spaControlStatus_t *spaControlStatus, otaParams_t *otaParams)

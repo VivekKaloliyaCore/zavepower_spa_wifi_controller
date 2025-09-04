@@ -84,6 +84,7 @@ typedef struct {
 typedef struct {
   bool deviceStatus;
   
+  bool ota_stat;
   bool bootupPacket;
   bool currentTemp;
   bool setTemp;

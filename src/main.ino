@@ -97,6 +97,10 @@ void loop()
     rs485Loop();
     mqttModuleLoop();
     spaMessageLoop();
+    if(mqtt_state())
+    {
+      spaControl_action();// Temp comment
+    }
   }
 
 

@@ -22,6 +22,7 @@ bool restart_esp = false;
 
 void wifiModuleCnnectToWiFi();
 bool wifiModuleCnnectToWiFiOneTime(void);
+void wifi_forced_restart(void);
 
 void wifiModuleStartAPMode()
 {
@@ -301,4 +302,10 @@ bool wifiModuleCnnectToWiFiOneTime(void)
   }
 
   return false;
+}
+
+void wifi_forced_restart(void)
+{
+  WiFi.disconnect();
+  wifiModuleCnnectToWiFi();
 }

@@ -212,7 +212,7 @@ void rs485Loop()
       }
       else if (Clear_to_Send(spaMessage))
       {
-        spaControl_action();
+        // spaControl_action(); // Temp comment
         rs485ClearToSend();
       }
       else if (For_Us_Message(spaMessage))
