@@ -455,7 +455,6 @@ void wifiModuleEraseStaConfig(void);
 
 bool wifiModuleCnnectToWiFiOneTime(void);
 
-void wifi_forced_restart(void);
 
 extern bool restart_esp;
 extern bool ap_configuration_on;

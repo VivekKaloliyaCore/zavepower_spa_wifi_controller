@@ -210,19 +210,33 @@ void reconnect()
       memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
       spaControlStatus.bootupPacket = true;
 
-      bool ota_state = preferences.getBool("ota", "");
-      if(ota_state != true)
-      {
-        if(FW_REV_STR == "2025-09-03-v.1.21")
+      bool otakey_exist = preferences.isKey("ota");
+      // bool ota_state = preferences.getBool("ota", "");
+      // if(ota_state != true)
+      Log.notice("otakey_exist returned %d.\n", otakey_exist);
+      if(otakey_exist == false)
+      {      
+        Log.notice("otakey_exist false\n");
+        if(FW_REV_STR == "2025-09-04-v.1.21")
         {
+          Log.notice("Firmware version matched\n");
           spaControlStatus.ota_stat = true;
+          preferences.begin("ota", false);
           preferences.putBool("ota", false);
         }
       }
-      else if(ota_state == true)
+      else if(otakey_exist == true)
       {
-        spaControlStatus.ota_stat = true;
-        preferences.putBool("ota", false);
+        Log.notice("otakey does exist\n");
+        bool ota_state = preferences.getBool("ota", "");
+        Log.notice("ota_state returned %d\n", ota_state);
+        if(ota_state == true)
+        {
+          Log.notice("ota_state true\n");
+          spaControlStatus.ota_stat = true;
+         preferences.putBool("ota", false);
+        }
+        
       }
       // configRequest();
       // spaControlStatus.setupInfo = true;
@@ -472,6 +486,7 @@ void performOTA(String firmwareURL)
 
 void performOTA_unsecured(String firmwareURL)
 {
+    preferences.putBool("ota", true);
     Log.notice("Starting OTA from URL: %s\n", firmwareURL.c_str());
     sendOTAStarted();
     HTTPClient http;
@@ -503,7 +518,7 @@ void performOTA_unsecured(String firmwareURL)
               Log.notice("Update finished!\n");
                 if (Update.isFinished()) {
                     // Log.notice("Update finished!\n");
-                    preferences.begin("ota", true);
+                    // preferences.begin("ota", true);
                     Log.notice("Restarting in 5 sec...\n");
 
                     // wifi_forced_restart();

@@ -183,6 +183,7 @@ spaControlStatus_t get_spaControlStatus(void)
 
 void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
 {
+  spaControlStatus.ota_stat = _spaControlStatus.ota_stat;
   spaControlStatus.deviceStatus = _spaControlStatus.deviceStatus;
   spaControlStatus.bootupPacket = _spaControlStatus.bootupPacket;
   spaControlStatus.currentTemp = _spaControlStatus.currentTemp;
@@ -279,6 +280,10 @@ void spaControl_action(void)
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.fwVersion)
+      {
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.ota_stat)
       {
         set_spaControlStatus(spaControlStatus);
       }
