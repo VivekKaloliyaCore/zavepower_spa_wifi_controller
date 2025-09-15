@@ -454,7 +454,7 @@ void wifiModuleEraseStaConfig(void);
 
 
 bool wifiModuleCnnectToWiFiOneTime(void);
-
+int32_t wifiModuleGetRSSI(void);
 
 extern bool restart_esp;
 extern bool ap_configuration_on;

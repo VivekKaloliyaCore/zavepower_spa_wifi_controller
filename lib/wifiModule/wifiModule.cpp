@@ -302,3 +302,8 @@ bool wifiModuleCnnectToWiFiOneTime(void)
 
   return false;
 }
+
+int32_t wifiModuleGetRSSI(void)
+{
+  return WiFi.RSSI();
+}

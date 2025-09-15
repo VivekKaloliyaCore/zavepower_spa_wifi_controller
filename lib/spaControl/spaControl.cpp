@@ -212,11 +212,11 @@ void spaControl_action(void)
   //   setTemp(0x1E);
   // }
 
-  if(j == 1)
-  {
-    spaControlStatus.setupInfo = true;
-    j++;
-  }
+  // if(j == 1)
+  // {
+  //   spaControlStatus.setupInfo = true;
+  //   j++;
+  // }
   if(mqtt_params.parse_mqtt_msg)
   {
     mqtt_params.is_parse_mqtt_msg_present = false;
@@ -712,6 +712,33 @@ void sendOTAFail(void)
 
 void spaControl_mqtt_action(void)
 {
+  if(spaControlStatus.bootupPacket)
+  {
+    spaControlStatus.bootupPacket = false;
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    // SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
+    spaControl_create_bootupPacket(json_str);
+    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
+    Log.notice("Boot Up pacage Published\n");
+    
+    // spaControlStatus.setupInfo = true;// Enable this to send setupinfo at the time of bootup.
+  }
+
+  if(spaControlStatus.setupInfo)
+  {
+    delay(500);
+    spaControlStatus.setupInfo = false;
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    SpaInformationData spa_information_data = spaMessage_get_spaInformationData();
+    k = 0;
+    spaControl_create_setupInfo(spa_information_data, json_str);
+    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    Log.notice(">>>>Setup Info Published\n");
+  }
+  
   if(spaControlStatus.deviceStatus)
   {
     spaControlStatus.deviceStatus = false;
@@ -754,19 +781,6 @@ void spaControl_mqtt_action(void)
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_heatMode(spa_status_data, json_str);
     spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
-  }
-
-  if(spaControlStatus.setupInfo)
-  {
-    delay(500);
-    spaControlStatus.setupInfo = false;
-    char json_str[512];
-    memset(&json_str[0], 0, sizeof(json_str));
-    SpaInformationData spa_information_data = spaMessage_get_spaInformationData();
-    k = 0;
-    spaControl_create_setupInfo(spa_information_data, json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
-    Log.notice(">>>>Setup Info Published\n");
   }
 
   if(spaControlStatus.tempRange)
@@ -828,22 +842,6 @@ void spaControl_mqtt_action(void)
     spaControlStatus.ota_stat = false;
     sendOTASuccess();
   }
-
-  if(spaControlStatus.bootupPacket)
-  {
-    spaControlStatus.bootupPacket = false;
-    char json_str[512];
-    memset(&json_str[0], 0, sizeof(json_str));
-    // SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
-    spaControl_create_bootupPacket(json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
-    // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
-    Log.notice("Boot Up pacage Published\n");
-    
-    // spaControlStatus.setupInfo = true;// Enable this to send setupinfo at the time of bootup.
-  }
-
-
 }
 
 bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaControlParams, spaControlStatus_t *spaControlStatus, otaParams_t *otaParams)
@@ -1490,6 +1488,15 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
 
   // Create "payload" as a nested object
   JsonObject payload = doc.createNestedObject("payload");
+
+  /* firmware version */
+  payload["fw_rev"] = FW_REV_STR;
+
+  /* every time get updated wifi signal strength */
+  int32_t rssi = wifiModuleGetRSSI();
+  Log.notice("Current WiFi RSSI: %d dBm\n", rssi);
+  payload["wifi_signal_strength_dbm"] = rssi;
+
   if(spaConfigurationData.pump1 >= 1)
   {
     payload["jet1"] = getMapDescription(_SpaStatusData.pump1, pumpMap);
