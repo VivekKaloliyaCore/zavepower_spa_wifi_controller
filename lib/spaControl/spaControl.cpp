@@ -65,7 +65,8 @@ void spaControl_create_fwVersion(char *json_str);
 void setCleanupCycle(void);
 void setClockMode(void);
 void setTempScale(void);
-void setM8(void);
+void setM8_off(void);
+void setM8_off_byOTA(void);
 void configRequest(void);
 
 void myFunction()
@@ -409,9 +410,10 @@ void spaControl_action(void)
         }
         else
         {
+          setM8_off_byOTA();
+          delay(100);
           performOTA_unsecured(message);
         }
-
       }
     }
   }
@@ -623,7 +625,7 @@ void spaControl_action(void)
   }
   else if(spaControlParams.is_m8_present)
   {
-    setM8();
+    setM8_off();
     spaControlParams.is_m8_present = false;
   }
   else if(spaControlParams.is_cleanupCycle_present)
@@ -2119,8 +2121,11 @@ void setTempScale(void)
   sendMessageToSpa(dataBuffer);
 }
 
-void setM8(void)
+void setM8_off(void)
 {
+  m8 = 0;
+  // Serial.print("M8 Value received : ");
+  // Serial.print(m8, HEX);
   CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
   dataBuffer.push(id);
   dataBuffer.push(0xBF);
@@ -2130,4 +2135,22 @@ void setM8(void)
 
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);
+  // rs485Write(dataBuffer);
+}
+
+void setM8_off_byOTA(void)
+{
+  m8 = 0;
+  // Serial.print("M8 Value received : ");
+  // Serial.print(m8, HEX);
+  CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
+  dataBuffer.push(id);
+  dataBuffer.push(0xBF);
+  dataBuffer.push(0x27);
+  dataBuffer.push(0x06);
+  dataBuffer.push(m8);
+
+  addCRC(dataBuffer);
+  // sendMessageToSpa(dataBuffer);
+  rs485Write(dataBuffer);
 }

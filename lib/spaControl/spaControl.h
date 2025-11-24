@@ -132,6 +132,7 @@ void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *
 void spaControl_create_errorCode_message(char *json_str, uint8_t initMode, uint8_t reminderType);
 void spaControl_create_fwVersion(char *json_str);
 
+
 // extern mqtt_params_t mqtt_params;
 void sendOTASuccess(void);
 void sendOTAFail(void);
@@ -140,4 +141,6 @@ void toggleHoldState(void);
 void configRequest(void);
 void setTime(int hour, int minute);
 void setCleanupCycle(void);
+void setM8_off(void);
+void setM8_off_byOTA(void);
 #endif

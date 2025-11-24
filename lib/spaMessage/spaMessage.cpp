@@ -763,6 +763,10 @@ bool parseStatusMessage(u_int8_t *message, int length)
         spaControlStatus.deviceStatus = true; // Commenting for Test
         set_spaControlStatus(spaControlStatus);
       }
+      if(spaStatusData.m8CycleTime != 0)
+      {
+        setM8_off();
+      }
       // else
       // {
       //   Log.notice("Not sending deviceStatus...\n");
