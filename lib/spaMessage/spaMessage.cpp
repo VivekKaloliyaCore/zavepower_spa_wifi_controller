@@ -523,6 +523,9 @@ Byte	Name	Description/Values
 
 bool parseStatusMessage(u_int8_t *message, int length)
 {
+  u_int8_t *hexArray_Temp = message + 5;
+  check_for_m8(hexArray_Temp);
+
   if (spaStatusData.crc != message[message[1]])
   {
     memset(&spaStatusDataBackup, 0, sizeof(SpaStatusData));

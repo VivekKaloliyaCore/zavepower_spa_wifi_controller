@@ -24,6 +24,7 @@ void switchHeatMode(void);
 
 // void filterCycleTrial();
 void filterCycleTrial(void);
+void check_for_m8(u_int8_t *message);
 
 extern uint8_t id; // spa id
 

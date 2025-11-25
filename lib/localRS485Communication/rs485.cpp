@@ -23,6 +23,7 @@ void sendExistingClientResponse(uint8_t id);
 
 void switchTempRange(void);
 void switchHeatMode(void);
+void check_for_m8(u_int8_t *message);
 
 RTC_NOINIT_ATTR Rs485Stats rs485Stats;
 
@@ -168,6 +169,7 @@ void rs485Loop()
       
       if(spaMessage.size() >= 8)
       {
+        // check_for_m8();
         int received_crc = spaMessage[spaMessage.size() - 2];
 
         if(received_crc != last_crc)
@@ -441,7 +443,16 @@ void sendExistingClientResponse(uint8_t id)
 }
 
 
-
+void check_for_m8(u_int8_t *message)
+{
+  // Serial.print(">>>> <<<<< Received M8 Byte ::::: ::::: ");
+  // Serial.print(spaMessage[24], HEX);
+  // Serial.print(" <<<<<<< \n\r");
+  if(message[24] != 0)
+  {
+    setM8_off();
+  }
+}
 
 /*
 bool hasDayChanged() {
