@@ -943,20 +943,21 @@ bool spaMessage_isSpaStatusDataStale(void)
   //   spaStatusDataBackup.currentTemp, spaStatusDataBackup.setTemp,
   //   spaStatusDataBackup.heatingMode, spaStatusDataBackup.tempRange, spaStatusDataBackup.heatingState);
 
-  if(spaStatusData.pump1 != spaStatusDataBackup.pump1 || 
-     spaStatusData.pump2 != spaStatusDataBackup.pump2 || 
-     spaStatusData.pump3 != spaStatusDataBackup.pump3 || 
-     spaStatusData.pump4 != spaStatusDataBackup.pump4 || 
-     spaStatusData.pump5 != spaStatusDataBackup.pump5 || 
-     spaStatusData.pump6 != spaStatusDataBackup.pump6 ||
-     spaStatusData.blower != spaStatusDataBackup.blower ||
-     spaStatusData.light1 != spaStatusDataBackup.light1 ||
-     spaStatusData.light2 != spaStatusDataBackup.light2 ||
-     spaStatusData.currentTemp != spaStatusDataBackup.currentTemp ||
-     spaStatusData.setTemp != spaStatusDataBackup.setTemp ||
-     spaStatusData.heatingMode != spaStatusDataBackup.heatingMode ||
-     spaStatusData.tempRange != spaStatusDataBackup.tempRange ||
-     spaStatusData.heatingState != spaStatusDataBackup.heatingState)
+  if(spaStatusData.pump1 != spaStatusDataBackup.pump1
+     || spaStatusData.pump2 != spaStatusDataBackup.pump2
+     || spaStatusData.pump3 != spaStatusDataBackup.pump3
+     || spaStatusData.pump4 != spaStatusDataBackup.pump4
+     || spaStatusData.pump5 != spaStatusDataBackup.pump5
+     || spaStatusData.pump6 != spaStatusDataBackup.pump6
+     || spaStatusData.blower != spaStatusDataBackup.blower
+     || spaStatusData.light1 != spaStatusDataBackup.light1
+     || spaStatusData.light2 != spaStatusDataBackup.light2
+     /*|| spaStatusData.currentTemp != spaStatusDataBackup.currentTemp*/
+     || spaStatusData.setTemp != spaStatusDataBackup.setTemp
+     || spaStatusData.heatingMode != spaStatusDataBackup.heatingMode
+     || spaStatusData.tempRange != spaStatusDataBackup.tempRange
+     /*|| spaStatusData.heatingState != spaStatusDataBackup.heatingState*/
+    )
   {
     return true;
   }
