@@ -801,9 +801,9 @@ void spaControl_mqtt_action(void)
     spaControlStatus.filterCycle = false;
     char json_str[512];
     memset(&json_str[0], 0, sizeof(json_str));
-    // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
-    // spaControl_create_filter_cycle(json_str);
-    // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
+    spaControl_create_filter_cycle(json_str);
+    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.hold)
@@ -1031,48 +1031,47 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlParams->is_reset_wifi_sta_present = true;
         spaControlParams->reset_wifi_sta = reset_wifi_sta;
       }
-      // else if(doc["payload"].containsKey("filterCycle"))
-      // {
-      //   spaControlParams->is_filterCycle_present = true;
-      //   spaControlParams->filterCycle = true;
-      //   if(doc["payload"]["filterCycle"].containsKey("1"))
-      //   {
-      //     Log.notice("Filter 1 Received\n");
-      //     spaFilterSettingsData.filt1Hour = doc["payload"]["filterCycle"]["1"]["startTimeHr"];
-      //     spaFilterSettingsData.filt1Minute = doc["payload"]["filterCycle"]["1"]["startTimeMin"];
-      //     spaFilterSettingsData.filt1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
-      //     spaFilterSettingsData.filt1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
-      //   }
-      //   if(doc["payload"]["filterCycle"].containsKey("2"))
-      //   {
-
-      //     Log.notice("Filter 2 Received\n");
-      //     if(doc["payload"]["filterCycle"]["2"]["enable"] == true)
-      //     {
-      //       spaFilterSettingsData.filt2Enable = 1;
-      //       spaFilterSettingsData.filt2Hour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
-      //       spaFilterSettingsData.filt2Minute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
-      //       spaFilterSettingsData.filt2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
-      //       spaFilterSettingsData.filt2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
-      //     }
-      //     else
-      //     { 
-      //       spaFilterSettingsData.filt2Enable = 0;
-      //       spaFilterSettingsData.filt2Hour = 0;
-      //       spaFilterSettingsData.filt2Minute = 0;
-      //       spaFilterSettingsData.filt2DurationHour = 0;
-      //       spaFilterSettingsData.filt2DurationMinute = 0;
-      //     }
-      //   }
-      //   else
-      //   {
-      //     spaFilterSettingsData.filt2Enable = 0;
-      //     spaFilterSettingsData.filt2Hour = 0;
-      //     spaFilterSettingsData.filt2Minute = 0;
-      //     spaFilterSettingsData.filt2DurationHour = 0;
-      //     spaFilterSettingsData.filt2DurationMinute = 0;
-      //   }
-      // }
+      else if(doc["payload"].containsKey("filterCycle"))
+      {
+        spaControlParams->is_filterCycle_present = true;
+        spaControlParams->filterCycle = true;
+        if(doc["payload"]["filterCycle"].containsKey("1"))
+        {
+          Log.notice("Filter 1 Received\n");
+          spaFilterSettingsData.filt1Hour = doc["payload"]["filterCycle"]["1"]["startTimeHr"];
+          spaFilterSettingsData.filt1Minute = doc["payload"]["filterCycle"]["1"]["startTimeMin"];
+          spaFilterSettingsData.filt1DurationHour = doc["payload"]["filterCycle"]["1"]["durationHr"];
+          spaFilterSettingsData.filt1DurationMinute = doc["payload"]["filterCycle"]["1"]["durationMin"];
+        }
+        if(doc["payload"]["filterCycle"].containsKey("2"))
+        {
+          Log.notice("Filter 2 Received\n");
+          if(doc["payload"]["filterCycle"]["2"]["enable"] == true)
+          {
+            spaFilterSettingsData.filt2Enable = 1;
+            spaFilterSettingsData.filt2Hour = doc["payload"]["filterCycle"]["2"]["startTimeHr"];
+            spaFilterSettingsData.filt2Minute = doc["payload"]["filterCycle"]["2"]["startTimeMin"];
+            spaFilterSettingsData.filt2DurationHour = doc["payload"]["filterCycle"]["2"]["durationHr"];
+            spaFilterSettingsData.filt2DurationMinute = doc["payload"]["filterCycle"]["2"]["durationMin"];
+          }
+          else
+          { 
+            spaFilterSettingsData.filt2Enable = 0;
+            spaFilterSettingsData.filt2Hour = 0;
+            spaFilterSettingsData.filt2Minute = 0;
+            spaFilterSettingsData.filt2DurationHour = 0;
+            spaFilterSettingsData.filt2DurationMinute = 0;
+          }
+        }
+        // else
+        // {
+        //   spaFilterSettingsData.filt2Enable = 0;
+        //   spaFilterSettingsData.filt2Hour = 0;
+        //   spaFilterSettingsData.filt2Minute = 0;
+        //   spaFilterSettingsData.filt2DurationHour = 0;
+        //   spaFilterSettingsData.filt2DurationMinute = 0;
+        // }
+      }
       else if(doc["payload"].containsKey("errorCodeURL"))
       {
         String url = doc["payload"]["errorCodeURL"];
@@ -1254,18 +1253,18 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         spaControlStatus->setupInfo = true;
         // delay(100);
       }
-      // else if(doc["payload"].containsKey("filterCycle"))
-      // {
-      //   spaControlStatus->filterCycle = true;
-      //   if(doc["payload"]["filterCycle"].containsKey("cycle1"))
-      //   {
-      //     spaControlStatus->filter1 = true;
-      //   }
-      //   if(doc["payload"]["filterCycle"].containsKey("cycle2"))
-      //   {
-      //     spaControlStatus->filter2 = true;
-      //   }
-      // }
+      else if(doc["payload"].containsKey("filterCycle"))
+      {
+        spaControlStatus->filterCycle = true;
+        if(doc["payload"]["filterCycle"].containsKey("cycle1"))
+        {
+          spaControlStatus->filter1 = true;
+        }
+        if(doc["payload"]["filterCycle"].containsKey("cycle2"))
+        {
+          spaControlStatus->filter2 = true;
+        }
+      }
       else if(doc["payload"].containsKey("fwVersion"))
       {
           spaControlStatus->fwVersion = true;
@@ -1454,7 +1453,7 @@ void spaControl_create_filter_cycle(char *json_str)
     {
       // spaControlStatus.filter2 = false;
       // spaFilterSettingsData.filt2Hour = spaFilterSettingsData.filt2Hour & ~(1 << 7);
-      payload["filter2StartHour"] = spaFilterSettingsData.filt2Hour;
+      payload["filter2StartHour"] = spaFilterSettingsData.filt2Hour & ~(1 << 7); //spaFilterSettingsData.filt2Hour;
       payload["filter2StartMin"] = spaFilterSettingsData.filt2Minute;
       payload["filter2DurationHour"] = spaFilterSettingsData.filt2DurationHour;
       payload["filter2DurationMin"] = spaFilterSettingsData.filt2DurationMinute;
@@ -1554,26 +1553,26 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   payload["heatMode"] = getMapDescription(_SpaStatusData.heatingMode, heatingModeMap);
   payload["tempRange"] = getMapDescription(_SpaStatusData.tempRange, tempRangeMap);
   payload["heatStatus"] = getMapDescription(_SpaStatusData.heatingState, heatingStateMap);
-  // if(_SpaStatusData.filterMode == 0)
-  // {
-  //   payload["filterCycle1"] = "Off";
-  //   payload["filterCycle2"] = "Off";
-  // }
-  // else if(_SpaStatusData.filterMode == 1)
-  // {
-  //   payload["filterCycle1"] = "On";
-  //   payload["filterCycle2"] = "Off";
-  // }
-  // else if(_SpaStatusData.filterMode == 2)
-  // {
-  //   payload["filterCycle1"] = "Off";
-  //   payload["filterCycle2"] = "On";
-  // }
-  // else if(_SpaStatusData.filterMode == 3)
-  // {
-  //   payload["filterCycle1"] = "On";
-  //   payload["filterCycle2"] = "On";
-  // }
+  if(_SpaStatusData.filterMode == 0)
+  {
+    payload["filterCycle1"] = "Off";
+    payload["filterCycle2"] = "Off";
+  }
+  else if(_SpaStatusData.filterMode == 1)
+  {
+    payload["filterCycle1"] = "On";
+    payload["filterCycle2"] = "Off";
+  }
+  else if(_SpaStatusData.filterMode == 2)
+  {
+    payload["filterCycle1"] = "Off";
+    payload["filterCycle2"] = "On";
+  }
+  else if(_SpaStatusData.filterMode == 3)
+  {
+    payload["filterCycle1"] = "On";
+    payload["filterCycle2"] = "On";
+  }
 
   if(spaControlStatus.device_info)
   {
@@ -1994,22 +1993,34 @@ void filterCycleTrial(void)
   //   Log.notice("filter 2 nana\n");
   //   filterCycleData->filter2StartHour = 0;
   // }
+  
+  // if(spaFilterSettingsData.filt2Enable)
+  // {
+  //   spaFilterSettingsData.filt2Hour =spaFilterSettingsData.filt2Hour | (1 << 7);
+  //   dataBuffer.push(spaFilterSettingsData.filt2Hour); // Filter 2 enable(bit 7) & stating hours 23
+  //   dataBuffer.push(spaFilterSettingsData.filt2Minute); // Filter 2 minutes 23
+  //   dataBuffer.push(spaFilterSettingsData.filt2DurationHour); // Filter 2 Duration hours 23
+  //   dataBuffer.push(spaFilterSettingsData.filt2DurationMinute); // Filter 2 Duration hours 23
+
+  // }
+  // else
+  // {
+  //   dataBuffer.push(0); // Filter 2 enable(bit 7) & stating hours 23
+  //   dataBuffer.push(0); // Filter 2 minutes 23
+  //   dataBuffer.push(0); // Filter 2 Duration hours 23
+  //   dataBuffer.push(0); // Filter 2 Duration hours 23
+  // }
+
   if(spaFilterSettingsData.filt2Enable)
   {
     spaFilterSettingsData.filt2Hour =spaFilterSettingsData.filt2Hour | (1 << 7);
-    dataBuffer.push(spaFilterSettingsData.filt2Hour); // Filter 2 enable(bit 7) & stating hours 23
-    dataBuffer.push(spaFilterSettingsData.filt2Minute); // Filter 2 minutes 23
-    dataBuffer.push(spaFilterSettingsData.filt2DurationHour); // Filter 2 Duration hours 23
-    dataBuffer.push(spaFilterSettingsData.filt2DurationMinute); // Filter 2 Duration hours 23
+  }
 
-  }
-  else
-  {
-    dataBuffer.push(0); // Filter 2 enable(bit 7) & stating hours 23
-    dataBuffer.push(0); // Filter 2 minutes 23
-    dataBuffer.push(0); // Filter 2 Duration hours 23
-    dataBuffer.push(0); // Filter 2 Duration hours 23
-  }
+  dataBuffer.push(spaFilterSettingsData.filt2Hour); // Filter 2 enable(bit 7) & stating hours 23
+  dataBuffer.push(spaFilterSettingsData.filt2Minute); // Filter 2 minutes 23
+  dataBuffer.push(spaFilterSettingsData.filt2DurationHour); // Filter 2 Duration hours 23
+  dataBuffer.push(spaFilterSettingsData.filt2DurationMinute); // Filter 2 Duration hours 23
+  
   addCRC(dataBuffer);
   sendMessageToSpa(dataBuffer);
 }

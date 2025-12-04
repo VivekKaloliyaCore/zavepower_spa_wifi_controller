@@ -957,6 +957,7 @@ bool spaMessage_isSpaStatusDataStale(void)
      || spaStatusData.heatingMode != spaStatusDataBackup.heatingMode
      || spaStatusData.tempRange != spaStatusDataBackup.tempRange
      /*|| spaStatusData.heatingState != spaStatusDataBackup.heatingState*/
+     || spaStatusData.filterMode != spaStatusDataBackup.filterMode
     )
   {
     return true;
