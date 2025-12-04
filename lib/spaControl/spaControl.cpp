@@ -10,7 +10,6 @@
 
 #include "spaControl.h"
 #include "rs485.h"
-#include "spaMqttMessage.h"
 #include "PubSubClient.h"
 #include "mqttModule.h"
 #include <wifiModule.h>
@@ -665,7 +664,7 @@ void sendOTAStarted(void)
   String output;
   serializeJson(doc, output);
   memcpy(json_str, output.c_str(), strlen(output.c_str()));
-  spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+  mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
 }
 
 void sendOTASuccess(void)
@@ -687,7 +686,7 @@ void sendOTASuccess(void)
   String output;
   serializeJson(doc, output);
   memcpy(json_str, output.c_str(), strlen(output.c_str()));
-  spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+  mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
 }
 
 void sendOTAFail(void)
@@ -709,7 +708,7 @@ void sendOTAFail(void)
   String output;
   serializeJson(doc, output);
   memcpy(json_str, output.c_str(), strlen(output.c_str()));
-  spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+  mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
 }
 
 void spaControl_mqtt_action(void)
@@ -721,8 +720,8 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     // SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_bootupPacket(json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
-    // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    // mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
     Log.notice("Boot Up pacage Published\n");
     
     // spaControlStatus.setupInfo = true;// Enable this to send setupinfo at the time of bootup.
@@ -737,7 +736,7 @@ void spaControl_mqtt_action(void)
     SpaInformationData spa_information_data = spaMessage_get_spaInformationData();
     k = 0;
     spaControl_create_setupInfo(spa_information_data, json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
     Log.notice(">>>>Setup Info Published\n");
   }
   
@@ -750,7 +749,7 @@ void spaControl_mqtt_action(void)
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_deviceStatus(spa_status_data, json_str);
 
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.currentTemp)
@@ -761,7 +760,7 @@ void spaControl_mqtt_action(void)
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_currentTemp(spa_status_data, json_str);
 
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.setTemp)
@@ -772,7 +771,7 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_setTemp(spa_status_data, json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.heatMode)
@@ -782,7 +781,7 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_heatMode(spa_status_data, json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.tempRange)
@@ -793,7 +792,7 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_tempRange(spa_status_data, json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.filterCycle)
@@ -803,7 +802,7 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
     spaControl_create_filter_cycle(json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.hold)
@@ -813,7 +812,7 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
     spaControl_create_hold_status(json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.tempScale)
@@ -825,7 +824,7 @@ void spaControl_mqtt_action(void)
     // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
     spaControl_create_tempScale_status(json_str);
     Log.notice("Created temp scale\n");
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
     Log.notice("Sent temp scale\n");
   }
 
@@ -836,7 +835,7 @@ void spaControl_mqtt_action(void)
     memset(&json_str[0], 0, sizeof(json_str));
     // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
     spaControl_create_fwVersion(json_str);
-    spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
   }
 
   if(spaControlStatus.ota_stat)

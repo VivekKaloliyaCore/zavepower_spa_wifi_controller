@@ -19,21 +19,17 @@
 #include <rs485.h>
 #include "spaMessage.h"
 #include "spaControl.h"
-#include "spaMqttMessage.h"
 #include "httpsClient.h"
 #include "../httpServer/httpServer.h"
 // Local Functions
 void reconnect();
 void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length);
-void nodeStateReport();
 bool mqtt_state();
 // WiFiClient wifiClient;
 // PubSubClient mqtt(wifiClient);
 WiFiClientSecure wifiClientSecure;
 PubSubClient mqtt(wifiClientSecure);
 String mqttTopic = "Spa/"; // root topic, gets appeanded with node mac address
-
-// TickTwo sendStatus(nodeStateReport, 1.5 * 60 * 1000); // 5 minutes
 
 /* OTA */
 static bool otaUpdateRunning = false;
@@ -75,13 +71,6 @@ void mqttModuleSetup()
   // mqtt_params.is_mqtt_topic_postfix_present = true;
   // sprintf(&mqtt_params.mqtt_topic_postfix[0], "response");
   // set_mqtt_params(mqtt_params);
-  // spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
-  // spaMqttMessage_publish_message("response/server", NULL, 0);
-  // spaMqttMessage_publish_message("debug", NULL, 0);
-  // spaMqttMessage_publish_message("bridge/msg", NULL, 0);
-  // spaMqttMessage_publish_message("debug/message", NULL, 0);
-  // spaMqttMessage_publish_message("debug/error", NULL, 0);
-  // spaMqttMessage_publish_message("status", NULL, 0);
 }
 
 bool mqtt_state()
@@ -193,16 +182,17 @@ void reconnect()
         preferences.putString("boot_up", "true");
     
         /* enable retain code */
-        spaMqttMessage_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
-        spaMqttMessage_publish_message("response/server", NULL, 0);
-        spaMqttMessage_publish_message("debug", NULL, 0);
-        spaMqttMessage_publish_message("bridge/msg", NULL, 0);
-        spaMqttMessage_publish_message("debug/message", NULL, 0);
-        spaMqttMessage_publish_message("debug/error", NULL, 0);
-        spaMqttMessage_publish_message("status", NULL, 0);
+        mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
+        mqttModule_publish_message("response/server", NULL, 0);
+        mqttModule_publish_message("debug", NULL, 0);
+        mqttModule_publish_message("bridge/msg", NULL, 0);
+        mqttModule_publish_message("debug/message", NULL, 0);
+        mqttModule_publish_message("debug/error", NULL, 0);
+        mqttModule_publish_message("status", NULL, 0);
+        mqttModule_publish_message("node/", NULL, 0);
+        mqttModule_publish_message("node/state", NULL, 0);
       }
 
-      publishError("MQTT Timeout - Reconnect Successfully Run", false);
       mqtt.subscribe((mqttTopic + "command").c_str());
       mqtt.subscribe((mqttTopic + "command/server").c_str());
       
@@ -249,8 +239,6 @@ void reconnect()
       // httpStart();
       // delay(2000);
       // Log.notice("http Started \n");
-
-      // nodeStateReport();
     }
   }
   mqtt.setBufferSize(512); // increase pubsubclient buffer size
@@ -442,34 +430,20 @@ void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length)
   // mqtt.publish(p_topic, p_payload, p_length);
 }
 
-void nodeStateReport()
+void mqttModule_publish_message(char *topic, char *msg, int msg_len)
 {
-  if (mqtt.connected())
+  char topic_final[128];
+  snprintf(topic_final, sizeof(topic_final), "%s%s", mqttTopic.c_str(), topic);
+  // Log.verbose("Publishing %s: %s\n", topic_final, msg);
+
+  if(msg_len)
   {
-    publishNodeStatus("ip", WiFi.localIP().toString().c_str(), false);
-    publishNodeStatus("mac", WiFi.macAddress().c_str(), false);
-    publishNodeStatus("gateway", gatewayName, false);
-    publishNodeStatus("restartReason", getLastRestartReason().c_str(), false);
-    publishNodeStatus("uptime", String(millis() / 1000).c_str(), false);
-    publishNodeStatus("getTime", String(getTime()).c_str(), false);
-    publishNodeStatus("state", "ON", false);
-    publishNodeStatus("flashsize", String(ESP.getFlashChipSize()).c_str(), false);
-    publishNodeStatus("chipid", String(ESP.getChipModel()).c_str(), false);
-    publishNodeStatus("speed", String(ESP.getCpuFreqMHz()).c_str(), false);
-    publishNodeStatus("heap", String(ESP.getFreeHeap()).c_str(), false);
-    publishNodeStatus("psram", String(ESP.getFreePsram()).c_str(), false);
-    publishNodeStatus("stack", String(uxTaskGetStackHighWaterMark(NULL)).c_str(), false);
-
-    publishNodeStatus("rs485 messagesToday", String(rs485Stats.messagesToday).c_str(), false);
-    publishNodeStatus("rs485 crcToday", String(rs485Stats.crcToday).c_str(), false);
-    publishNodeStatus("rs485 messagesYesterday", String(rs485Stats.messagesYesterday).c_str(), false);
-    publishNodeStatus("rs485 crcYesterday", String(rs485Stats.crcYesterday).c_str(), false);
-    publishNodeStatus("rs485 badFormatToday", String(rs485Stats.badFormatToday).c_str(), false);
-    publishNodeStatus("rs485 badFormatYesterday", String(rs485Stats.badFormatYesterday).c_str(), false);
-
-    String release = String(__DATE__) + " - " + String(__TIME__);
-    publishNodeStatus("release", release.c_str(), false);
-    publishNodeStatus("buildDefinition", buildDefinitionString.c_str(), false);
+    mqtt.publish(topic_final, (uint8_t*)msg, msg_len, false);
+  }
+  else if(msg_len == 0)
+  {
+    Serial.printf(">>>> Sending empty message\n");
+    mqtt.publish(topic_final, (uint8_t*)"", 0, (boolean)true);
   }
 }
 

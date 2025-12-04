@@ -9,7 +9,6 @@
 #include "spaControl.h"
 #include "../../src/config.h"
 #include "../../src/main.h"
-#include "spaMqttMessage.h"
 
 // QueueHandle_t rs485WriteQueue;
 int last_crc = 0;
@@ -176,7 +175,7 @@ void rs485Loop()
         {
           last_crc = received_crc;
           Log.verbose(F("[rs485]: Received: %d - %s" CR), id, msgToString(spaMessage).c_str());
-          spaMqttMessage_publish_message("debug", (char *)msgToString(spaMessage).c_str(), spaMessage.size());
+          // mqttModule_publish_message("debug", (char *)msgToString(spaMessage).c_str(), spaMessage.size());
         }
       }
 
@@ -201,8 +200,6 @@ void rs485Loop()
                 id = 0x2F;
 
               ID_ack();
-              mqtt.publish((mqttTopic + "node/id").c_str(), String(id, 16).c_str());
-              publishDebug("Received SPA id");
             }
 
             // FE BF 00:Any new clients?
@@ -262,7 +259,6 @@ void rs485Loop()
 
 void rs485ClearToSend()
 {
-  //  mqtt.publish((mqttTopic + "node/rs485Queue").c_str(), "rs485ClearToSend");
   rs485WriteQueueMessage *message;
   CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> dataBuffer;
   if (xQueueReceive(spaWriteQueue, &message, 0) == pdTRUE)
@@ -271,7 +267,6 @@ void rs485ClearToSend()
     {
       dataBuffer.push(message->message[i]);
     }
-    //   mqtt.publish((mqttTopic + "node/rs485Queue").c_str(), "Queue Receive");
     rs485Write(dataBuffer);
     delete message;
   }
@@ -283,7 +278,6 @@ void rs485ClearToSend()
     dataBuffer.push(0xBF);
     dataBuffer.push(0x07);
     addCRC(dataBuffer);
-    //    mqtt.publish((mqttTopic + "node/rs485Queue").c_str(), "Clear to Send");
     rs485Write(dataBuffer);
   }
 }

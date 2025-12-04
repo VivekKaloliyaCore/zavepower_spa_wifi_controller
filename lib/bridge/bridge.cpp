@@ -11,8 +11,6 @@
 #include "spaMessage.h"
 #include "balboa.h"
 
-#define publishBridge(...) mqtt.publish((mqttTopic + "bridge/msg").c_str(), __VA_ARGS__)
-
 // Local functions
 
 CircularBuffer<uint8_t, BALBOA_MESSAGE_SIZE> Q_out;

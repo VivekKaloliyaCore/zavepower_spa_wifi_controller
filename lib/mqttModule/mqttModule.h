@@ -26,10 +26,6 @@
 // #define BROKER_PASS ""
 // #endif
 
-#define publishDebug(...) mqtt.publish((mqttTopic + "debug/message").c_str(), __VA_ARGS__);
-#define publishError(...) mqtt.publish((mqttTopic + "debug/error").c_str(), __VA_ARGS__);
-#define publishNodeStatus(topic, ...) mqtt.publish((mqttTopic + "node/" + topic).c_str(), __VA_ARGS__);
-
 #ifdef USE_MQTTS
     #ifdef USE_COREFRAGMENT_MQTT_CREDS
     #define MQTTS_SERVER        "a105disq94b521-ats.iot.ap-south-1.amazonaws.com"       // CoreFragment AWS URL
@@ -244,6 +240,7 @@ static const char *ota_server_certificate = "-----BEGIN CERTIFICATE-----\n"
 
 void mqttModuleSetup();
 void mqttModuleLoop();
+void mqttModule_publish_message(char *topic, char *msg, int msg_len);
 void performOTA(String firmwareURL);
 void performOTA_unsecured(String firmwareURL);
 bool mqtt_state();

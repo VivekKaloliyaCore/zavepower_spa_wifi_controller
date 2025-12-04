@@ -6,7 +6,6 @@
 
 #include "../../src/main.h"
 #include "balboa.h"
-#include "spaMqttMessage.h"
 #include "rs485.h"
 #include "bridge.h"
 #include "../spaControl/spaControl.h"
@@ -347,7 +346,6 @@ void parsePreferencesResponse(u_int8_t *message, int length)
   spaPreferencesData.m8AI = hexArray[8];
 
   Log.verbose(F("[Mess]: Preferences Response: %s" CR), msgToString(hexArray, length - 7).c_str());
-  void publishSpaPreferencesData();
 }
 
 /*
@@ -382,7 +380,6 @@ void parseWiFiModuleConfigurationResponse(u_int8_t *message, int length)
   sprintf(wiFiModuleConfigurationData.macAddress, "%02x:%02x:%02x:%02x:%02x:%02x", hexArray[3], hexArray[4], hexArray[5], hexArray[6], hexArray[7], hexArray[8]);
 
   // Log.verbose(F("[Mess]: WiFi Module Configuration Response: %s" CR), msgToString(hexArray, length - 7).c_str());
-  publishWiFiModuleConfigurationData();
 }
 
 /*
@@ -441,8 +438,6 @@ void parseConfigurationResponse(u_int8_t *message, int length)
   spaConfigurationData.mister = TwoBit(hexArray[4], 4);
 
   // Log.verbose(F("[Mess]: Configuration Response: %s" CR), msgToString(hexArray, length - 7).c_str());
-  publishSpaConfigurationData();
-
 }
 
 /*
@@ -489,7 +484,6 @@ void parseInformationResponse(u_int8_t *message, int length)
   sprintf(spaInformationData.dipSwitch, "%x%x", hexArray[20], hexArray[19]);
 
   // Log.verbose(F("[Mess]: Information Response: %s" CR), msgToString(hexArray, length - 7).c_str());
-  publishSpaInformationData();
 }
 
 /*
@@ -775,8 +769,7 @@ bool parseStatusMessage(u_int8_t *message, int length)
       //   Log.notice("Not sending deviceStatus...\n");
       // }
     }
-
-    // publishSpaStatusData();
+    
     return true;
   }
   return false;
@@ -795,7 +788,6 @@ void parseFaultResponse(u_int8_t *message, int length)
   u_int8_t *hexArray = message + 5;
 
   Log.verbose(F("[Mess]: Fault Log Response: %s" CR), msgToString(hexArray, length - 7).c_str());
-  publishSpaFaultLogData();
 }
 
 void parseFilterResponse(u_int8_t *message, int length)
@@ -825,7 +817,6 @@ void parseFilterResponse(u_int8_t *message, int length)
     spaFilterSettingsData.filt1Minute, spaFilterSettingsData.filt1DurationHour, spaFilterSettingsData.filt1DurationMinute, spaFilterSettingsData.filt2Enable, \
     spaFilterSettingsData.filt2Hour, spaFilterSettingsData.filt2Minute, spaFilterSettingsData.filt2DurationHour, spaFilterSettingsData.filt2DurationMinute);
   // Log.verbose(F("[Mess]: Filter Response: %s" CR), msgToString(hexArray, length - 7).c_str());
-  publishSpaFilterSettingsData();
 }
 
 void parseSettings0x04Response(u_int8_t *message, int length)
@@ -841,7 +832,6 @@ void parseSettings0x04Response(u_int8_t *message, int length)
   u_int8_t *hexArray = message + 5;
 
   // Log.verbose(F("[Mess]: Settings 0x04 Response: %s" CR), msgToString(hexArray, length - 7).c_str());
-  publishSpaSettings0x04Data();
 }
 
 void sendMessageToSpa(uint8_t *data, int length)
