@@ -10,6 +10,7 @@
 #include "bridge.h"
 #include "../spaControl/spaControl.h"
 #include "httpsClient.h"
+#include <wifiModule.h>
 
 
 #define TwoBit(value, bit) (((value) >> (bit)) & 0x03)
@@ -37,6 +38,7 @@ RTC_NOINIT_ATTR SpaFilterSettingsData spaFilterSettingsData;
 RTC_NOINIT_ATTR SpaPreferencesData spaPreferencesData;
 RTC_NOINIT_ATTR WiFiModuleConfigurationData wiFiModuleConfigurationData;
 RTC_NOINIT_ATTR SpaFaultLogData spaFaultLogData;
+static SpaTimeData spaTimeData;
 
 // private functions
 bool parseStatusMessage(u_int8_t *, int);
@@ -49,6 +51,7 @@ void parseFilterResponse(u_int8_t *, int);
 void parseSettings0x04Response(u_int8_t *, int);
 void configurationRequest();
 void updateTemperatureHistory();
+void parseTimeResponse(u_int8_t *message, int length);
 
 TickTwo temperatureHistory(updateTemperatureHistory, .75 * 60 * 1000); // Initial interval is 1 minute, then hourly on first execution
 
@@ -142,6 +145,8 @@ void spaMessageSetup()
     Log.verbose(F("[Mess]: Stale Preferences" CR));
   }
 
+  spaTimeData = {};
+
   temperatureHistory.start();
 }
 
@@ -187,6 +192,9 @@ void spaMessageLoop()
       case WiFi_Module_Configuration_Type:
         Log.verbose(F("[Mess]: WiFi Module Configuration Response: %s" CR), msgToString(message->message, message->length).c_str());
         parseWiFiModuleConfigurationResponse(message->message, message->length);
+        break;
+      case Set_Time_Type:
+        parseTimeResponse(message->message, message->length);
         break;
       default:
         Log.verbose(F("[Mess]: Unknown Message Type: %x - %s" CR), message->message[4], msgToString(message->message, message->length).c_str());
@@ -954,4 +962,22 @@ bool spaMessage_isSpaStatusDataStale(void)
   }
 
   return false;
+}
+
+void parseTimeResponse(u_int8_t *message, int length)
+{
+  // if(spaTimeData.crc != message[message[1]])
+  {
+    spaTimeData.crc = message[message[1]];
+    spaTimeData.hour = message[5];
+    spaTimeData.minute = message[6];
+    Log.noticeln("Time has been updated manually !!!");
+    Log.noticeln("    -> Set time : %d:%d", spaTimeData.hour, spaTimeData.minute);
+
+    /* sync time */
+    Log.noticeln("    -> Local time auto-syncing...");
+    struct tm time_now = getStructTime();
+    Log.noticeln("    -> Auto-sync local time : %d:%d", time_now.tm_hour, time_now.tm_min);
+    syncWithNetworkTime(time_now.tm_hour, time_now.tm_min);
+  }
 }

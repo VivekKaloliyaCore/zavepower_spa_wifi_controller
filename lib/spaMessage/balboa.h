@@ -297,6 +297,13 @@ struct SpaPreferencesData
   uint8_t m8AI;
 };
 
+struct SpaTimeData
+{
+  uint8_t crc;
+  uint8_t hour;
+  uint8_t minute;
+};
+
 const std::map<uint8_t, const char *> spaStateMap = {
     {0, "Running"},
     {1, "Initializing"},

@@ -144,7 +144,7 @@ void rs485Loop()
   {
     if (isMessageValid(spaMessage))
     {
-      if(spaMessage[4] == 0x23) // Filter Cycle Message
+      if(spaMessage[4] == Set_Time_Type) // Set time
       {
         SpaReadQueueMessage *messageToSend = new SpaReadQueueMessage;
         messageToSend->length = (spaMessage.size() < BALBOA_MESSAGE_SIZE ? spaMessage.size() : BALBOA_MESSAGE_SIZE);
@@ -155,7 +155,18 @@ void rs485Loop()
         xQueueSend(spaReadQueue, &messageToSend, 0);
       }
 
-      if(spaMessage[4] == 0x2E) // Configuration Response
+      if(spaMessage[4] == Filter_Cycles_Type) // Filter Cycle Message
+      {
+        SpaReadQueueMessage *messageToSend = new SpaReadQueueMessage;
+        messageToSend->length = (spaMessage.size() < BALBOA_MESSAGE_SIZE ? spaMessage.size() : BALBOA_MESSAGE_SIZE);
+        for (int i = 0; i < messageToSend->length; i++)
+        {
+          messageToSend->message[i] = spaMessage[i];
+        }
+        xQueueSend(spaReadQueue, &messageToSend, 0);
+      }
+
+      if(spaMessage[4] == Configuration_Type) // Configuration Response
       {
         SpaReadQueueMessage *messageToSend = new SpaReadQueueMessage;
         messageToSend->length = (spaMessage.size() < BALBOA_MESSAGE_SIZE ? spaMessage.size() : BALBOA_MESSAGE_SIZE);
@@ -222,7 +233,7 @@ void rs485Loop()
         {
           messageToSend->message[i] = spaMessage[i];
         }
-
+        
         if (xQueueSend(spaReadQueue, &messageToSend, 0) != pdTRUE)
         {
           // Log.error(F("[rs485]: SPA Read Queue full, dropped %s" CR), msgToString(messageToSend->message, messageToSend->length).c_str()); // Commented for Test:::

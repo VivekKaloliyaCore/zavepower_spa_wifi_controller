@@ -449,17 +449,21 @@ void wifiConnect();
 void otaSetup();
 
 String getStringTime();
+struct tm getStructTime();
 
 void wifiModuleEraseStaConfig(void);
 
 
 bool wifiModuleCnnectToWiFiOneTime(void);
 int32_t wifiModuleGetRSSI(void);
+bool syncTimeFromIpApi(void);
 
 extern bool restart_esp;
 extern bool ap_configuration_on;
 
 // #include <Preferences.h>
 // Preferences preferences;
+
+void syncWithNetworkTime(int hr, int min);
 
 #endif

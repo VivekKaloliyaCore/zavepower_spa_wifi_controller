@@ -4,6 +4,10 @@
 #include <ArduinoLog.h>
 #include <time.h>
 
+#include <HTTPClient.h>
+#include <WiFiClientSecure.h>
+#include <ArduinoJson.h>
+
 #include <restartReason.h>
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
@@ -19,6 +23,10 @@ char gatewayName[20];
 static int wifi_sta_connect_retry = 0;
 bool ap_configuration_on = false;
 bool restart_esp = false;
+
+unsigned long lastCheck = 0;
+bool internetOK = false;
+IPAddress ip;
 
 void wifiModuleCnnectToWiFi();
 bool wifiModuleCnnectToWiFiOneTime(void);
@@ -53,8 +61,10 @@ void wifiModuleCnnectToWiFi()
 
     if (WiFi.status() == WL_CONNECTED)
     {
-        configTime(gmtOffset_sec, daylightOffset_sec, "pool.ntp.org");
+        // configTime(gmtOffset_sec, daylightOffset_sec, "pool.ntp.org");
         Log.notice(F("[WiFi]: Connected, IP Address: %s" CR), WiFi.localIP().toString().c_str());
+
+        syncTimeFromIpApi();
 
         int timeSyncRetry = 0;
         while(strstr(getStringTime().c_str(), "Failed to obtain time") && timeSyncRetry < 3)
@@ -69,6 +79,10 @@ void wifiModuleCnnectToWiFi()
 
         Log.notice(F("[WiFi]: Time: %s" CR), getStringTime().c_str());
         // otaSetup();
+
+        /* sync time */
+        struct tm time_now = getStructTime();
+        syncWithNetworkTime(time_now.tm_hour, time_now.tm_min);
 
         wifi_sta_connect_retry = 0;
     }
@@ -195,6 +209,19 @@ void wifiModuleLoop()
   {
     stServerOn();
   }
+
+  // if (millis() - lastCheck > 10000) {  // every 10s
+  //     lastCheck = millis();
+  //     internetOK = WiFi.hostByName("google.com", ip);
+  //     Log.notice("Internet is %s\n", internetOK?"Ok.":"Not ok.");
+  // }
+
+  // if (millis() - lastCheck > 5000) {  // every 10s
+  //     lastCheck = millis();
+  //     struct tm t;
+  //     getLocalTime(&t);
+  //     Serial.println(&t, "%Y-%m-%d %H:%M:%S");
+  // }
 }
 
 /* Functions */
@@ -246,6 +273,17 @@ String getStringTime()
   strftime(timeCharArray, sizeof(timeCharArray), "%Y-%m-%d %H:%M:%S", &timeinfo);
 
   return String(timeCharArray);
+}
+
+struct tm getStructTime()
+{
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo))
+  {
+    Log.error(F("[WiFi]: Obtaining Time failed" CR));
+  }
+
+  return timeinfo;
 }
 
 void notifyOfUpdateStarted()
@@ -306,4 +344,79 @@ bool wifiModuleCnnectToWiFiOneTime(void)
 int32_t wifiModuleGetRSSI(void)
 {
   return WiFi.RSSI();
+}
+
+bool syncTimeFromIpApi(void)
+{
+    if (WiFi.status() != WL_CONNECTED) {
+        return false;
+    }
+
+    WiFiClientSecure client;
+    client.setInsecure(); // skip cert validation
+
+    HTTPClient https;
+    if (!https.begin(client, "https://ipapi.co/json")) {
+        return false;
+    }
+
+    int httpCode = https.GET();
+    if (httpCode != 200) {
+        https.end();
+        return false;
+    }
+
+    String payload = https.getString();
+    https.end();
+
+    StaticJsonDocument<1024> doc;
+    if (deserializeJson(doc, payload) != DeserializationError::Ok) {
+        return false;
+    }
+
+    const char* utc_offset = doc["utc_offset"]; // "+0530"
+    if (!utc_offset || strlen(utc_offset) != 5) {
+        return false;
+    }
+
+    // ---- Convert "+0530" → POSIX TZ ----
+    int sign = (utc_offset[0] == '-') ? -1 : 1;
+    int hours = (utc_offset[1] - '0') * 10 + (utc_offset[2] - '0');
+    int minutes = (utc_offset[3] - '0') * 10 + (utc_offset[4] - '0');
+
+    int tz_hours = -sign * hours;
+
+    char tz[20];
+    if (minutes == 0) {
+        snprintf(tz, sizeof(tz), "UTC%+d", tz_hours);
+    } else {
+        snprintf(tz, sizeof(tz), "UTC%+d:%02d", tz_hours, minutes);
+    }
+    Log.noticeln("Setting TZ to: %s", tz);   // LOC-5:30 for India
+
+    configTime(0, 0, "pool.ntp.org", "time.nist.gov");
+    struct tm timeinfo;
+    while (!getLocalTime(&timeinfo)) {
+      delay(500);
+      Log.notice(".");
+    }
+    // Print UTC
+    Log.notice("UTC: %d:%d:%d\n",
+            timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+    // setenv("TZ", "IST-5:30", 1);  // ✅ Set IST timezone
+    // setenv("TZ", "UTC-5:30", 1);  // ✅ Set IST timezone
+    setenv("TZ", tz, 1);  // ✅ Set IST timezone
+    tzset();
+    while (!getLocalTime(&timeinfo)) {
+      delay(500);
+      Log.notice(".");
+    }
+    Log.notice("Local time: %d:%d:%d\n",
+            timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+    Log.noticeln("Time synchronized (IST)");
+    Log.noticeln("");
+
+    (strstr(getStringTime().c_str(), "Failed to obtain time")) ? false : true;
+
+    return true;
 }

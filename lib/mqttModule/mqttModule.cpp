@@ -168,6 +168,10 @@ void reconnect()
 
     if (mqtt.connected())
     {
+      /* sync time */
+      struct tm time_now = getStructTime();
+      syncWithNetworkTime(time_now.tm_hour, time_now.tm_min);
+
       mqtt_params_t mqtt_params = {0};
       memset(&mqtt_params, 0, sizeof(mqtt_params_t));
       mqtt_params.is_mqtt_topic_postfix_present = true;

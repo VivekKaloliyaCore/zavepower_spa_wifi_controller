@@ -143,4 +143,5 @@ void setTime(int hour, int minute);
 void setCleanupCycle(void);
 void setM8_off(void);
 void setM8_off_byOTA(void);
+// void syncWithNetworkTime(int hr, int min);
 #endif

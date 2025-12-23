@@ -1106,6 +1106,16 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
           hour = hr;
           minute = min;
           spaControlParams->is_time_present = true;
+
+          Log.noticeln("Time has been updated manually !!!");
+          Log.noticeln("    -> Set time : %d:%d", hour, minute);
+
+          /* sync time */
+          Log.noticeln("    -> Local time auto-syncing...");
+          struct tm time_now = getStructTime();
+          hour = time_now.tm_hour;
+          minute = time_now.tm_min;
+          Log.noticeln("    -> Auto-sync local time : %d:%d", hour, minute);
         }
         else
         {
@@ -2163,4 +2173,17 @@ void setM8_off_byOTA(void)
   addCRC(dataBuffer);
   // sendMessageToSpa(dataBuffer);
   rs485Write(dataBuffer);
+}
+
+void syncWithNetworkTime(int hr, int min)
+{
+  hour = hr;
+  minute = min;
+
+  Log.notice("Sync with network local time: %d:%d\n", hour, minute);
+
+  spaControlParams_t spaControlParamsTemp = {0};
+  memset(&spaControlParamsTemp, 0, sizeof(spaControlParams_t));
+  spaControlParamsTemp.is_time_present = true;
+  set_spaControlParams(spaControlParamsTemp);
 }
