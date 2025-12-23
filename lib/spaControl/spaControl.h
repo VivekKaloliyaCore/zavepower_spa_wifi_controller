@@ -79,6 +79,8 @@ typedef struct {
   bool is_m8_present;
 
   bool is_cleanupCycle_present;
+
+  bool req_config;
 } spaControlParams_t;
 
 typedef struct {
@@ -101,6 +103,7 @@ typedef struct {
   bool fwVersion;
   bool hold;
   bool tempScale;
+  bool time;
 } spaControlStatus_t;
 
 typedef struct {
@@ -131,6 +134,7 @@ void spaControl_create_bootupPacket(char *json_str);
 void spaControl_create_setupInfo(SpaInformationData spa_information_data, char *json_str);
 void spaControl_create_errorCode_message(char *json_str, uint8_t initMode, uint8_t reminderType);
 void spaControl_create_fwVersion(char *json_str);
+void spaControl_create_getTime_response(char *json_str);
 
 
 // extern mqtt_params_t mqtt_params;
@@ -144,4 +148,7 @@ void setCleanupCycle(void);
 void setM8_off(void);
 void setM8_off_byOTA(void);
 // void syncWithNetworkTime(int hr, int min);
+// void requestConnfig(void);
+void triggerBootupTicker(spaControlStatus_t _spaControlStatus);
+bool is_bootup_packets_sent_on_bootup(void);
 #endif

@@ -75,12 +75,12 @@ void setup()
 
 void loop()
 {
-  if(j == 0)
-  {
-    configRequest(); // Sending config request once
-    Log.notice(">>>>Config Req Sent\n");
-    j++;
-  }
+  // if(j == 0)
+  // {
+  //   configRequest(); // Sending config request once
+  //   Log.notice(">>>>Config Req Sent\n");
+  //   j++;
+  // }
   // if(j == 1)
   // {
   //   spaControlStatus.setupInfo = true;
@@ -102,6 +102,16 @@ void loop()
       spaControl_action();// Temp comment
     }
   }
+
+  if (Serial.available())
+	{
+		char cmd = Serial.read();
+		if (cmd == 'c')
+		{
+			configRequest(); // Sending config request once
+      Log.notice(">>>>Config Req Sent\n");
+		}
+	}
 
 
   // setTime(hour, minute);

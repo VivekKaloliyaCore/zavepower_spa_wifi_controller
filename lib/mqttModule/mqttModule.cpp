@@ -237,8 +237,8 @@ void reconnect()
       // configRequest();
       // spaControlStatus.setupInfo = true;
       
-      set_spaControlStatus(spaControlStatus);
-
+      // set_spaControlStatus(spaControlStatus);
+      triggerBootupTicker(spaControlStatus);
 
       // httpStart();
       // delay(2000);

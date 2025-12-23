@@ -635,6 +635,8 @@ bool parseStatusMessage(u_int8_t *message, int length)
     // Log.verbose(F("[Mess]: Status Response: %s" CR), msgToString(hexArray, length - 7).c_str()); // Commented for Test
 
     /* send status over MQTT */
+    if(!is_bootup_packets_sent_on_bootup())
+      return true;
     spaControlParams_t spaControlParams = get_spaControlParams();
     if(spaControlParams.is_jet1_present)
     {

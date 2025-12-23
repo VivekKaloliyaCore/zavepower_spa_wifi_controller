@@ -18,6 +18,8 @@
 #include <balboa.h>
 #include <Preferences.h>
 
+#include <Ticker.h>
+
 StaticJsonDocument<512> globalDeviceInfo; // Adjust size as needed
 
 mqtt_params_t mqtt_params = {0};
@@ -36,6 +38,9 @@ bool sendSpaCmdSend = false;
 
 static spaControlParams_t spaControlParams = {0};
 static spaControlStatus_t spaControlStatus = {0};
+static spaControlStatus_t spaControlStatusBootupTicker = {0};
+
+static bool is_bootup_packets_sent = false;
 
 // SpaFilterSettingsData spaFilterSettingsData = {0};
 
@@ -44,6 +49,17 @@ Preferences api;
 
 char k = 0;
 char j = 0;
+
+Ticker bootupTicker;
+
+void bootupTickerFunc() {
+  Log.notice("bootupTickerFunc Triggered!\n");
+  
+  spaControlStatus_t spaControlStatusTemp = {0};
+  memset(&spaControlStatusTemp, 0, sizeof(spaControlStatus_t));
+  memcpy(&spaControlStatusTemp, &spaControlStatusBootupTicker, sizeof(spaControlStatus_t));
+  set_spaControlStatus(spaControlStatusTemp);
+}
 
 // Local Function
 void switchTempRange(void);
@@ -67,6 +83,31 @@ void setTempScale(void);
 void setM8_off(void);
 void setM8_off_byOTA(void);
 void configRequest(void);
+
+bool spa_control_parse_time_hh_mm_from_str(const char *str, uint8_t *hour, uint8_t *min)
+{
+    if (!str || !hour || !min) return false;
+
+    // Expected format: HH:MM
+    if (str[2] != ':') return false;
+
+    // Check digits
+    if (str[0] < '0' || str[0] > '9' ||
+        str[1] < '0' || str[1] > '9' ||
+        str[3] < '0' || str[3] > '9' ||
+        str[4] < '0' || str[4] > '9')
+        return false;
+
+    uint8_t h = (str[0] - '0') * 10 + (str[1] - '0');
+    uint8_t m = (str[3] - '0') * 10 + (str[4] - '0');
+
+    // Validate ranges
+    if (h > 23 || m > 59) return false;
+
+    *hour = h;
+    *min  = m;
+    return true;
+}
 
 void myFunction()
 {
@@ -174,6 +215,8 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   spaControlParams.is_cleanupCycle_present = _spaControlParams.is_cleanupCycle_present;
   // spaControlParams.is_reset_wifi_sta_present = _spaControlParams.is_reset_wifi_sta_present;
   // spaControlParams.reset_wifi_sta = _spaControlParams.reset_wifi_sta;
+
+  spaControlParams.req_config = _spaControlParams.req_config;
 }
 
 spaControlStatus_t get_spaControlStatus(void)
@@ -201,6 +244,7 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.fwVersion = _spaControlStatus.fwVersion;
   spaControlStatus.hold = _spaControlStatus.hold;
   spaControlStatus.tempScale = _spaControlStatus.tempScale;
+  spaControlStatus.time = _spaControlStatus.time;
 }
 
 
@@ -217,6 +261,14 @@ void spaControl_action(void)
   //   spaControlStatus.setupInfo = true;
   //   j++;
   // }
+
+  if(spaControlParams.req_config)
+  {
+    spaControlParams.req_config = false;
+    Log.notice("Requesting the config...\n");
+    configRequest();
+  }
+
   if(mqtt_params.parse_mqtt_msg)
   {
     mqtt_params.is_parse_mqtt_msg_present = false;
@@ -284,6 +336,10 @@ void spaControl_action(void)
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.ota_stat)
+      {
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.time)
       {
         set_spaControlStatus(spaControlStatus);
       }
@@ -723,7 +779,12 @@ void spaControl_mqtt_action(void)
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
     // mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], NULL, 0);
     Log.notice("Boot Up pacage Published\n");
-    
+
+    if(!is_bootup_packets_sent)
+    {
+      is_bootup_packets_sent = true;
+    }
+
     // spaControlStatus.setupInfo = true;// Enable this to send setupinfo at the time of bootup.
   }
 
@@ -842,6 +903,19 @@ void spaControl_mqtt_action(void)
   {
     spaControlStatus.ota_stat = false;
     sendOTASuccess();
+  }
+
+  if(spaControlStatus.time)
+  {
+    Log.notice("spaControlStatus.time = true\n");
+    spaControlStatus.time = false;
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
+    spaControl_create_getTime_response(json_str);
+    Log.notice("Created time status\n");
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    Log.notice("Sent time status\n");
   }
 }
 
@@ -1285,6 +1359,10 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       else if(doc["payload"].containsKey("tempScale"))
       {
         spaControlStatus->tempScale = true;
+      }
+      else if(doc["payload"].containsKey("time"))
+      {
+        spaControlStatus->time = true;
       }
     }
 
@@ -1847,6 +1925,41 @@ void spaControl_create_errorCode_message(char *json_str, uint8_t initMode, uint8
   Log.notice("error code message created\n");
 }
 
+void spaControl_create_getTime_response(char *json_str)
+{
+  Log.noticeln("In Create GetTIME response");
+  DynamicJsonDocument doc(200);
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "time";
+  
+  JsonObject payload = doc.createNestedObject("payload");
+  
+  uint8_t hour, min;
+  SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
+  if (spa_control_parse_time_hh_mm_from_str(&spa_status_data.time[0], &hour, &min))
+  {
+    payload["hour"] = hour;
+    payload["minute"] = min;
+  }
+  else
+  {
+    struct tm time_now = getStructTime();
+    payload["hour"] = time_now.tm_hour;
+    payload["minute"] = time_now.tm_min;
+  }
+
+  payload["timezone"]   = get_timezone();
+  payload["utc_offset"] = get_utc_offset();
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+}
+
 
 // Test:::
 void switchTempRange(void)
@@ -2186,4 +2299,30 @@ void syncWithNetworkTime(int hr, int min)
   memset(&spaControlParamsTemp, 0, sizeof(spaControlParams_t));
   spaControlParamsTemp.is_time_present = true;
   set_spaControlParams(spaControlParamsTemp);
+}
+
+void requestConnfig(void)
+{
+  spaControlParams_t spaControlParamsTemp = {0};
+  memset(&spaControlParamsTemp, 0, sizeof(spaControlParams_t));
+  spaControlParamsTemp.req_config = true;
+  set_spaControlParams(spaControlParamsTemp);
+
+  // configRequest();
+}
+
+void triggerBootupTicker(spaControlStatus_t _spaControlStatus)
+{
+  memset(&spaControlStatusBootupTicker, 0, sizeof(spaControlStatus_t));
+  memcpy(&spaControlStatusBootupTicker, &_spaControlStatus, sizeof(spaControlStatus_t));
+
+  /* get config - for setup info */
+  requestConnfig(); // Sending config request once
+  
+  bootupTicker.once(3.0, bootupTickerFunc); // fire once after 3 seconds
+}
+
+bool is_bootup_packets_sent_on_bootup(void)
+{
+  return is_bootup_packets_sent;
 }

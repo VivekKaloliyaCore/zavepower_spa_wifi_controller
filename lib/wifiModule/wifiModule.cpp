@@ -28,6 +28,9 @@ unsigned long lastCheck = 0;
 bool internetOK = false;
 IPAddress ip;
 
+char g_utc_offset[8]    = {0};
+char g_timezone[32]     = {0};
+
 void wifiModuleCnnectToWiFi();
 bool wifiModuleCnnectToWiFiOneTime(void);
 
@@ -346,6 +349,32 @@ int32_t wifiModuleGetRSSI(void)
   return WiFi.RSSI();
 }
 
+const char* get_timezone(void)
+{
+    return g_timezone;
+}
+ 
+const char* get_utc_offset(void)
+{
+    return g_utc_offset;
+}
+ 
+bool set_timezone(const char* tz)
+{
+    if (!tz) return false;
+ 
+    strlcpy(g_timezone, tz, sizeof(g_timezone));
+    return true;
+}
+ 
+bool set_utc_offset(const char* offset)
+{
+    if (!offset || strlen(offset) != 5) return false;
+ 
+    strlcpy(g_utc_offset, offset, sizeof(g_utc_offset));
+    return true;
+}
+
 bool syncTimeFromIpApi(void)
 {
     if (WiFi.status() != WL_CONNECTED) {
@@ -374,15 +403,25 @@ bool syncTimeFromIpApi(void)
         return false;
     }
 
-    const char* utc_offset = doc["utc_offset"]; // "+0530"
-    if (!utc_offset || strlen(utc_offset) != 5) {
+    const char* json_timezone = doc["timezone"]; // "Asia/Kolkata"
+    if (!json_timezone || strlen(json_timezone) == 0) {
         return false;
     }
 
+    const char* json_utc_offset = doc["utc_offset"]; // "+0530"
+    if (!json_utc_offset || strlen(json_utc_offset) != 5) {
+        return false;
+    }
+
+    set_timezone(json_timezone);
+    set_utc_offset(json_utc_offset);
+    Log.noticeln("Stored UTC Offset : %s", get_utc_offset());
+    Log.noticeln("Stored Timezone   : %s", get_timezone());
+
     // ---- Convert "+0530" → POSIX TZ ----
-    int sign = (utc_offset[0] == '-') ? -1 : 1;
-    int hours = (utc_offset[1] - '0') * 10 + (utc_offset[2] - '0');
-    int minutes = (utc_offset[3] - '0') * 10 + (utc_offset[4] - '0');
+    int sign = (json_utc_offset[0] == '-') ? -1 : 1;
+    int hours = (json_utc_offset[1] - '0') * 10 + (json_utc_offset[2] - '0');
+    int minutes = (json_utc_offset[3] - '0') * 10 + (json_utc_offset[4] - '0');
 
     int tz_hours = -sign * hours;
 

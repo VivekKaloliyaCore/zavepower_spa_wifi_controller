@@ -1,11 +1,12 @@
 // Update as needed and copy to config.h
 
-#define FW_REV_STR  "2025-12-04-v.1.26"
+#define FW_REV_STR  "2025-12-23-v.1.27"
 
 #define WIFI_SSID           "Spapilot Reset Hotspot"
 #define WIFI_PASSWORD       "Zavepwr21#&"
 
-#define WIFI_AP_SSID        "Spapilot Setup WiFi"
+#define WIFI_AP_SSID        "Spapilot (Balboa)"
+// #define WIFI_AP_SSID        "Spapilot Setup WiFi"
 #define WIFI_AP_PASSWORD    "" //"Zavepwr21#&"
 
 #define GMT_OFFSET -14400

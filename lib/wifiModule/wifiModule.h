@@ -457,6 +457,8 @@ void wifiModuleEraseStaConfig(void);
 bool wifiModuleCnnectToWiFiOneTime(void);
 int32_t wifiModuleGetRSSI(void);
 bool syncTimeFromIpApi(void);
+const char* get_timezone(void);
+const char* get_utc_offset(void);
 
 extern bool restart_esp;
 extern bool ap_configuration_on;
@@ -465,5 +467,6 @@ extern bool ap_configuration_on;
 // Preferences preferences;
 
 void syncWithNetworkTime(int hr, int min);
+void requestConnfig(void);
 
 #endif
