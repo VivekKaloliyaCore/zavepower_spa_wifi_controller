@@ -230,7 +230,7 @@ void reconnect()
         {
           Log.notice("ota_state true\n");
           spaControlStatus.ota_stat = true;
-         preferences.putBool("ota", false);
+          preferences.putBool("ota", false);
         }
         
       }
