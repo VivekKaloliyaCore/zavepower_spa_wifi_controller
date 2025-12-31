@@ -124,6 +124,14 @@ bool spa_control_check_for_spaControlStatusBootupTicker(void)
       set_spaControlStatus(spaControlStatusTemp);
       return true;
     }
+    else if(spaControlStatusBootupTicker.time)
+    {
+      spaControlStatusBootupTicker.time = false;
+      spaControlStatus_t spaControlStatusTemp = get_spaControlStatus();
+      spaControlStatusTemp.time = true;      
+      set_spaControlStatus(spaControlStatusTemp);
+      return true;
+    }
 
     return false;
 }
@@ -968,6 +976,8 @@ void spaControl_mqtt_action(void)
     Log.notice("Created time status\n");
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
     Log.notice("Sent time status\n");
+
+    spa_control_check_for_spaControlStatusBootupTicker();
   }
 }
 

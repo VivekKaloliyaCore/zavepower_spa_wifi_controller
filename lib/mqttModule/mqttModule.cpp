@@ -205,6 +205,7 @@ void reconnect()
       spaControlStatus.bootupPacket = true;
       spaControlStatus.setupInfo = true;
       spaControlStatus.deviceStatus = true;
+      spaControlStatus.time = true;
 
       bool otakey_exist = preferences.isKey("ota");
       // bool ota_state = preferences.getBool("ota", "");
