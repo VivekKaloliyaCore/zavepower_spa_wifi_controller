@@ -15,6 +15,7 @@
 #include <wifiModule.h>
 #include "../../src/config.h"
 #include "../../src/main.h"
+#include "wireless_debugger.h"
 #include <balboa.h>
 #include <Preferences.h>
 
@@ -51,9 +52,11 @@ char k = 0;
 char j = 0;
 
 Ticker bootupTicker;
+Ticker wirelessDebuggerTicker;
 
 // Local Function
 void bootupTickerFunc();
+void wirelessDebuggerTickerFunc();
 bool spa_control_check_for_spaControlStatusBootupTicker(void);
 bool spa_control_parse_time_hh_mm_from_str(const char *str, uint8_t *hour, uint8_t *min);
 void switchTempRange(void);
@@ -87,6 +90,18 @@ void bootupTickerFunc() {
   // memset(&spaControlStatusTemp, 0, sizeof(spaControlStatus_t));
   // memcpy(&spaControlStatusTemp, &spaControlStatusBootupTicker, sizeof(spaControlStatus_t));
   // set_spaControlStatus(spaControlStatusTemp);
+}
+
+void wirelessDebuggerTickerFunc() {
+  Log.notice("wirelessDebuggerTickerFunc Triggered!\n");
+
+  if(is_wireless_debugger_on())
+  {
+    spaControlStatus_t spaControlStatusTemp = {0};
+    memset(&spaControlStatus, 0, sizeof(spaControlStatus_t));
+    spaControlStatus.wirelessDebuggerStatus = true;
+    set_spaControlStatus(spaControlStatus);
+  }
 }
 
 bool spa_control_check_for_spaControlStatusBootupTicker(void)
@@ -269,6 +284,8 @@ void set_spaControlParams(spaControlParams_t _spaControlParams)
   // spaControlParams.reset_wifi_sta = _spaControlParams.reset_wifi_sta;
 
   spaControlParams.req_config = _spaControlParams.req_config;
+
+  spaControlParams.is_wirelessDebugger_present = _spaControlParams.is_wirelessDebugger_present;
 }
 
 spaControlStatus_t get_spaControlStatus(void)
@@ -297,6 +314,8 @@ void set_spaControlStatus(spaControlStatus_t _spaControlStatus)
   spaControlStatus.hold = _spaControlStatus.hold;
   spaControlStatus.tempScale = _spaControlStatus.tempScale;
   spaControlStatus.time = _spaControlStatus.time;
+  spaControlStatus.wirelessDebugger = _spaControlStatus.wirelessDebugger;
+  spaControlStatus.wirelessDebuggerStatus = _spaControlStatus.wirelessDebuggerStatus;
 }
 
 
@@ -340,26 +359,31 @@ void spaControl_action(void)
       Log.notice("parse_action_command\n");
       if(spaControlStatus.deviceStatus)
       {
+        set_wireless_debugger_deviceStatus_get_cmd_status(true);
         Log.notice("Sending deviceStatus...\n");
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.currentTemp)
       {
+        set_wireless_debugger_currentTemp_get_cmd_status(true);
         Log.notice("Sending currentTemp...\n");
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.setTemp)
       {
+        set_wireless_debugger_setTemp_get_cmd_status(true);
         Log.notice("Sending setTemp...\n");
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.heatMode)
       {
+        set_wireless_debugger_heatMode_get_cmd_status(true);
         Log.notice("Sending heatMode...\n");
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.tempRange)
       {
+        set_wireless_debugger_tempRange_get_cmd_status(true);
         Log.notice("Sending tempRange...\n");
         set_spaControlStatus(spaControlStatus);
       }
@@ -369,10 +393,12 @@ void spaControl_action(void)
       }
       else if(spaControlStatus.setupInfo)
       {
+        set_wireless_debugger_setupInfo_get_cmd_status(true);
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.filterCycle)
       {
+        set_wireless_debugger_filterCycle_get_cmd_status(true);
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.hold)
@@ -381,10 +407,12 @@ void spaControl_action(void)
       }
       else if(spaControlStatus.tempScale)
       {
+        set_wireless_debugger_tempScale_get_cmd_status(true);
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.fwVersion)
       {
+        set_wireless_debugger_fwVersion_get_cmd_status(true);
         set_spaControlStatus(spaControlStatus);
       }
       else if(spaControlStatus.ota_stat)
@@ -393,41 +421,57 @@ void spaControl_action(void)
       }
       else if(spaControlStatus.time)
       {
+        set_wireless_debugger_time_get_cmd_status(true);
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.wirelessDebugger)
+      {
+        set_spaControlStatus(spaControlStatus);
+      }
+      else if(spaControlStatus.wirelessDebuggerStatus)
+      {
         set_spaControlStatus(spaControlStatus);
       }
 
       if(spaControlParams.is_jet1_present)
       {
+        set_wireless_debugger_pump1_cmd_status(true);
         Log.notice("Sending jet 1 command...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_jet2_present)
       {
+        set_wireless_debugger_pump2_cmd_status(true);
         Log.notice("Sending jet 2 command...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_jet3_present)
       {
+        set_wireless_debugger_pump3_cmd_status(true);
         Log.notice("Sending jet 3 command...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_jet4_present)
       {
+        set_wireless_debugger_pump4_cmd_status(true);
         Log.notice("Sending jet 4 command...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_blower1_present)
       {
+        set_wireless_debugger_blower_cmd_status(true);
         Log.notice("Sending Blower 1 command...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_light1_present)
       {
+        set_wireless_debugger_light1_cmd_status(true);
         Log.notice("Sending Light 1 command...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_reset_wifi_sta_present)
       {
+        set_wireless_debugger_resetWifiSta_set_cmd_status(true);
         Log.notice("Reset WiFi STA...\n");
 
         if(spaControlParams.reset_wifi_sta)
@@ -443,31 +487,37 @@ void spaControl_action(void)
       }
       else if(spaControlParams.is_temp_range_high_present)
       {
+        set_wireless_debugger_tempRange_set_cmd_status(true);
         // Log.notice("Sending currentTemp...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_temp_range_low_present)
       {
+        set_wireless_debugger_tempRange_set_cmd_status(true);
         // Log.notice("Sending currentTemp...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_ready_mode_present)
       {
+        set_wireless_debugger_heatMode_set_cmd_status(true);
         // Log.notice("Sending currentTemp...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_resting_mode_present)
       {
+        set_wireless_debugger_heatMode_set_cmd_status(true);
         // Log.notice("Sending currentTemp...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_set_temp_present)
       {
+        set_wireless_debugger_setTemp_set_cmd_status(true);
         // Log.notice("Sending currentTemp...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_filterCycle_present)
       {
+        set_wireless_debugger_filterCycle_set_cmd_status(true);
         // Log.notice("Sending currentTemp...\n");
         set_spaControlParams(spaControlParams);
       }
@@ -478,16 +528,19 @@ void spaControl_action(void)
       }
       else if(spaControlParams.is_time_present)
       {
+        set_wireless_debugger_time_set_cmd_status(true);
         Log.notice("Sending time command...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_clockMode_present)
       {
+        set_wireless_debugger_clockMode_set_cmd_status(true);
         Log.notice("Sending time command...\n");
         set_spaControlParams(spaControlParams);
       }
       else if(spaControlParams.is_tempScale_present)
       {
+        set_wireless_debugger_tempScale_set_cmd_status(true);
         Log.notice("Sending time command...\n");
         set_spaControlParams(spaControlParams);
       }
@@ -501,9 +554,14 @@ void spaControl_action(void)
         Log.notice("Sending time command...\n");
         set_spaControlParams(spaControlParams);
       }
+      else if(spaControlParams.is_wirelessDebugger_present)
+      {
+        set_spaControlParams(spaControlParams);
+      }
 
       if(otaParams.is_url_present)
       {
+        set_wireless_debugger_ota_cmd_status(true);
         String message;
         for (unsigned int i = 0; i < strlen(otaParams.url); i++) {
             message += (char)otaParams.url[i];
@@ -533,6 +591,7 @@ void spaControl_action(void)
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
         toggleJet1();
+        set_wireless_debugger_pump1_cmd_status(false);
 
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
@@ -551,6 +610,7 @@ void spaControl_action(void)
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
         toggleJet2();
+        set_wireless_debugger_pump2_cmd_status(false);
 
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
@@ -569,6 +629,7 @@ void spaControl_action(void)
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
         toggleJet3();
+        set_wireless_debugger_pump3_cmd_status(false);
 
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
@@ -587,6 +648,7 @@ void spaControl_action(void)
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
         toggleJet4();
+        set_wireless_debugger_pump4_cmd_status(false);
 
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
@@ -605,6 +667,7 @@ void spaControl_action(void)
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
         toggleBlower1();
+        set_wireless_debugger_blower_cmd_status(false);
 
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
@@ -623,6 +686,7 @@ void spaControl_action(void)
       if(sendSpaCmdSend || !spaCmdSendTimerRunning)
       {
         toggleLight1();
+        set_wireless_debugger_light1_cmd_status(false);
         sendSpaCmdSend = false;
         startSpaCmdSendTimer();
       }
@@ -643,6 +707,7 @@ void spaControl_action(void)
         // Log.notice("XYZ::::::::::\n");
         spaControlParams.setTempRangeHigh = false;
         switchTempRange();
+        set_wireless_debugger_tempRange_set_cmd_status(false);
       }
     }
   }
@@ -655,6 +720,7 @@ void spaControl_action(void)
       {
         spaControlParams.setTempRangeLow = false;
         switchTempRange();
+        set_wireless_debugger_tempRange_set_cmd_status(false);
       }
     }
   }
@@ -666,6 +732,7 @@ void spaControl_action(void)
       {
         spaControlParams.setModeRest = false;
         switchHeatMode();
+        set_wireless_debugger_heatMode_set_cmd_status(false);
       }
     }
   }
@@ -677,6 +744,7 @@ void spaControl_action(void)
       {
         spaControlParams.setModeReady = false;
         switchHeatMode();
+        set_wireless_debugger_heatMode_set_cmd_status(false);
       }
     }
   }
@@ -686,6 +754,7 @@ void spaControl_action(void)
     {
       spaControlParams.setTempCommand = false;
       setTemp(sendSetTemp);
+      set_wireless_debugger_setTemp_set_cmd_status(false);
     }
   }
   else if(spaControlParams.is_filterCycle_present)
@@ -694,6 +763,7 @@ void spaControl_action(void)
     {
       spaControlParams.filterCycle = false;
       filterCycleTrial();
+      set_wireless_debugger_filterCycle_set_cmd_status(false);
     }
 
   }
@@ -718,16 +788,19 @@ void spaControl_action(void)
   else if(spaControlParams.is_time_present)
   {
     setTime(hour, minute);
+    set_wireless_debugger_time_set_cmd_status(false);
     spaControlParams.is_time_present = false;
   }
   else if(spaControlParams.is_clockMode_present)
   {
     setClockMode();
+    set_wireless_debugger_clockMode_set_cmd_status(false);
     spaControlParams.is_clockMode_present = false;
   }
   else if(spaControlParams.is_tempScale_present)
   {
     setTempScale();
+    set_wireless_debugger_tempScale_set_cmd_status(false);
     // spaControlParams.is_tempScale_present = false;
   }
   else if(spaControlParams.is_m8_present)
@@ -739,6 +812,18 @@ void spaControl_action(void)
   {
     setCleanupCycle();
     spaControlParams.is_cleanupCycle_present = false;
+  }
+  else if(spaControlParams.is_wirelessDebugger_present)
+  {
+    if(is_wireless_debugger_on())
+    {
+      wirelessDebuggerTicker.attach(60.0, wirelessDebuggerTickerFunc);
+    }
+    else
+    {
+      wirelessDebuggerTicker.detach();
+    }
+    spaControlParams.is_wirelessDebugger_present = false;
   }
   // else if(spaControlParams.is_reset_wifi_sta_present)
   // {
@@ -862,6 +947,8 @@ void spaControl_mqtt_action(void)
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
     Log.notice(">>>>Setup Info Published\n");
 
+    set_wireless_debugger_setupInfo_get_cmd_status(false);
+
     spa_control_check_for_spaControlStatusBootupTicker();
   }
   
@@ -876,6 +963,8 @@ void spaControl_mqtt_action(void)
 
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
 
+    set_wireless_debugger_deviceStatus_get_cmd_status(false);
+
     spa_control_check_for_spaControlStatusBootupTicker();
   }
 
@@ -888,6 +977,8 @@ void spaControl_mqtt_action(void)
     spaControl_create_currentTemp(spa_status_data, json_str);
 
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+
+    set_wireless_debugger_currentTemp_get_cmd_status(false);
   }
 
   if(spaControlStatus.setTemp)
@@ -899,6 +990,8 @@ void spaControl_mqtt_action(void)
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_setTemp(spa_status_data, json_str);
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+
+    set_wireless_debugger_setTemp_get_cmd_status(false);
   }
 
   if(spaControlStatus.heatMode)
@@ -909,6 +1002,8 @@ void spaControl_mqtt_action(void)
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_heatMode(spa_status_data, json_str);
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+
+    set_wireless_debugger_heatMode_get_cmd_status(false);
   }
 
   if(spaControlStatus.tempRange)
@@ -920,6 +1015,8 @@ void spaControl_mqtt_action(void)
     SpaStatusData spa_status_data = spaMessage_get_spaStatusData();
     spaControl_create_tempRange(spa_status_data, json_str);
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+
+    set_wireless_debugger_tempRange_get_cmd_status(false);
   }
 
   if(spaControlStatus.filterCycle)
@@ -930,6 +1027,8 @@ void spaControl_mqtt_action(void)
     SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
     spaControl_create_filter_cycle(json_str);
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+
+    set_wireless_debugger_filterCycle_get_cmd_status(false);
   }
 
   if(spaControlStatus.hold)
@@ -953,6 +1052,8 @@ void spaControl_mqtt_action(void)
     Log.notice("Created temp scale\n");
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
     Log.notice("Sent temp scale\n");
+
+    set_wireless_debugger_tempScale_get_cmd_status(false);
   }
 
   if(spaControlStatus.fwVersion)
@@ -977,7 +1078,44 @@ void spaControl_mqtt_action(void)
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
     Log.notice("Sent time status\n");
 
+    set_wireless_debugger_time_get_cmd_status(false);
+
     spa_control_check_for_spaControlStatusBootupTicker();
+  }
+
+  if(spaControlStatus.wirelessDebugger)
+  {
+    Log.notice("spaControlStatus.wirelessDebugger = true\n");
+    spaControlStatus.wirelessDebugger = false;
+    char json_str[512];
+    memset(&json_str[0], 0, sizeof(json_str));
+    // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
+    spaControl_create_getWirelessDebugger_response(json_str);
+    Log.notice("Created wirelessDebugger status\n");
+    mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    Log.notice("Sent wirelessDebugger status\n");
+  }
+
+  if(spaControlStatus.wirelessDebuggerStatus)
+  {
+    Log.notice("spaControlStatus.wirelessDebuggerStatus = true\n");
+    spaControlStatus.wirelessDebuggerStatus = false;
+
+    if(is_wireless_debugger_on())
+    {
+      char json_str[512];
+      memset(&json_str[0], 0, sizeof(json_str));
+      // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
+      spaControl_create_getWirelessDebuggerStatus_response(json_str);
+      Log.notice("Created wirelessDebuggerStatus status\n");
+      // mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+      mqttModule_publish_message(WIRELESS_DEBUGGER_MQTT_PUB_TOPIC_PREFFIX, json_str, strlen(json_str));
+      Log.notice("Sent wirelessDebuggerStatus status\n");
+    }
+    else
+    {
+      Log.noticeln("Wireless debugger is OFF !!!! Unable to send debugger status.");
+    }
   }
 }
 
@@ -1346,6 +1484,19 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
         //   spaControlParams->is_cleanupCycle_present = false;
         // }
       }
+      else if(doc["payload"].containsKey("wirelessDebugger"))
+      {
+        bool is_on = doc["payload"]["wirelessDebugger"];
+        if(is_on)
+        {
+          wireless_debugger_on();
+        }
+        else
+        {
+          wireless_debugger_off();
+        }
+        spaControlParams->is_wirelessDebugger_present = true;
+      }
     }
     else
       return false;
@@ -1425,6 +1576,14 @@ bool spaControl_parse_action_command(char *json_str, spaControlParams_t *spaCont
       else if(doc["payload"].containsKey("time"))
       {
         spaControlStatus->time = true;
+      }
+      else if(doc["payload"].containsKey("wirelessDebugger"))
+      {
+        spaControlStatus->wirelessDebugger = true;
+      }
+      else if(doc["payload"].containsKey("wirelessDebuggerStatus"))
+      {
+        spaControlStatus->wirelessDebuggerStatus = true;
       }
     }
 
@@ -1646,6 +1805,9 @@ void spaControl_create_deviceStatus(SpaStatusData _SpaStatusData, char *json_str
   int32_t rssi = wifiModuleGetRSSI();
   Log.notice("Current WiFi RSSI: %d dBm\n", rssi);
   payload["wifi_signal_strength_dbm"] = rssi;
+
+  /* debugger status */
+  payload["wirelessDebugger"] = is_wireless_debugger_on();
 
   if(spaConfigurationData.pump1 >= 1)
   {
@@ -2014,6 +2176,58 @@ void spaControl_create_getTime_response(char *json_str)
 
   payload["timezone"]   = get_timezone();
   payload["utc_offset"] = get_utc_offset();
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+}
+
+void spaControl_create_getWirelessDebugger_response(char *json_str)
+{
+  Log.noticeln("In Create GetWirelessDebugger response");
+  DynamicJsonDocument doc(200);
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "WirelessDebugger";
+  
+  JsonObject payload = doc.createNestedObject("payload");
+
+  payload["WirelessDebugger"] = is_wireless_debugger_on();
+
+  // Serialize JSON to a string
+  String output;
+  serializeJson(doc, output);
+
+  memcpy(json_str, output.c_str(), strlen(output.c_str()));
+}
+
+void spaControl_create_getWirelessDebuggerStatus_response(char *json_str)
+{
+  Log.noticeln("In Create GetWirelessDebuggerStatus response");
+  DynamicJsonDocument doc(200);
+
+  // Add key-value pairs
+  doc["action"] = "response";
+  doc["msgT"] = "WirelessDebuggerStatus";
+  
+  JsonObject payload = doc.createNestedObject("payload");
+
+  uint8_t debuggerBytes[256] = {0};
+  memset(&debuggerBytes[0], 0, sizeof(debuggerBytes));
+  size_t debuggerBytesLen = get_wireless_debugger_debug_status_bytes(&debuggerBytes[0]);
+
+  char debuggerBytesStr[256] = {0};
+  memset(&debuggerBytesStr[0], 0, sizeof(debuggerBytesStr));
+  size_t debuggerBytesStrLen = 0;
+  for(int x=0; x < debuggerBytesLen; x++)
+  {
+    debuggerBytesStrLen += sprintf(&debuggerBytesStr[debuggerBytesStrLen], "%02X ", debuggerBytes[x]);
+  }
+
+  payload["WirelessDebuggerStatus"] = (const char *)debuggerBytesStr;
 
   // Serialize JSON to a string
   String output;

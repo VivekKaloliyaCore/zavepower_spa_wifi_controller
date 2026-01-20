@@ -13,6 +13,8 @@
 #include <ESPAsyncWebServer.h>
 #include <Preferences.h>
 
+#include "wireless_debugger.h"
+
 Preferences preferences;
 // AsyncWebServer server(80);
 #include "../httpServer/httpServer.h"
@@ -36,6 +38,7 @@ bool wifiModuleCnnectToWiFiOneTime(void);
 
 void wifiModuleStartAPMode()
 {
+  set_wireless_debugger_is_spa_configured(false);
   apServerOn();
 }
 
@@ -66,6 +69,8 @@ void wifiModuleCnnectToWiFi()
     {
         // configTime(gmtOffset_sec, daylightOffset_sec, "pool.ntp.org");
         Log.notice(F("[WiFi]: Connected, IP Address: %s" CR), WiFi.localIP().toString().c_str());
+
+        set_wireless_debugger_wifi_reconn_counter_up();
 
         syncTimeFromIpApi();
 
@@ -169,6 +174,7 @@ void wifiModuleSetup()
   }
   else
   {
+    set_wireless_debugger_is_spa_configured(true);
     ap_configuration_on = false;
     WiFi.mode(WIFI_STA);
   }

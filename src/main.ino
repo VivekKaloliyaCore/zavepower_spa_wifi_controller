@@ -14,6 +14,7 @@
 #include "main.h"
 #include "../httpsClient/httpsClient.h"
 #include "../lib/spaControl/spaControl.h"
+#include "wireless_debugger.h"
 
 String buildDefinitionString = "";
 #define addBuildDefinition(name) buildDefinitionString += #name " ";
@@ -69,6 +70,8 @@ void setup()
   logSection(FW_REV_STR);
 
   esp_log_level_set("*", ESP_LOG_DEBUG);
+
+  wireless_debugger_init();
   
   // // logSection("This is UPDATED FIRMWARE....");
 }

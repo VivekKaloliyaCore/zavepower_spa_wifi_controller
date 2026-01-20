@@ -21,6 +21,7 @@
 #include "spaControl.h"
 #include "httpsClient.h"
 #include "../httpServer/httpServer.h"
+#include "wireless_debugger.h"
 // Local Functions
 void reconnect();
 void mqttMessage(char *p_topic, byte *p_payload, unsigned int p_length);
@@ -168,6 +169,8 @@ void reconnect()
 
     if (mqtt.connected())
     {
+      set_wireless_debugger_mqtt_reconn_counter_up();
+
       /* sync time */
       struct tm time_now = getStructTime();
       syncWithNetworkTime(time_now.tm_hour, time_now.tm_min);

@@ -1,6 +1,6 @@
 // Update as needed and copy to config.h
 
-#define FW_REV_STR  "2025-12-31-v.1.28"
+#define FW_REV_STR          "2026-01-20-v.1.29"
 
 #define WIFI_SSID           "Spapilot Reset Hotspot"
 #define WIFI_PASSWORD       "Zavepwr21#&"
