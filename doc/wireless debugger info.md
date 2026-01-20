@@ -2,7 +2,7 @@
 
 ### Overview
 
-This wireless debugging system provides real-time monitoring and status tracking for the spa control system.
+This wireless debugging system provides real-time monitoring and status tracking for the spa control system over MQTT.
 
 
 
