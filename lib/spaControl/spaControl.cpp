@@ -1064,6 +1064,7 @@ void spaControl_mqtt_action(void)
     // SpaFilterSettingsData spaFilterSettingsData = spaMessage_get_spaFilterData();
     spaControl_create_fwVersion(json_str);
     mqttModule_publish_message(&mqtt_params.mqtt_topic_postfix[0], json_str, strlen(json_str));
+    set_wireless_debugger_fwVersion_get_cmd_status(false);
   }
 
   if(spaControlStatus.time)
