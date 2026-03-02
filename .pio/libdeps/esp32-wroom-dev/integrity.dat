@@ -1,0 +1,9 @@
+rlogiacco/CircularBuffer @ ^1.3.3
+PubSubClient@2.8
+ArduinoJson@6.18.3
+https://github.com/Densaugeo/base64_arduino.git
+thijse/ArduinoLog@1.1.1
+RobTillaart/CRC
+https://github.com/tzapu/WiFiManager.git#9f5981e
+https://github.com/me-no-dev/ESPAsyncWebServer.git
+sstaub/TickTwo@^4.4.0
